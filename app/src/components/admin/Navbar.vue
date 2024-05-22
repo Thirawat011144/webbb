@@ -4,10 +4,11 @@ import Swal from "sweetalert2";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
+import { useSearchStore } from '../../store/Search';
 
 const router = useRouter();
 const searchQuery = ref("");
-const searchResults = ref([]);
+const searchStore = useSearchStore();
 
 const handleSignOut = () => {
     Swal.fire({
@@ -21,17 +22,16 @@ const handleSignOut = () => {
             localStorage.removeItem(config.role_name);
             localStorage.removeItem(config.token_name);
             localStorage.removeItem(config.firstName_name);
-            router.push("/login");
+            router.push("/");
         }
     });
 };
 
 const searchUsers = async () => {
     if (searchQuery.value.trim() === "") {
-        searchResults.value = [];
+        searchStore.setSearchResults([]);
         return;
     }
-    console.log(searchQuery.value)
 
     try {
         const response = await axios.get(`${config.api_path}/users/search`, {
@@ -39,8 +39,8 @@ const searchUsers = async () => {
                 query: searchQuery.value,
             },
         });
-        searchResults.value = response.data;
-        router.push({ path: '/admin-index/search', query: { results: JSON.stringify(response.data) } });
+        searchStore.setSearchResults(response.data);
+        router.push('/admin-index/search')
     } catch (error) {
         Swal.fire({
             title: "Error",
@@ -49,12 +49,6 @@ const searchUsers = async () => {
         });
     }
 };
-
-// const clearSearch = () => {
-//     searchQuery.value = "";
-//     searchResults.value = [];
-// };
-
 </script>
 
 <template>
@@ -100,7 +94,6 @@ const searchUsers = async () => {
         </nav>
     </div>
 </template>
-
 
 <style scoped>
 .custom-search-input .form-control {

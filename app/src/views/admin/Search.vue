@@ -1,29 +1,27 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useSearchStore } from '../../store/Search';
 
-const route = useRoute();
+const searchStore = useSearchStore();
 const searchResults = ref([]);
 
 const updateSearchResults = () => {
-    if (route.query.results) {
-        searchResults.value = JSON.parse(route.query.results);
-    } else {
-        searchResults.value = [];
-    }
+    searchResults.value = searchStore.searchResults;
 };
 
 onMounted(() => {
     updateSearchResults();
 });
 
-watch(route, (newRoute) => {
-    updateSearchResults();
-});
+watch(
+    () => searchStore.searchResults,
+    (newResults) => {
+        updateSearchResults();
+    }
+);
 </script>
 
 <template>
-
     <section class="content">
         <div class="card">
             <div class="card-header">
@@ -60,7 +58,6 @@ watch(route, (newRoute) => {
             </div>
         </div>
     </section>
-
 </template>
 
 <style scoped>

@@ -10,6 +10,10 @@ import Search from '../views/admin/Search.vue';
 import News from '../components/news/News.vue';
 
 
+import FormCreateNews from '../components/news/CreateNews.vue';
+import ListNews from '../components/news/ListNews.vue'
+import EditNews from '../components/news/EditNews.vue'
+
 import Cr2 from '../views/admin/list-student/Cr2.vue';
 import Ec2 from '../views/admin/list-student/Ec2.vue';
 import Ec4 from '../views/admin/list-student/Ec4.vue';
@@ -130,6 +134,21 @@ const routes = [
         path: 'search',
         name: 'search',
         component: Search
+      },
+      {
+        path:'create-news',
+        name:'create-news',
+        component:FormCreateNews
+      },
+      {
+        path:'list-news',
+        name:'list-news',
+        component:ListNews
+      },
+      {
+        path:'edit-news/:id',
+        name:'edit-news',
+        component:EditNews
       }
     ]
   }

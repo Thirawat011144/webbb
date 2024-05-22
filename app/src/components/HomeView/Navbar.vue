@@ -8,9 +8,11 @@
             </div>
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item active">
-                        <a class="nav-link fw-bold" href="#">Home </a>
-                    </li>
+                    <router-link to="/" class="text-decoration-none">
+                        <li class="nav-item active">
+                            <a class="nav-link fw-bold" href="#">Home </a>
+                        </li>
+                    </router-link>
                     <li class="nav-item">
                         <a class="nav-link fw-bold " href="#">Dashboard</a>
                     </li>
@@ -45,9 +47,9 @@ export default {
 
 <style scoped>
 .custom-navbar {
-    background: rgba(255, 255, 255, 0.4);
+    background: rgb(252, 252, 252);
     backdrop-filter: blur(10px);
-    padding: 1rem 2rem;
+    padding: 2rem 2rem;
 }
 
 .navbar-brand {

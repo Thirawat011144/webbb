@@ -115,18 +115,26 @@ const getUserName = computed(() => {
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-chart-pie"></i>
+                            <i class="fa-regular fa-newspaper"></i>
                             <p>
-                                Charts
+                                News
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="pages/charts/chartjs.html" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>ChartJS</p>
-                                </a>
+                            <li class="nav-item ms-4">
+                                <router-link to="/admin-index/create-news" class="nav-link">
+                                    <p>CreateNews</p>
+                                    <i class="fa-solid fa-plus ms-2"></i>
+                                </router-link>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item ms-4">
+                                <router-link to="/admin-index/list-news" class="nav-link">
+                                    <p>ListNews</p>
+                                    <i class="fa-solid fa-book ms-4"></i>
+                                </router-link>
                             </li>
                         </ul>
                     </li>
@@ -188,14 +196,6 @@ const getUserName = computed(() => {
                         </ul>
                     </li>
                     <li class="nav-header">EXAMPLES</li>
-                    <li class="nav-item">
-                        <a href="pages/calendar.html" class="nav-link">
-                            <i class="nav-icon far fa-calendar-alt"></i>
-                            <p>
-                                Edit HomePage
-                            </p>
-                        </a>
-                    </li>
                     <li class="nav-item">
                         <a href="pages/gallery.html" class="nav-link">
                             <i class="nav-icon far fa-image"></i>
