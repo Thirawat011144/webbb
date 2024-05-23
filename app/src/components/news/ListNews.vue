@@ -17,9 +17,10 @@
             <td>{{ news.title }}</td>
             <td>{{ news.detail }}</td>
             <td class="p-3">
-              
-             
-              <router-link :to="`/admin-index/edit-news/${news.id}`"> <button class="btn btn-primary">Edit</button></router-link>
+
+
+              <router-link :to="`/admin-index/edit-news/${news.id}`"> <button
+                  class="btn btn-primary">Edit</button></router-link>
               <button @click="removeData(news.id)" class="btn btn-danger">Delete</button>
             </td>
           </tr>

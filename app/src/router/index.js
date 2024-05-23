@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import config from '../../config';
+import routeAdmin from './adminRouter';
 
 import HomeView from '../views/HomeView.vue';
 import Register from '../views/auth/Register.vue';
@@ -50,108 +51,109 @@ const routes = [
     name: 'login',
     component: Login
   },
-  {
-    path: '/admin-index',
-    name: 'admin-index',
-    component: AdminIndex,
-    beforeEnter: (to, from, next) => {
-      const role = localStorage.getItem(config.role_name);
-      const token = localStorage.getItem(config.token_name);
-      if (!token) {
-        next('login');
-      } else {
-        if (role === 'admin') {
-          next();
-        } else if (role === 'user') {
-          next('user-index');
-        } else {
-          next('login');
-        }
-      }
-    },
-    children: [
-      {
-        path: 'list-cr2',
-        name: 'list-cr2',
-        component: Cr2,
-      },
-      {
-        path: 'list-ec2',
-        name: 'list-ec2',
-        component: Ec2
-      },
-      {
-        path: 'list-ec4',
-        name: 'list-ec4',
-        component: Ec4,
-      },
-      {
-        path: 'cr2-req',
-        name: 'cr2-req',
-        component: Cr2Req
-      },
-      {
-        path: 'cr2-active',
-        name: 'cr2-active',
-        component: Cr2Active
-      },
-      {
-        path: 'cr2-success',
-        name: 'cr2-success',
-        component: Cr2Success
-      },
-      {
-        path: 'Ec2-req',
-        name: 'Ec2-req',
-        component: Ec2Req
-      },
-      {
-        path: 'Ec2-active',
-        name: 'Ec2-active',
-        component: Ec2Active
-      },
-      {
-        path: 'Ec2-success',
-        name: 'Ec2-success',
-        component: Ec2Success
-      },
-      {
-        path: 'Ec4-req',
-        name: 'Ec4-req',
-        component: Ec4Req
-      },
-      {
-        path: 'Ec4-active',
-        name: 'Ec4-active',
-        component: Ec4Active
-      },
-      {
-        path: 'Ec4-success',
-        name: 'Ec4-success',
-        component: Ec4Success
-      },
-      {
-        path: 'search',
-        name: 'search',
-        component: Search
-      },
-      {
-        path:'create-news',
-        name:'create-news',
-        component:FormCreateNews
-      },
-      {
-        path:'list-news',
-        name:'list-news',
-        component:ListNews
-      },
-      {
-        path:'edit-news/:id',
-        name:'edit-news',
-        component:EditNews
-      }
-    ]
-  }
+  ...routeAdmin
+  // {
+  //   path: '/admin-index',
+  //   name: 'admin-index',
+  //   component: AdminIndex,
+  //   beforeEnter: (to, from, next) => {
+  //     const role = localStorage.getItem(config.role_name);
+  //     const token = localStorage.getItem(config.token_name);
+  //     if (!token) {
+  //       next('login');
+  //     } else {
+  //       if (role === 'admin') {
+  //         next();
+  //       } else if (role === 'user') {
+  //         next('user-index');
+  //       } else {
+  //         next('login');
+  //       }
+  //     }
+  //   },
+  //   children: [
+  //     {
+  //       path: 'list-cr2',
+  //       name: 'list-cr2',
+  //       component: Cr2,
+  //     },
+  //     {
+  //       path: 'list-ec2',
+  //       name: 'list-ec2',
+  //       component: Ec2
+  //     },
+  //     {
+  //       path: 'list-ec4',
+  //       name: 'list-ec4',
+  //       component: Ec4,
+  //     },
+  //     {
+  //       path: 'cr2-req',
+  //       name: 'cr2-req',
+  //       component: Cr2Req
+  //     },
+  //     {
+  //       path: 'cr2-active',
+  //       name: 'cr2-active',
+  //       component: Cr2Active
+  //     },
+  //     {
+  //       path: 'cr2-success',
+  //       name: 'cr2-success',
+  //       component: Cr2Success
+  //     },
+  //     {
+  //       path: 'Ec2-req',
+  //       name: 'Ec2-req',
+  //       component: Ec2Req
+  //     },
+  //     {
+  //       path: 'Ec2-active',
+  //       name: 'Ec2-active',
+  //       component: Ec2Active
+  //     },
+  //     {
+  //       path: 'Ec2-success',
+  //       name: 'Ec2-success',
+  //       component: Ec2Success
+  //     },
+  //     {
+  //       path: 'Ec4-req',
+  //       name: 'Ec4-req',
+  //       component: Ec4Req
+  //     },
+  //     {
+  //       path: 'Ec4-active',
+  //       name: 'Ec4-active',
+  //       component: Ec4Active
+  //     },
+  //     {
+  //       path: 'Ec4-success',
+  //       name: 'Ec4-success',
+  //       component: Ec4Success
+  //     },
+  //     {
+  //       path: 'search',
+  //       name: 'search',
+  //       component: Search
+  //     },
+  //     {
+  //       path:'create-news',
+  //       name:'create-news',
+  //       component:FormCreateNews
+  //     },
+  //     {
+  //       path:'list-news',
+  //       name:'list-news',
+  //       component:ListNews
+  //     },
+  //     {
+  //       path:'edit-news/:id',
+  //       name:'edit-news',
+  //       component:EditNews
+  //     },
+  //   ]
+  // }
   ,
   {
     path: '/user-index',
@@ -169,7 +171,22 @@ const routes = [
   {
     path: '/edit-cr2/:id',
     name: 'edit-cr2',
-    component: EditCr2
+    component: EditCr2,
+    beforeEnter: (to, from, next) => {
+      const role = localStorage.getItem(config.role_name);
+      const token = localStorage.getItem(config.token_name);
+      if (!token) {
+        next('login');
+      } else {
+        if (role === 'admin') {
+          next();
+        } else if (role === 'user') {
+          next('user-index');
+        } else {
+          next('login');
+        }
+      }
+    },
   },
   {
     path: '/edit-ec2/:id',
@@ -188,9 +205,10 @@ const routes = [
   }
 ];
 
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes
+  routes,
 });
 
 

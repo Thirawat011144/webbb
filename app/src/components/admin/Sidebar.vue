@@ -42,7 +42,7 @@ const getUserName = computed(() => {
                 </div>
             </div>
             <!-- SidebarSearch Form -->
-            <div class="form-inline">
+            <!-- <div class="form-inline">
                 <div class="input-group" data-widget="sidebar-search">
                     <input class="form-control form-control-sidebar" type="search" placeholder="Search"
                         aria-label="Search">
@@ -52,15 +52,18 @@ const getUserName = computed(() => {
                         </button>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Sidebar Menu -->
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                     data-accordion="false">
+                    <div class="nav-item text-white">
+                        Menu
+                    </div>
                     <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-                    <li class="nav-item menu-open">
+                    <!-- <li class="nav-item menu-open">
                         <a href="#" class="nav-link ">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>
@@ -76,9 +79,9 @@ const getUserName = computed(() => {
                                 </a>
                             </li>
                         </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link active">
+                    </li> -->
+                    <!-- <li class="nav-item">
+                        <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-copy"></i>
                             <p>
                                 Edit Options
@@ -112,9 +115,9 @@ const getUserName = computed(() => {
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a  class="nav-link">
                             <i class="fa-regular fa-newspaper"></i>
                             <p>
                                 News
@@ -138,7 +141,7 @@ const getUserName = computed(() => {
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-tree"></i>
                             <p>
@@ -211,14 +214,14 @@ const getUserName = computed(() => {
                                 Kanban Board
                             </p>
                         </a>
-                    </li>
+                    </li> -->
                 </ul>
             </nav>
             <!-- /.sidebar-menu -->
         </div>
-        <div>
+        
             <router-view></router-view>
-        </div>
+        
         <!-- /.sidebar -->
     </aside>
 </template>

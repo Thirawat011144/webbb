@@ -1,10 +1,8 @@
-
-
 <template>
   <div class="bg">
-    <Navbar />
+    <Navbarv1 class="" />
     <div class="news-container">
-      <h1>ข่าวสาร</h1>
+      <h1 class="">ข่าวสาร</h1>
       <div class="news-list">
         <div class="news-item" v-for="news in newsList" :key="news.id">
           <!-- <img :src="news.image" alt="news image" class="news-image"> -->
@@ -25,13 +23,14 @@ import axios from 'axios';
 import Navbar from '../HomeView/Navbar.vue';
 import { ref, onMounted } from 'vue';
 import config from '../../../config';
+import Navbarv1 from '../HomeView/Navbarv1.vue';
 
 const newsList = ref([]);
 
 const fetchNews = async () => {
   try {
     const response = await axios.get(`${config.api_path}/news`); // เปลี่ยน URL เป็น API ของคุณ
-    newsList.value = response.data;
+    newsList.value = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // เรียงลำดับข่าวจากใหม่ไปเก่า
   } catch (error) {
     console.error('Error fetching news:', error);
   }
@@ -46,6 +45,7 @@ onMounted(() => {
   fetchNews();
 });
 </script>
+
 
 <style scoped>
 .bg {
@@ -64,6 +64,7 @@ onMounted(() => {
 }
 
 .news-container {
+  width: 100%;
   max-width: 1200px;
   margin: 80px auto 20px auto;
   padding: 20px;

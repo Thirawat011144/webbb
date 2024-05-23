@@ -1,47 +1,28 @@
 <template>
-  <div id="app">
+  <div>
     <Navbar />
-    <main>
-      <MainBanner />
-      <div class="container my-4">
-        <div class="row my-4">
-          <FeatureCard icon="fas fa-search" title="ติดตามข่าวสาร" description="" />
-          <FeatureCard icon="fas fa-university" title="เว็บไซต์ระบบ ESS " description="" />
-          <FeatureCard icon="fas fa-calendar-alt" title="FACEBOOK " description="" />
-        </div>
-      </div>
-      <Newsletter />
-    </main>
+ 
+    <Footer />
   </div>
 </template>
 
-
 <script>
-import Navbar from '../components/HomeView/Navbar.vue'
-import MainBanner from '../components/HomeView/Mainbar.vue'
-import FeatureCard from '../components/HomeView/FeatureCard.vue'
-import Newsletter from '../components/HomeView/Newsletter.vue'
+import Navbar from '../components/HomeView/Navbar.vue';
+import Footer from '../components/HomeView/Footer.vue';
+import Mainbar from '../components/HomeView/Mainbar.vue';
 
 export default {
-  name: 'App',
   components: {
     Navbar,
-    MainBanner,
-    FeatureCard,
-    Newsletter
+    Footer,
+    Mainbar
   }
-}
+};
 </script>
 
-<style>
+<style scoped>
 body {
   font-family: Arial, sans-serif;
   margin: 0;
-  padding: 0;
-  box-sizing: border-box;
 }
-
-/* main {
-  padding-top: 70px; 
-} */
 </style>
