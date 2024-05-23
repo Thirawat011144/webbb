@@ -24,8 +24,9 @@
                         <li class="nav-item p-2 abb">เข้าสู่ระบบ</li>
                     </router-link>
                 </ul>
+                <router-view></router-view>
             </div>
-            <router-view></router-view>
+            
         </div>
         <mainbar />
     </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="bg">
-    <Navbarv1 class="" />
+    <!-- <Navbarv1 class="" /> -->
     <div class="news-container">
       <h1 class="">ข่าวสาร</h1>
       <div class="news-list">
@@ -23,7 +23,7 @@ import axios from 'axios';
 import Navbar from '../HomeView/Navbar.vue';
 import { ref, onMounted } from 'vue';
 import config from '../../../config';
-import Navbarv1 from '../HomeView/Navbarv1.vue';
+// import Navbarv1 from '../HomeView/Navbarv1.vue';
 
 const newsList = ref([]);
 
@@ -49,7 +49,7 @@ onMounted(() => {
 
 <style scoped>
 .bg {
-  background-image: url('../../assets/img/8.jpg');
+  /* background-image: url('../../assets/img/8.jpg'); */
   background-size: cover;
   background-position: center;
   background-attachment: fixed;

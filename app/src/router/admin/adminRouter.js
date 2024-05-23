@@ -1,48 +1,34 @@
-// import { createRouter, createWebHistory } from 'vue-router';
 import AdminIndex from '@/views/admin/AdminIndex.vue';
-import Search from '../views/admin/Search.vue';
-import config from '../../config';
+import Search from '../../views/admin/Search.vue';
+import config from '../../../config';
+import {checkAuth} from "./authRouteFunction"
 
-import FormCreateNews from '../components/news/CreateNews.vue';
-import ListNews from '../components/news/ListNews.vue'
-import EditNews from '../components/news/EditNews.vue'
+import FormCreateNews from '../../components/news/CreateNews.vue';
+import ListNews from '../../components/news/ListNews.vue'
+import EditNews from '../../components/news/EditNews.vue'
 
-import Cr2 from '../views/admin/list-student/Cr2.vue';
-import Ec2 from '../views/admin/list-student/Ec2.vue';
-import Ec4 from '../views/admin/list-student/Ec4.vue';
+import Cr2 from '../../views/admin/list-student/Cr2.vue';
+import Ec2 from '../../views/admin/list-student/Ec2.vue';
+import Ec4 from '../../views/admin/list-student/Ec4.vue';
 
-import Cr2Req from '../views/admin/list-student-request/Cr2Req.vue';
-import Ec2Req from '../views/admin/list-student-request/Ec2Req.vue';
-import Ec4Req from '../views/admin/list-student-request/Ec4Req.vue';
+import Cr2Req from '../../views/admin/list-student-request/Cr2Req.vue';
+import Ec2Req from '../../views/admin/list-student-request/Ec2Req.vue';
+import Ec4Req from '../../views/admin/list-student-request/Ec4Req.vue';
 
-import Cr2Active from "../views/admin/list-student-active/Cr2Active.vue";
-import Ec2Active from "../views/admin/list-student-active/Ec2Active.vue";
-import Ec4Active from "../views/admin/list-student-active/Ec4Active.vue";
+import Cr2Active from "../../views/admin/list-student-active/Cr2Active.vue";
+import Ec2Active from "../../views/admin/list-student-active/Ec2Active.vue";
+import Ec4Active from "../../views/admin/list-student-active/Ec4Active.vue";
 
-import Cr2Success from "../views/admin/list-student-success/Cr2Success.vue";
-import Ec2Success from "../views/admin/list-student-success/Ec2Success.vue";
-import Ec4Success from "../views/admin/list-student-success/Ec4Success.vue";
+import Cr2Success from "../../views/admin/list-student-success/Cr2Success.vue";
+import Ec2Success from "../../views/admin/list-student-success/Ec2Success.vue";
+import Ec4Success from "../../views/admin/list-student-success/Ec4Success.vue";
 
 const routeAdmin = [
     {
         path: '/admin-index',
         name: 'admin-index',
         component: AdminIndex,
-        beforeEnter: (to, from, next) => {
-          const role = localStorage.getItem(config.role_name);
-          const token = localStorage.getItem(config.token_name);
-          if (!token) {
-            next('login');
-          } else {
-            if (role === 'admin') {
-              next();
-            } else if (role === 'user') {
-              next('user-index');
-            } else {
-              next('login');
-            }
-          }
-        },
+        beforeEnter: checkAuth,
         children: [
           {
             path: 'list-cr2',
