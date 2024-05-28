@@ -10,3 +10,14 @@ export const useSearchStore = defineStore('search', {
         },
     },
 });
+
+export const useDataStore = defineStore('fetchData', {
+    state: () => ({
+        dataResults: [],
+    }),
+    actions: {
+        setDataResults(results) { // เปลี่ยนชื่อ method จาก fetchDataResults เป็น setDataResults
+            this.dataResults = results; // อัพเดท state ด้วยข้อมูลที่ดึงมา
+        },
+    }
+})

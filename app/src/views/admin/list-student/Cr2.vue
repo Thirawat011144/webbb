@@ -87,14 +87,17 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="content">
+  <section class="content mt-4">
     <div class="card">
       <div class="card-header">
-        <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นประกาศนียบัตรวิชาชีพ ชั้นปีที่ 2 
+        <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นประกาศนียบัตรวิชาชีพ ชั้นปีที่ 2
           <div>
-            <router-link :to="`/admin-index/cr2-req`"> <button class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
-            <router-link :to="`/admin-index/cr2-active`"> <button class="btn btn-warning m-1">กำลังฝึก</button></router-link>
-            <router-link :to="`/admin-index/cr2-success`">  <button class="btn btn-success m-1">ฝึกจบแล้ว</button> </router-link>
+            <router-link :to="`/admin-index/cr2-req`"> <button
+                class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
+            <router-link :to="`/admin-index/cr2-active`"> <button
+                class="btn btn-warning m-1">กำลังฝึก</button></router-link>
+            <router-link :to="`/admin-index/cr2-success`"> <button class="btn btn-success m-1">ฝึกจบแล้ว</button>
+            </router-link>
           </div>
         </div>
         <table class="table">

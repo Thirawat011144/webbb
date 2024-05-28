@@ -24,9 +24,18 @@ router.post('/login', async (req, res) => {
         }
 
         const data = {
+            id: User.id,
+            firstName: User.firstName,
+            lastName: User.lastName,
             userName: User.userName,
+            phoneNumber: User.phoneNumber,
+            gender: User.gender,
+            year: User.year,
+            branch: User.branch,
+            status: User.status,
+            studentID: User.studentID,
+            company: User.company,
             role: User.role,
-            firstName:User.firstName
         };
 
         jwt.sign(data, process.env.SECRET_KEY, { expiresIn: '1h' }, (error, token) => {

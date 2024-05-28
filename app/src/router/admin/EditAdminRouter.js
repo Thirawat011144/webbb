@@ -2,7 +2,6 @@ import EditCr2 from '../../views/admin/edit-student/EditCr2.vue';
 import EditEc2 from '../../views/admin/edit-student/EditEc2.vue';
 import EditEc4 from '../../views/admin/edit-student/EditEc4.vue';
 
-// import config from '../../../config';
 import {checkAuth} from "./authRouteFunction"
 
 const routeEditAdmin = [

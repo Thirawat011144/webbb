@@ -104,5 +104,16 @@ router.delete('/users/:id', async (req, res) => {
     }
 })
 
+router.get('/user/info', async (req, res) => {
+    try {
+
+        res.send("test")
+
+    } catch (error) {
+        res.status(500).send({ message: error })
+        console.log(error)
+    }
+})
+
 
 module.exports = router;

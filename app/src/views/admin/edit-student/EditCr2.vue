@@ -49,7 +49,7 @@ const updateData = async () => {
     });
     if (result.isConfirmed) {
         try {
-            const response = await axios.put(`${config.api_path}/user/${route.params.id}`, user.value);
+            const response = await axios.put(`${config.api_path}/user`, user.value);
             if (response.data.message === 'Success') {
                 Swal.fire({
                     title: "สำเร็จ",

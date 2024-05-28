@@ -24,11 +24,10 @@
                         <li class="nav-item p-2 abb">เข้าสู่ระบบ</li>
                     </router-link>
                 </ul>
-                <router-view></router-view>
             </div>
-            
         </div>
-        <mainbar />
+        <!-- <mainbar/> -->
+        <router-view></router-view>
     </div>
 </template>
 

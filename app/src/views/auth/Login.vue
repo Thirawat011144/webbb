@@ -4,9 +4,11 @@ import { ref } from 'vue';
 import config from '../../../config';
 import Swal from 'sweetalert2';
 import { useRouter } from 'vue-router';
+import {useDataStore} from '../../store/Search'
 
 
 const router = useRouter();
+const searchData = useDataStore(); 
 
 const userName = ref('');
 const password = ref('');
@@ -29,6 +31,8 @@ const handleLogin = async () => {
             localStorage.setItem(config.token_name, response.data.token);
             localStorage.setItem(config.role_name, response.data.data.role)
             localStorage.setItem(config.firstName_name, response.data.data.firstName)
+            localStorage.setItem('userData', JSON.stringify(response.data.data)); // เก็บข้อมูลใน localStorage
+            searchData.setDataResults(response.data.data); 
 
             if (response.data.data.role === "admin") {
                 router.push('/admin-index')
@@ -75,25 +79,29 @@ const handleLogin = async () => {
                             <h2 class="ab">เข้าสู่ระบบ</h2>
                             <p class="text-white">We are happy to have you back.</p>
                         </div>
-                        <div class="input-group mb-3">
-                            <input v-model="userName" type="text" class="form-control form-control-lg bg-light fs-6"
-                                placeholder="Username">
-                        </div>
-                        <div class="input-group mb-1">
-                            <input v-model="password" type="password" class="form-control form-control-lg bg-light fs-6"
-                                placeholder="Password">
-                        </div>
-                        <div class="input-group mb-5 d-flex justify-content-between">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="formCheck">
-                                <label for="formCheck" class="form-check-label text-secondary"><small>Remember
-                                        Me</small></label>
+                        <form @submit.prevent="handleLogin">
+                            <div class="input-group mb-3">
+                                <input v-model="userName" type="text" class="form-control form-control-lg bg-light fs-6"
+                                    placeholder="Username">
                             </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <button style="background-color: mediumvioletred; color: white;" @click="handleLogin"
-                                class="btn w-100 fs-6">Login</button>
-                        </div>
+                            <div class="input-group mb-1">
+                                <input v-model="password" type="password"
+                                    class="form-control form-control-lg bg-light fs-6" placeholder="Password">
+                            </div>
+                            <div class="input-group mb-5 d-flex justify-content-between">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="formCheck">
+                                    <label for="formCheck" class="form-check-label text-secondary"><small>Remember
+                                            Me</small></label>
+                                </div>
+                            </div>
+                            <div class="input-group mb-3">
+                                <button style="background-color: mediumvioletred; color: white;"
+                                    class="btn w-100 fs-6">Login</button>
+
+                                <!--  -->
+                            </div>
+                        </form>
                         <div class="input-group mb-3"></div>
                         <div class="row">
                             <router-link to="/register"><small>Don't have account? <a href="#">Sign

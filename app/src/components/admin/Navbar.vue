@@ -22,6 +22,7 @@ const handleSignOut = () => {
             localStorage.removeItem(config.role_name);
             localStorage.removeItem(config.token_name);
             localStorage.removeItem(config.firstName_name);
+            localStorage.removeItem('userData');
             router.push("/");
         }
     });
@@ -60,12 +61,12 @@ const searchUsers = async () => {
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
-                <li class="nav-item d-none d-sm-inline-block">
+                <!-- <li class="nav-item d-none d-sm-inline-block">
                     <a href="index3.html" class="nav-link">Home</a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
+                </li> -->
+                <!-- <li class="nav-item d-none d-sm-inline-block">
                     <a href="#" class="nav-link">Contact</a>
-                </li>
+                </li> -->
             </ul>
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">

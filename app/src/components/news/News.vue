@@ -1,36 +1,39 @@
 <template>
-  <div class="bg">
-    <!-- <Navbarv1 class="" /> -->
-    <div class="news-container">
-      <h1 class="">ข่าวสาร</h1>
-      <div class="news-list">
-        <div class="news-item" v-for="news in newsList" :key="news.id">
-          <!-- <img :src="news.image" alt="news image" class="news-image"> -->
-          <div class="news-content">
-            <h2>{{ news.title }}</h2>
-            <p class="news-date"><i class="fas fa-clock"></i> {{ formatDate(news.createdAt) }}</p>
-            <!-- <p>{{ news.detail }}</p> -->
-            <a :href="news.detail" target="_blank">คลิ๊กเพื่อดูรายละเอียด</a>
+  <div>
+    <div class="bg">
+      <Navbar />
+      <div>
+        <div class="news-container">
+          <h1 class="news-header">ประชาสัมพันธ์</h1>
+          <div class="news-list">
+            <div class="news-item" v-for="news in newsList" :key="news.id">
+              <div class="news-content">
+                <h2>{{ news.title }}</h2>
+                <p class="news-date"><i class="fas fa-clock"></i> {{ formatDate(news.createdAt) }}</p>
+                <a :href="news.detail" target="_blank" class="news-link">คลิ๊กเพื่อดูรายละเอียด</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <FooterHome />
   </div>
 </template>
 
 <script setup>
 import axios from 'axios';
-import Navbar from '../HomeView/Navbar.vue';
 import { ref, onMounted } from 'vue';
 import config from '../../../config';
-// import Navbarv1 from '../HomeView/Navbarv1.vue';
+import Navbar from '../HomeView/Navbar.vue';
+import FooterHome from '../HomeView/Footer.vue'
 
 const newsList = ref([]);
 
 const fetchNews = async () => {
   try {
-    const response = await axios.get(`${config.api_path}/news`); // เปลี่ยน URL เป็น API ของคุณ
-    newsList.value = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // เรียงลำดับข่าวจากใหม่ไปเก่า
+    const response = await axios.get(`${config.api_path}/news`);
+    newsList.value = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   } catch (error) {
     console.error('Error fetching news:', error);
   }
@@ -46,38 +49,29 @@ onMounted(() => {
 });
 </script>
 
-
 <style scoped>
 .bg {
-  /* background-image: url('../../assets/img/8.jpg'); */
+  background-image: url('../../assets/img/8.1.png');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.navbar-bg {
-  background: rgba(255, 255, 255, 0.8);
-  width: 100%;
 }
 
 .news-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 80px auto 20px auto;
-  padding: 20px;
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
 }
 
-.news-container h1 {
+.news-header {
   text-align: center;
-  margin-bottom: 20px;
-  font-size: 2em;
-  color: #003366;
+  margin-bottom: 30px;
+  font-size: 2.5em;
+  color: #333333;
+  font-weight: bold;
 }
 
 .news-list {
@@ -89,46 +83,47 @@ onMounted(() => {
 .news-item {
   display: flex;
   flex-direction: row;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
+  background-color: #f8f8f8;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
 }
 
-.news-image {
-  width: 200px;
-  height: 200px;
-  object-fit: cover;
+.news-item:hover {
+  transform: scale(1.02);
 }
 
 .news-content {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
   flex-grow: 1;
 }
 
 .news-content h2 {
-  margin: 0 0 10px 0;
-  font-size: 1.2em;
-  color: #003366;
+  margin: 0;
+  font-size: 1.1em;
+  color: #101922;
+  font-weight: bold;
 }
 
-.news-content .news-date {
-  color: #777;
+.news-date {
+  color: #888888;
   font-size: 0.9em;
 }
 
-.news-content p {
-  margin: 0 0 10px 0;
-  flex-grow: 1;
+.news-link {
+  color: #0056b3;
+  text-decoration: none;
+  font-weight: bold;
+  align-self: flex-start;
+  margin-top: auto;
 }
 
-.news-content a {
-  color: #003366;
-  text-decoration: none;
-  align-self: flex-start;
+.news-link:hover {
+  text-decoration: underline;
 }
 </style>

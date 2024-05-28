@@ -34,11 +34,12 @@ const getUserName = computed(() => {
         <div class="sidebar">
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                <div class="image">
+                <!-- <div class="image">
                     <img src="../../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-                </div>
+                </div> -->
                 <div class="info">
-                    <router-link to="/admin-index"> <a href="#" class="d-block">{{ getUserName }}</a> </router-link>
+                    <router-link to="/admin-index"> <a href="#" class="d-block fw-bold">Admin: {{ getUserName }}</a>
+                    </router-link>
                 </div>
             </div>
             <!-- SidebarSearch Form -->
@@ -58,8 +59,8 @@ const getUserName = computed(() => {
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                     data-accordion="false">
-                    <div class="nav-item text-white">
-                        Menu
+                    <div class="nav-header text-white">
+                        เมนู
                     </div>
                     <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
@@ -80,44 +81,36 @@ const getUserName = computed(() => {
                             </li>
                         </ul>
                     </li> -->
-                    <!-- <li class="nav-item">
+                    <li class="nav-item">
                         <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-copy"></i>
+                            <i class="fa-solid fa-user-graduate"></i>
                             <p>
-                                Edit Options
-                                <i class="fas fa-angle-left right"></i>
-                                <span class="badge badge-info right">3</span>
+                                รายชื่อนักเรียน
+                                <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
+
                             <li class="nav-item">
-                                <a href="pages/layout/top-nav.html" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Teacher</p>
-                                </a>
+                                <router-link to="/admin-index/list-cr2" class="nav-link ms-4">
+                                    <p>ปวช ชั้นปีที่ 2</p>
+                                </router-link>
                             </li>
+
                             <li class="nav-item">
-                                <router-link to="" class="nav-link active">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Student</p>
+                                <router-link to="/admin-index/list-ec2" class="nav-link ms-4">
+                                    <p>ป.ตรี ชั้นปีที่ 2</p>
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <a href="pages/layout/fixed-sidebar-custom.html" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Fixed Sidebar <small>+ Custom Area</small></p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages/layout/collapsed-sidebar.html" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Collapsed Sidebar</p>
-                                </a>
+                                <router-link to="/admin-index/list-ec4" class="nav-link ms-4 ">
+                                    <p>ป.ตรี ชี่นปีที่ 4</p>
+                                </router-link>
                             </li>
                         </ul>
-                    </li> -->
+                    </li>
                     <li class="nav-item">
-                        <a  class="nav-link">
+                        <a class="nav-link">
                             <i class="fa-regular fa-newspaper"></i>
                             <p>
                                 News
@@ -219,9 +212,9 @@ const getUserName = computed(() => {
             </nav>
             <!-- /.sidebar-menu -->
         </div>
-        
-            <router-view></router-view>
-        
+
+        <router-view></router-view>
+
         <!-- /.sidebar -->
     </aside>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="content mt-4">
     <div class="card">
       <div class="card-header">ข้อมูลข่าวประชาสัมพันธ์</div>
       <table class="table">

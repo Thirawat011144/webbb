@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="content mt-4">
     <div class="card bg-white">
       <div class="card-header"> แบบฟอร์มแจ้งข้อมูลข่าวสาร </div>
       <div class="card-header">
@@ -7,9 +7,6 @@
           <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Title</label>
             <input v-model="news.title" type="text" id="title" class="form-control" required>
-            <!-- <input type="text" id="title" v-model="news.title" required /> -->
-
-            <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
           </div>
           <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">Link</label>

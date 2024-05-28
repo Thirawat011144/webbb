@@ -31,6 +31,7 @@ export default {
   flex-direction: column;
   align-items: center;
   text-align: center;
+  z-index: -1;
 }
 
 .feature-card img {

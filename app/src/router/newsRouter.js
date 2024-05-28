@@ -1,11 +1,11 @@
-// import News from '../components/news/News.vue';
+import News from '../components/news/News.vue';
 
-// const routeNews = [
-//     {
-//         path: '/news',
-//         name: 'news',
-//         component: News
-//       }
-// ]
+const routeNews = [
+    {
+        path: '/news',
+        name: 'news',
+        component: News
+      }
+]
 
-// export default routeNews
+export default routeNews

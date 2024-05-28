@@ -3,9 +3,9 @@ import { createRouter, createWebHistory } from 'vue-router';
 import routeHome from './HomeRouter'
 import routeAuth from './authRouter'
 import routeAdmin from './admin/adminRouter';
-import routeUser from './userRouter';
+import routeUser from './user/userRouter';
 import routeEditAdmin from './admin/EditAdminRouter'
-// import routeNews from './newsRouter'
+import routeNews from './newsRouter'
 
 const routes = [
   ...routeHome,
@@ -13,7 +13,7 @@ const routes = [
   ...routeAdmin,
   ...routeUser,
   ...routeEditAdmin,
-  // ...routeNews
+  ...routeNews
 ];
 
 const router = createRouter({
