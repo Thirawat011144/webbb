@@ -4,11 +4,11 @@ import { ref } from 'vue';
 import config from '../../../config';
 import Swal from 'sweetalert2';
 import { useRouter } from 'vue-router';
-import {useDataStore} from '../../store/Search'
+import { useDataStore } from '../../store/Search'
 
 
 const router = useRouter();
-const searchData = useDataStore(); 
+const searchData = useDataStore();
 
 const userName = ref('');
 const password = ref('');
@@ -32,7 +32,7 @@ const handleLogin = async () => {
             localStorage.setItem(config.role_name, response.data.data.role)
             localStorage.setItem(config.firstName_name, response.data.data.firstName)
             localStorage.setItem('userData', JSON.stringify(response.data.data)); // เก็บข้อมูลใน localStorage
-            searchData.setDataResults(response.data.data); 
+            searchData.setDataResults(response.data.data);
 
             if (response.data.data.role === "admin") {
                 router.push('/admin-index')
@@ -82,11 +82,11 @@ const handleLogin = async () => {
                         <form @submit.prevent="handleLogin">
                             <div class="input-group mb-3">
                                 <input v-model="userName" type="text" class="form-control form-control-lg bg-light fs-6"
-                                    placeholder="Username">
+                                    placeholder="Username" required>
                             </div>
                             <div class="input-group mb-1">
                                 <input v-model="password" type="password"
-                                    class="form-control form-control-lg bg-light fs-6" placeholder="Password">
+                                    class="form-control form-control-lg bg-light fs-6" placeholder="Password" required>
                             </div>
                             <div class="input-group mb-5 d-flex justify-content-between">
                                 <div class="form-check">

@@ -5,19 +5,22 @@ const CompaniesModel = connect.define("companies", {
     id: {
         type: DataTypes.BIGINT,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
     },
     companyName: {
-        type: DataTypes.STRING(255)
+        type: DataTypes.STRING(255),
     },
     companyType: {
         type: DataTypes.STRING(255),
     },
     companyPhone: {
-        type: DataTypes.STRING(255)
+        type: DataTypes.STRING(255),
     },
     companyAddress: {
-        type: DataTypes.STRING(500)
+        type: DataTypes.STRING(500),
+    },
+    companyEmail:{
+        type:DataTypes.STRING(255),
     }
 })
 

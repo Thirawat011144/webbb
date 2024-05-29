@@ -3,7 +3,10 @@ import { ref } from 'vue';
 import axios from 'axios';
 import config from '../../../config';
 import Swal from 'sweetalert2';
+import { useRouter } from 'vue-router';
 
+
+const router = useRouter();
 
 const companyName = ref('');
 const companyType = ref('');
@@ -38,6 +41,9 @@ const handleSubmit = async () => {
                     text: "เพิ่มข้อมูลสำเร็จ",
                     icon: "success",
                 });
+                console.log(response.data.newCompany)
+                localStorage.setItem('companyData', JSON.stringify(response.data.newCompany));
+                router.push('/user-index/data-student')
             }
         } catch (error) {
             Swal.fire({
