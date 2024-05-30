@@ -21,6 +21,9 @@ const CompaniesModel = connect.define("companies", {
     },
     companyEmail:{
         type:DataTypes.STRING(255),
+    },
+    studentID: {
+        type: DataTypes.STRING(50) // เพิ่มคอลัมน์ studentID
     }
 })
 

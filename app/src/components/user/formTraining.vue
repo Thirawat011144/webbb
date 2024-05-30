@@ -13,6 +13,32 @@ const companyType = ref('');
 const companyPhone = ref('');
 const companyEmail = ref('');
 const companyAddress = ref('');
+const studentID = ref('');
+
+
+
+// const studentID = localStorage.getItem('userData')
+// console.log(studentID)
+// const storedData = localStorage.getItem('userData');
+
+const userDataString = localStorage.getItem('userData');
+
+if (userDataString) {
+    try {
+        // แปลง JSON string ให้เป็น object
+        const userData = JSON.parse(userDataString);
+
+        // เข้าถึงค่า studentID
+        studentID.value = userData.studentID;
+
+        console.log(studentID);  // Output: ค่า studentID
+    } catch (error) {
+        console.error('Error parsing JSON:', error);
+    }
+} else {
+    console.log('No userData found in localStorage');
+}
+
 
 const handleSubmit = async () => {
     const result = await Swal.fire({
@@ -33,6 +59,7 @@ const handleSubmit = async () => {
                 companyPhone: companyPhone.value,
                 companyEmail: companyEmail.value,
                 companyAddress: companyAddress.value,
+                studentID: studentID.value
             };
             const response = await axios.post(`${config.api_path}/company`, formData);
             if (response.data.message === 'Success') {
@@ -44,6 +71,12 @@ const handleSubmit = async () => {
                 console.log(response.data.newCompany)
                 localStorage.setItem('companyData', JSON.stringify(response.data.newCompany));
                 router.push('/user-index/data-student')
+            } else {
+                Swal.fire({
+                    title: "ผิดพลาด",
+                    text: "มีข้อมูลเรียบร้อยแล้ว",
+                    // icon: "success",
+                });
             }
         } catch (error) {
             Swal.fire({
@@ -97,6 +130,11 @@ const handleSubmit = async () => {
                         <div data-mdb-input-init class="form-outline mb-4">
                             <label class="form-label" for="form6Example5">Email สถานประกอบการ</label>
                             <input type="email" id="form6Example5" class="form-control" v-model="companyEmail" />
+                        </div>
+
+                        <div data-mdb-input-init class="form-outline mb-4">
+                            <label class="form-label" for="form6Example5">Student ID</label>
+                            <input type="text" id="form6Example5" class="form-control" v-model="studentID" />
                         </div>
 
                         <!-- Message input -->
