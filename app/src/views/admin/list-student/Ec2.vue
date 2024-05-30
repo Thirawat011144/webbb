@@ -89,7 +89,7 @@ onMounted(() => {
   <section class="content mt-4">
     <div class="card">
       <div class="card-header">
-        <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรี ชั้นปีที่ 2
+        <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรี ชั้นปีที่ 2 (ทั้งหมด)
           <div>
             <router-link :to="`/admin-index/Ec2-req`"> <button
                 class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
@@ -118,7 +118,7 @@ onMounted(() => {
               <td>{{ user.firstName }} {{ user.lastName }}</td>
               <td>{{ user.branch }}</td>
               <td>{{ user.year }}</td>
-              <td class="text-center">{{ user.company }}</td>
+              <td class="text-center">{{ user.companyDetails ? user.companyDetails.companyName : 'Null' }}</td>
               <td>
                 <router-link :to="`/edit-ec2/${user.id}`">
                   <button class="btn btn-primary m-1">Edit</button>

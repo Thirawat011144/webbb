@@ -107,6 +107,11 @@ const getUserName = computed(() => {
                                     <p>ป.ตรี ชี่นปีที่ 4</p>
                                 </router-link>
                             </li>
+                            <li class="nav-item">
+                                <router-link to="/admin-index/list-student" class="nav-link ms-4 ">
+                                    <p>รายชื่อนักเรียนทั้งหมด</p>
+                                </router-link>
+                            </li>
                         </ul>
                     </li>
                     <li class="nav-item">

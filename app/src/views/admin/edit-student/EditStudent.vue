@@ -56,8 +56,7 @@ const updateData = async () => {
                     text: "แก้ไขข้อมูลผู้ใช้สำเร็จ",
                     icon: "success",
                 });
-
-                router.push('/admin-index/list-cr2');
+                router.push('/admin-index/list-student');
             }
         } catch (error) {
             Swal.fire({
@@ -65,7 +64,7 @@ const updateData = async () => {
                 text: (error.message, "Update Error"),
                 icon: "error"
             });
-            console.log("ssss", error)
+            console.log(error)
         }
     }
 };
@@ -88,7 +87,7 @@ onMounted(() => {
                                 <div class="form-outline">
                                     <label class="form-label" for="firstName">First name</label>
                                     <input type="text" id="firstName" class="form-control form-control-lg"
-                                        v-model="user.firstName" />
+                                        v-model="user.firstName" disabled />
                                 </div>
                             </div>
                             <div class="col-md-6 mb-4">

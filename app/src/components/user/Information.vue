@@ -2,7 +2,7 @@
     <!-- <div class="d-flex"> -->
     <!-- <Sidebar /> -->
     <div class="flex-grow-1 p-3">
-        <h1>User Information</h1>
+        <h2>ข้อมูลส่วนตัว</h2>
         <div class="card" v-if="dataResult">
             <div class="card-body">
                 <h5 class="card-title">

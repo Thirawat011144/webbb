@@ -119,7 +119,7 @@ onMounted(() => {
                             <td>{{ user.firstName }} {{ user.lastName }}</td>
                             <td>{{ user.branch }}</td>
                             <td>{{ user.year }}</td>
-                            <td class="text-center">{{ user.company }}</td>
+                            <td class="text-center">{{ user.companyDetails ? user.companyDetails.companyName : 'Null' }}</td>
                             <td>
                                 <router-link :to="`/edit-cr2/${user.id}`">
                                     <button class="btn btn-primary m-1">Edit</button>

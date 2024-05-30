@@ -7,6 +7,7 @@ import FormCreateNews from '../../components/news/CreateNews.vue';
 import ListNews from '../../components/news/ListNews.vue'
 import EditNews from '../../components/news/EditNews.vue'
 
+import ListStudent from '../../views/admin/list-student/ListStudent.vue'
 import Cr2 from '../../views/admin/list-student/Cr2.vue';
 import Ec2 from '../../views/admin/list-student/Ec2.vue';
 import Ec4 from '../../views/admin/list-student/Ec4.vue';
@@ -30,6 +31,12 @@ const routeAdmin = [
         component: AdminIndex,
         beforeEnter: checkAuth,
         children: [
+          {
+            path:'list-student',
+            name:'list-student',
+            component:ListStudent
+          }
+          ,
           {
             path: 'list-cr2',
             name: 'list-cr2',

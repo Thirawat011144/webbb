@@ -1,6 +1,6 @@
 <template>
     <div class="flex-grow-1 p-3">
-        <h1>Status & Company Data</h1>
+        <h2>ข้อมูลสถานประกอบการ</h2>
         <div class="card" v-if="company">
             <div class="card-body">
                 <h5 class="card-title">

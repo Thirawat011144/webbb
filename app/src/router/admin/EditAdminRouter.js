@@ -1,7 +1,7 @@
 import EditCr2 from '../../views/admin/edit-student/EditCr2.vue';
 import EditEc2 from '../../views/admin/edit-student/EditEc2.vue';
 import EditEc4 from '../../views/admin/edit-student/EditEc4.vue';
-
+import EditStudent from '../../views/admin/edit-student/EditStudent.vue'
 import {checkAuth} from "./authRouteFunction"
 
 const routeEditAdmin = [
@@ -9,7 +9,7 @@ const routeEditAdmin = [
         path: '/edit-cr2/:id',
         name: 'edit-cr2',
         component: EditCr2,
-        beforeEnter: checkAuth
+        beforeEnter:checkAuth
     },
     {
         path: '/edit-ec2/:id',
@@ -21,6 +21,12 @@ const routeEditAdmin = [
         path: '/edit-ec4/:id',
         name: 'edit-ec4',
         component: EditEc4,
+        beforeEnter:checkAuth
+    },
+    {
+        path: '/edit-student/:id',
+        name: 'edit-student',
+        component: EditStudent,
         beforeEnter:checkAuth
     },
 ]

@@ -1,5 +1,6 @@
 const express = require("express");
-const UsersModel = require("../Models/Users");
+// const UsersModel = require("../Models/Users");
+const { CompaniesModel, UsersModel } = require("../Models/index");
 const { Op } = require('sequelize');
 
 
@@ -9,7 +10,12 @@ const router = express.Router();
 router.get("/users", async (req, res) => {
     try {
         const users = await UsersModel.findAll({
-            attributes: { exclude: ['password'] } // ระบุฟิลด์ที่ไม่ต้องการรวมในผลลัพธ์
+            attributes: { exclude: ['password'] }, // ระบุฟิลด์ที่ไม่ต้องการรวมในผลลัพธ์
+            include: [{
+                model: CompaniesModel,
+                as: 'companyDetails',
+                attributes: ['companyName'] // รวมเฉพาะฟิลด์ companyName
+            }] 
         });
         res.send(users);
     } catch (error) {
@@ -93,12 +99,20 @@ router.put('/user/:id', async (req, res) => {
 
 router.delete('/users/:id', async (req, res) => {
     try {
-        const user = await UsersModel.findByPk(req.params.id);
+        const user = await UsersModel.findByPk(req.params.id, {
+            include: [{ model: CompaniesModel, as: 'companyDetails' }]
+        });
         if (!user) {
             return res.status(404).send({ message: "User not found" });
         }
+
+        if (user.companyDetails) {
+            await user.companyDetails.destroy();
+        }
+
         await user.destroy();
         res.send({ message: "User deleted successfully" });
+
     } catch (error) {
         res.status(500).send({ message: error.message });
     }

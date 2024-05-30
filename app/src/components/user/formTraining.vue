@@ -69,7 +69,7 @@ const handleSubmit = async () => {
                     icon: "success",
                 });
                 console.log(response.data.newCompany)
-                localStorage.setItem('companyData', JSON.stringify(response.data.newCompany));
+                // localStorage.setItem('companyData', JSON.stringify(response.data.newCompany));
                 router.push('/user-index/data-student')
             } else {
                 Swal.fire({
@@ -109,12 +109,12 @@ const handleSubmit = async () => {
                                     <label class="form-label" for="form6Example2">ประเภทหน่วยงาน</label>
                                     <select id="form6Example2" class="form-control" v-model="companyType">
                                         <option value="">กรุณาเลือกประเภทหน่วยงาน</option>
-                                        <option value="government">หน่วยงานรัฐบาล</option>
-                                        <option value="stateEnterprise">รัฐวิสาหกิจ</option>
-                                        <option value="publicOrganization">องค์การมหาชน</option>
-                                        <option value="corporation">องค์การนิติบุคคล</option>
-                                        <option value="nonProfit">องค์การไม่แสวงหาผลกำไร</option>
-                                        <option value="educationalInstitution">สถาบันการศึกษา</option>
+                                        <option value="หน่วยงานรัฐบาล">หน่วยงานรัฐบาล</option>
+                                        <option value="รัฐวิสาหกิจ">รัฐวิสาหกิจ</option>
+                                        <option value="องค์การมหาชน">องค์การมหาชน</option>
+                                        <option value="องค์การนิติบุคคล">องค์การนิติบุคคล</option>
+                                        <option value="องค์การไม่แสวงหาผลกำไร">องค์การไม่แสวงหาผลกำไร</option>
+                                        <option value="สถาบันการศึกษา">สถาบันการศึกษา</option>
                                     </select>
                                 </div>
                             </div>
