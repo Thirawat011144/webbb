@@ -46,7 +46,7 @@ router.get("/users/search", async (req, res) => {
                 { firstName: { [Op.like]: `%${query}%` } },
                 { lastName: { [Op.like]: `%${query}%` } },
                 { userName: { [Op.like]: `%${query}%` } },
-                { company: { [Op.like]: `%${query}%` } },
+                // { company: { [Op.like]: `%${query}%` } },
             ]
         };
 
@@ -82,7 +82,7 @@ router.put('/user/:id', async (req, res) => {
         if (!user) {
             return res.status(404).send({ message: "User not found" });
         }
-        const { firstName, lastName, userName, password, phoneNumber, gender, year, branch, status, studentID, company } = req.body;
+        const { firstName, lastName, userName, password, phoneNumber, gender, year, branch, status, studentID, /**company **/ } = req.body;
         Object.assign(user, { firstName, lastName, userName, password, phoneNumber, gender, year, branch, status, studentID, company })
         await user.save();
         res.json({ data: user, message: "Success" });

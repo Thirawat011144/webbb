@@ -17,7 +17,7 @@ const year = ref(''); //ชั้นปี
 const branch = ref(''); //สาขา
 const status = ref(''); //สถานะ
 const studentID = ref(''); //รหัสนักศึกษา
-const company = ref(''); //สถานที่ขอออกฝึก
+// const company = ref(''); //สถานที่ขอออกฝึก
 
 
 
@@ -34,7 +34,7 @@ const handleRegister = async () => {
             branch: branch.value,
             status: status.value,
             studentID: studentID.value,
-            company: company.value
+            // company: company.value
         }
         const response = await axios.post(`${config.api_path}/register`, payload);
         if (response.data.message === "Success") {
@@ -52,6 +52,7 @@ const handleRegister = async () => {
             text: (error.message, "Register Error"),
             icon: "error"
         })
+        console.log(error)
     }
 }
 
@@ -166,11 +167,11 @@ const handleRegister = async () => {
                                             class="form-control form-control-lg" />
                                     </div>
 
-                                    <div class="form-outline mb-4">
+                                    <!--                    <div class="form-outline mb-4">
                                         <label class="form-label" for="form3Example90">Company</label>
                                         <input v-model="company" type="text" id="form3Example90"
                                             class="form-control form-control-lg" />
-                                    </div>
+                                    </div> -->
 
                                     <div class="d-flex justify-content-end pt-3">
                                         <button @click="handleRegister" type="button" class="btn btn-lg"

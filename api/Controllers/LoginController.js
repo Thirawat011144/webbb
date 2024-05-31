@@ -34,7 +34,7 @@ router.post('/login', async (req, res) => {
             branch: User.branch,
             status: User.status,
             studentID: User.studentID,
-            company: User.company,
+            // company: User.company,
             role: User.role,
         };
 

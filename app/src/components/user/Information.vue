@@ -8,14 +8,9 @@
                 <h5 class="card-title">
                     <span>ชื่อ:</span> {{ dataResult.firstName }} <span>นามสกุล:</span> {{ dataResult.lastName }}
                 </h5>
-                <p class="card-text">
-                    <span>Company:</span> {{ dataResult.company }}
-                </p>
+
                 <p class="card-text">
                     <span>Phone:</span> {{ dataResult.phoneNumber }}
-                </p>
-                <p class="card-text">
-                    <span>Role:</span> {{ dataResult.role }}
                 </p>
                 <p class="card-text">
                     <span>Status:</span> {{ dataResult.status }}

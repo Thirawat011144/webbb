@@ -27,7 +27,7 @@ router.post("/register", async (req, res) => {
         branch: req.body.branch,
         status: req.body.status,
         studentID: req.body.studentID,
-        company: req.body.company
+        // company: req.body.company
       });
       await result.save();
       res.json({ message: "Success", result: result });

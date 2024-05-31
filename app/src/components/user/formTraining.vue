@@ -6,13 +6,25 @@ import Swal from 'sweetalert2';
 import { useRouter } from 'vue-router';
 
 
+
+
 const router = useRouter();
+
+const userData = JSON.parse(localStorage.getItem('userData') || '{}');
 
 const companyName = ref('');
 const companyType = ref('');
 const companyPhone = ref('');
 const companyEmail = ref('');
 const companyAddress = ref('');
+const studentID = ref('')
+
+if (userData.studentID) {
+    studentID.value = userData.studentID;
+    console.log(studentID);  // Output: ค่า studentID
+} else {
+    console.log('No userData found in localStorage');
+}
 
 const handleSubmit = async () => {
     const result = await Swal.fire({
@@ -33,6 +45,7 @@ const handleSubmit = async () => {
                 companyPhone: companyPhone.value,
                 companyEmail: companyEmail.value,
                 companyAddress: companyAddress.value,
+                studentID:studentID.value
             };
             const response = await axios.post(`${config.api_path}/company`, formData);
             if (response.data.message === 'Success') {
@@ -76,12 +89,12 @@ const handleSubmit = async () => {
                                     <label class="form-label" for="form6Example2">ประเภทหน่วยงาน</label>
                                     <select id="form6Example2" class="form-control" v-model="companyType">
                                         <option value="">กรุณาเลือกประเภทหน่วยงาน</option>
-                                        <option value="government">หน่วยงานรัฐบาล</option>
-                                        <option value="stateEnterprise">รัฐวิสาหกิจ</option>
-                                        <option value="publicOrganization">องค์การมหาชน</option>
-                                        <option value="corporation">องค์การนิติบุคคล</option>
-                                        <option value="nonProfit">องค์การไม่แสวงหาผลกำไร</option>
-                                        <option value="educationalInstitution">สถาบันการศึกษา</option>
+                                        <option value="หน่วยงานรัฐบาล">หน่วยงานรัฐบาล</option>
+                                        <option value="รัฐวิสาหกิจ">รัฐวิสาหกิจ</option>
+                                        <option value="องค์การมหาชน">องค์การมหาชน</option>
+                                        <option value="องค์การนิติบุคคล">องค์การนิติบุคคล</option>
+                                        <option value="องค์การไม่แสวงหาผลกำไร">องค์การไม่แสวงหาผลกำไร</option>
+                                        <option value="สถาบันการศึกษา">สถาบันการศึกษา</option>
                                     </select>
                                 </div>
                             </div>
@@ -97,6 +110,11 @@ const handleSubmit = async () => {
                         <div data-mdb-input-init class="form-outline mb-4">
                             <label class="form-label" for="form6Example5">Email สถานประกอบการ</label>
                             <input type="email" id="form6Example5" class="form-control" v-model="companyEmail" />
+                        </div>
+
+                        <div data-mdb-input-init class="form-outline mb-4">
+                            <label class="form-label" for="form6Example5">Student ID</label>
+                            <input type="text" id="form6Example5" class="form-control" v-model="studentID" />
                         </div>
 
                         <!-- Message input -->
