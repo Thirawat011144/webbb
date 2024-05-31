@@ -155,8 +155,8 @@ const handleRegister = async () => {
                                             <select v-model="status" class="form-select">
                                                 <option value="" disabled>Status</option>
                                                 <option value="Request training">Request training</option>
-                                                <option value="training">training</option>
-                                                <option value="Finished training">Finished training</option>
+                                                <!-- <option value="training">training</option>
+                                                <option value="Finished training">Finished training</option> -->
                                             </select>
                                         </div>
                                     </div>

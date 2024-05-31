@@ -19,7 +19,7 @@ const user = ref({
     branch: '',
     status: '',
     studentID: '',
-    company: ''
+    // company: ''
 });
 
 const fetchData = async () => {
@@ -49,7 +49,7 @@ const updateData = async () => {
     });
     if (result.isConfirmed) {
         try {
-            const response = await axios.put(`${config.api_path}/user`, user.value);
+            const response = await axios.put(`${config.api_path}/user/${route.params.id}`, user.value);
             if (response.data.message === 'Success') {
                 Swal.fire({
                     title: "สำเร็จ",
@@ -176,11 +176,11 @@ onMounted(() => {
                             <input v-model="user.studentID" type="text" id="studentID"
                                 class="form-control form-control-lg" />
                         </div>
-                        <div class="form-outline mb-4">
+                        <!-- <div class="form-outline mb-4">
                             <label class="form-label" for="company">Company</label>
                             <input v-model="user.company" type="text" id="company"
                                 class="form-control form-control-lg" />
-                        </div>
+                        </div> -->
                         <div class="d-flex justify-content-end pt-3">
                             <button type="submit" class="btn btn-primary btn-lg ms-2">Submit Form</button>
                         </div>

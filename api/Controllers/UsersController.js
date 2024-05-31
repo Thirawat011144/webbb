@@ -1,7 +1,7 @@
 const express = require("express");
-const UsersModel = require("../Models/Users");
+// const UsersModel = require("../Models/Users");
 const { Op } = require('sequelize');
-
+const { UsersModel, CompaniesModel } = require("../Models/index");
 
 const router = express.Router();
 
@@ -9,13 +9,19 @@ const router = express.Router();
 router.get("/users", async (req, res) => {
     try {
         const users = await UsersModel.findAll({
-            attributes: { exclude: ['password'] } // ระบุฟิลด์ที่ไม่ต้องการรวมในผลลัพธ์
+            attributes: { exclude: ['password'] },
+            include: [{
+                model: CompaniesModel,
+                as: 'companyDetails',
+                attributes: ['companyName']
+            }]
         });
         res.send(users);
     } catch (error) {
         res.status(500).send({ message: error.message });
     }
-})
+});
+
 
 router.get("/user/:id", async (req, res) => {
     try {
@@ -83,7 +89,7 @@ router.put('/user/:id', async (req, res) => {
             return res.status(404).send({ message: "User not found" });
         }
         const { firstName, lastName, userName, password, phoneNumber, gender, year, branch, status, studentID, /**company **/ } = req.body;
-        Object.assign(user, { firstName, lastName, userName, password, phoneNumber, gender, year, branch, status, studentID, company })
+        Object.assign(user, { firstName, lastName, userName, password, phoneNumber, gender, year, branch, status, studentID,/**company **/ })
         await user.save();
         res.json({ data: user, message: "Success" });
     } catch (error) {
