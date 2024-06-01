@@ -1,13 +1,11 @@
 const express = require("express");
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const UsersModel = require("../Models/Users");
 
 const router = express.Router();
 
 router.post("/register", async (req, res) => {
   try {
-    console.log(req.body);
     const existingUser = await UsersModel.findOne({
       where: { userName: req.body.userName },
     });
@@ -27,7 +25,6 @@ router.post("/register", async (req, res) => {
         branch: req.body.branch,
         status: req.body.status,
         studentID: req.body.studentID,
-        // company: req.body.company
       });
       await result.save();
       res.json({ message: "Success", result: result });
@@ -36,6 +33,5 @@ router.post("/register", async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 })
-
 
 module.exports = router;

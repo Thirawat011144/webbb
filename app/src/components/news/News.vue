@@ -4,7 +4,7 @@
       <Navbar />
       <div>
         <div class="news-container">
-          <h1 class="news-header">ประชาสัมพันธ์</h1>
+          <h3 class="news-header">ประชาสัมพันธ์</h3>
           <div class="news-list">
             <div class="news-item" v-for="news in newsList" :key="news.id">
               <div class="news-content">
@@ -69,7 +69,7 @@ onMounted(() => {
 .news-header {
   text-align: center;
   margin-bottom: 30px;
-  font-size: 2.5em;
+  /* font-size: 2.5em; */
   color: #333333;
   font-weight: bold;
 }

@@ -27,7 +27,9 @@ const users = ref([]); // เปลี่ยน {} เป็น []
 
 const fetchData = async () => {
   try {
-    const response = await axios.get(`${config.api_path}/users`);
+    const response = await axios.get(`${config.api_path}/users`,{
+      // headers: { 'Authorization': `Bearer ${localStorage.getItem(config.token_name)}` }
+    });
     users.value = response.data.filter(user => user.year === "ปวช 2");
   } catch (error) {
     Swal.fire({

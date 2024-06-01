@@ -1,5 +1,4 @@
 const express = require("express");
-const bcrypt = require('bcryptjs');
 const NewsModel = require("../Models/News");
 
 const router = express.Router();
@@ -34,7 +33,7 @@ router.get("/news/:id", async (req, res) => {
     try {
         const news = await NewsModel.findByPk(req.params.id);
         if (!news) {
-            return res.status(404).send({ message: "User not found" });
+            return res.status(404).send({ message: "News not found" });
         }
         res.send(news);
     } catch (error) {
@@ -46,7 +45,7 @@ router.put('/news/:id', async (req, res) => {
     try {
         const news = await NewsModel.findByPk(req.params.id);
         if (!news) {
-            return res.status(404).send({ message: "User not found" });
+            return res.status(404).send({ message: "News not found" });
         }
         const { title, detail, } = req.body;
         Object.assign(news, { title, detail })
@@ -64,14 +63,12 @@ router.delete('/news/:id', async (req, res) => {
             return res.status(404).send({ message: "News not found" });
         }
         await news.destroy();
-        res.send({ message: "User deleted successfully" });
+        res.send({ message: "News deleted successfully" });
     } catch (error) {
         res.status(500).send({ message: error.message });
         console.log(error)
     }
-    
 })
-
 
 
 module.exports = router;

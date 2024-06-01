@@ -1,7 +1,7 @@
 <template>
   <div class="content mt-4">
     <div class="card bg-white">
-      <div class="card-header"> แบบฟอร์มแจ้งข้อมูลข่าวสาร </div>
+      <h5 class="card-header"> แบบฟอร์มแจ้งข้อมูลข่าวสาร </h5>
       <div class="card-header">
         <form @submit.prevent="submitForm">
           <div class="mb-3">
@@ -36,7 +36,6 @@ const news = ref({
 const submitForm = async () => {
   try {
     const response = await axios.post(`http://localhost:3000/api/news/`, news.value);
-    // alert('News updated successfully');
     if (response) {
       Swal.fire({
         title: "Sign Up",
@@ -47,8 +46,11 @@ const submitForm = async () => {
       router.push('/admin-index/list-news')
     }
   } catch (error) {
-    console.error('Error updating news:', error);
-    alert('Failed to update news');
+    Swal.fire({
+      title: "Error",
+      text: "ไม่สามารถเพิ่มข่าวสารได้",
+      icon: "error",
+    });
   }
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="content mt-4">
     <div class="card">
-      <div class="card-header">ข้อมูลข่าวประชาสัมพันธ์</div>
+      <h5 class="card-header">ข้อมูลข่าวประชาสัมพันธ์</h5>
       <table class="table">
         <thead>
           <tr>
@@ -35,11 +35,8 @@ import axios from "axios";
 import { ref, onMounted, computed } from 'vue';
 import config from "../../../config";
 import Swal from 'sweetalert2';
-import { useRoute, useRouter } from 'vue-router';
-import { RouterLink, RouterView } from 'vue-router';
 
-
-const news = ref([]); // เปลี่ยน {} เป็น []
+const news = ref([]); 
 
 const fetchData = async () => {
   try {
@@ -55,7 +52,6 @@ const fetchData = async () => {
 };
 
 const removeData = async (id) => {
-  // แสดงป๊อปอัพยืนยันการลบ
   const result = await Swal.fire({
     title: 'คุณแน่ใจหรือไม่?',
     text: 'คุณจะไม่สามารถย้อนกลับได้!',
@@ -67,7 +63,6 @@ const removeData = async (id) => {
     cancelButtonText: 'ยกเลิก'
   });
 
-  // ตรวจสอบว่าผู้ใช้กดยืนยันการลบหรือไม่
   if (result.isConfirmed) {
     try {
       const response = await axios.delete(`${config.api_path}/news/${id}`);
@@ -78,7 +73,7 @@ const removeData = async (id) => {
         icon: 'success',
       }).then((result) => {
         if (result.value) {
-          fetchData(); // รีเฟรชข้อมูลหลังจากการลบ
+          fetchData(); 
         }
       });
     } catch (error) {

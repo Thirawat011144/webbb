@@ -6,8 +6,6 @@ import Swal from 'sweetalert2';
 import { useRouter } from 'vue-router';
 
 
-
-
 const router = useRouter();
 
 const userData = JSON.parse(localStorage.getItem('userData') || '{}');
@@ -21,7 +19,6 @@ const studentID = ref('')
 
 if (userData.studentID) {
     studentID.value = userData.studentID;
-    console.log(studentID);  // Output: ค่า studentID
 } else {
     console.log('No userData found in localStorage');
 }
@@ -61,7 +58,7 @@ const handleSubmit = async () => {
         } catch (error) {
             Swal.fire({
                 title: "error",
-                text: (error.message, "Creating Company Error"),
+                text: (error.message, "Creating Data Company Error"),
                 icon: "error"
             });
         }
@@ -76,7 +73,6 @@ const handleSubmit = async () => {
             <div class="card">
                 <div class="card-body">
                     <form @submit.prevent="handleSubmit">
-                        <!-- 2 column grid layout with text inputs for the first and last names -->
                         <div class="row mb-4">
                             <div class="col">
                                 <div data-mdb-input-init class="form-outline">
@@ -84,6 +80,8 @@ const handleSubmit = async () => {
                                     <input type="text" id="form6Example1" class="form-control" v-model="companyName" />
                                 </div>
                             </div>
+
+                        <!-- List input -->
                             <div class="col">
                                 <div data-mdb-input-init class="form-outline">
                                     <label class="form-label" for="form6Example2">ประเภทหน่วยงาน</label>
@@ -111,7 +109,7 @@ const handleSubmit = async () => {
                             <label class="form-label" for="form6Example5">Email สถานประกอบการ</label>
                             <input type="email" id="form6Example5" class="form-control" v-model="companyEmail" />
                         </div>
-
+                         <!-- StudentID input -->
                         <div data-mdb-input-init class="form-outline mb-4">
                             <label class="form-label" for="form6Example5">Student ID</label>
                             <input type="text" id="form6Example5" class="form-control" v-model="studentID" />

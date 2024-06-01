@@ -43,13 +43,7 @@ const UsersModel = connect.define("users", {
         defaultValue: 'user'
     }
 })
-// UsersModel.sync({ alter: true })
-//     .then(() => {
-//         console.log("Table created successfully!");
-//     })
-//     .catch((err) => {
-//         console.error("Error creating table:", err);
-//     });
+
 module.exports = UsersModel;
 
 

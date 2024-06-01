@@ -1,6 +1,43 @@
+<script setup>
+import { ref, onMounted, watch } from 'vue';
+import config from '../../../config';
+import axios from 'axios';
+
+const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+
+const company = ref('')
+
+let studentID = null
+
+if (userData.studentID) {
+    studentID = userData.studentID;
+} else {
+    console.log('No userData found in localStorage');
+}
+
+const fetchCompany = async () => {
+    try {
+        if (studentID) {
+            const response = await axios.get(`${config.api_path}/company/${studentID}`, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem(config.token_name)}` }
+            });
+            company.value = response.data;
+        } else {
+            console.error('studentID is not defined');
+        }
+    } catch (error) {
+        console.error('Error fetching company:', error);
+    }
+};
+
+onMounted(() => {
+    fetchCompany();
+});
+</script>
+
 <template>
     <div class="flex-grow-1 p-3">
-        <h1>Company Data</h1>
+        <h2>ข้อมูลสถานประกอบการ</h2>
         <div class="card" v-if="company">
             <div class="card-body">
                 <h5 class="card-title">
@@ -25,64 +62,6 @@
         </div>
     </div>
 </template>
-
-
-<script setup>
-import { ref, onMounted, watch } from 'vue';
-import config from '../../../config';
-import axios from 'axios';
-// import { useDataStore } from '../../store/Search';
-
-
-const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-
-const company = ref('')
-// const searchData = useDataStore();
-// const dataResult = ref({});
-
-let studentID = null
-
-if (userData.studentID) {
-    studentID = userData.studentID;
-    console.log(studentID);  // Output: ค่า studentID
-} else {
-    console.log('No userData found in localStorage');
-}
-
-
-// const updateDataResults = () => {
-//     const storedCompanyData = localStorage.getItem('companyData');
-//     if (storedCompanyData) {
-//         dataResult.value = JSON.parse(storedCompanyData);
-//     } else {
-//         dataResult.value = searchData.dataResults;
-//     }
-// }
-
-const fetchCompany = async () => {
-    try {
-        if (studentID) {
-            const response = await axios.get(`${config.api_path}/company/${studentID}`, {
-                headers: { 'Authorization': `Bearer ${localStorage.getItem(config.token_name)}` }
-            });
-            company.value = response.data;
-            console.log(company.value)
-        } else {
-            console.error('studentID is not defined');
-        }
-    } catch (error) {
-        console.error('Error fetching company:', error);
-    }
-};
-
-onMounted(() => {
-    fetchCompany();
-});
-
-// onMounted(() => {
-//     updateDataResults();
-// });
-</script>
 
 <style scoped>
 span {

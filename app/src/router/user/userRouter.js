@@ -1,5 +1,3 @@
-// import config from '../../../config';
-
 import UserIndex from '@/views/user/UserIndex.vue';
 import { checkAuth } from './authRouterFunction';
 import formTraining from '../../components/user/formTraining.vue'

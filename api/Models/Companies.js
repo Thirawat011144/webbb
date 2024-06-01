@@ -28,11 +28,4 @@ const CompaniesModel = connect.define("companies", {
     }
 })
 
-// CompaniesModel.sync({ alter: true })
-//     .then(() => {
-//         console.log("Table created successfully!")
-//     }).catch((error) => {
-//         console.log("Error creating table:", error)
-//     })
-
 module.exports = CompaniesModel;

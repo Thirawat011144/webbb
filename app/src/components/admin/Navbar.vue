@@ -7,6 +7,7 @@ import axios from "axios";
 import { useSearchStore } from '../../store/Search';
 
 const router = useRouter();
+
 const searchQuery = ref("");
 const searchStore = useSearchStore();
 
@@ -33,7 +34,6 @@ const searchUsers = async () => {
         searchStore.setSearchResults([]);
         return;
     }
-
     try {
         const response = await axios.get(`${config.api_path}/users/search`, {
             params: {
@@ -100,17 +100,14 @@ const searchUsers = async () => {
 .custom-search-input .form-control {
     border-radius: 0.25rem;
     height: 32px;
-    /* Adjust to match the height of the Sign Out button */
 }
 
 .custom-search-input .btn-navbar {
     border-radius: 0.25rem;
     height: 32px;
-    /* Adjust to match the height of the Sign Out button */
 }
 
 .btn-sm {
     height: 32px;
-    /* Ensure Sign Out button matches the height */
 }
 </style>

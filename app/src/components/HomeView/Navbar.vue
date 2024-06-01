@@ -26,13 +26,12 @@
                 </ul>
             </div>
         </div>
-        <!-- <mainbar/> -->
         <router-view></router-view>
     </div>
 </template>
 
 <script setup>
-import Mainbar from './Mainbar.vue';
+
 
 </script>
 

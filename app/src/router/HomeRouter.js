@@ -1,19 +1,16 @@
 import HomeView from '../views/HomeView.vue';
-// import News from '../components/news/News.vue';
-
+import TeacherIndex from '@/views/teacher/index.vue'
 const routeHome = [
     {
         path: '/',
         name: 'home',
         component: HomeView,
-        // children:[
-        //   {
-        //     path:'news',
-        //     name:'news',
-        //     component:News
-        //   }
-        // ]
       },
+    {
+      path:'/teacher-index',
+      name:'teacher-home',
+      component:TeacherIndex
+    }
 ]
 
 export default routeHome
