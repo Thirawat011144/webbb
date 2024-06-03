@@ -1,12 +1,20 @@
 import Register from '../views/auth/Register.vue';
 import Login from '@/views/auth/Login.vue';
+import RegisterTeacher from '@/views/auth/RegisterTeacher.vue';
 
 const routerAuth = [
     {
         path: '/register',
         name: 'register',
         component: Register
-      },
+      }
+      ,
+      {
+        path:'/teacher-register',
+        name:'teacher-register',
+        component:RegisterTeacher
+      }
+      ,
       {
         path: '/login',
         name: 'login',

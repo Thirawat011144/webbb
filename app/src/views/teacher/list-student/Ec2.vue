@@ -4,10 +4,9 @@ import { ref, onMounted, computed } from 'vue';
 import config from "../../../../config";
 import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
-import { RouterLink, RouterView } from 'vue-router';
 
-// const route = useRoute();
-// const router = useRouter();
+const route = useRoute();
+const router = useRouter();
 
 // const user = ref({
 //   firstName: '',
@@ -27,10 +26,8 @@ const users = ref([]); // เปลี่ยน {} เป็น []
 
 const fetchData = async () => {
   try {
-    const response = await axios.get(`${config.api_path}/users`, {
-      // headers: { 'Authorization': `Bearer ${localStorage.getItem(config.token_name)}` }
-    });
-    users.value = response.data.filter(user => user.year === "ปวช 2");
+    const response = await axios.get(`${config.api_path}/users`);
+    users.value = response.data.filter(user => user.year === "ป.ตรี ปีที่ 2");
   } catch (error) {
     Swal.fire({
       title: "error",
@@ -89,16 +86,17 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="content mt-4">
+  <section class="content mt-4 ">
     <div class="card">
       <div class="card-header">
-        <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นประกาศนียบัตรวิชาชีพ ชั้นปีที่ 2
+        <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรี ชั้นปีที่ 2
           <div>
-            <router-link :to="`/admin-index/cr2-req`"> <button
+            <router-link :to="`/teacher-index/student-tec2req`"> <button
                 class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
-            <router-link :to="`/admin-index/cr2-active`"> <button
+            <router-link :to="`/teacher-index/student-tec2active`"> <button
                 class="btn btn-warning m-1">กำลังฝึก</button></router-link>
-            <router-link :to="`/admin-index/cr2-success`"> <button class="btn btn-success m-1">ฝึกจบแล้ว</button>
+            <router-link :to="`/teacher-index/student-tec2success`"> <button
+               class="btn btn-success m-1">ฝึกจบแล้ว</button>
             </router-link>
           </div>
         </div>
@@ -121,9 +119,9 @@ onMounted(() => {
               <td>{{ user.firstName }} {{ user.lastName }}</td>
               <td>{{ user.branch }}</td>
               <td>{{ user.year }}</td>
-              <td class="text-center">{{ user.companyDetails ? user.companyDetails.companyName : 'Null' }} </td>
+              <td class="text-center">{{ user.company }}</td>
               <td>
-                <router-link :to="`/edit-cr2/${user.id}`">
+                <router-link :to="`/edit-ec2/${user.id}`">
                   <button class="btn btn-primary m-1">Edit</button>
                 </router-link>
                 <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button>
@@ -132,7 +130,6 @@ onMounted(() => {
           </tbody>
         </table>
       </div>
-      <!-- <router-view></router-view> -->
     </div>
   </section>
 </template>

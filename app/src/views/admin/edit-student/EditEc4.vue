@@ -8,6 +8,8 @@ import { useRoute, useRouter } from 'vue-router';
 const route = useRoute();
 const router = useRouter();
 
+const role = localStorage.getItem(config.role_name);
+
 const user = ref({
     firstName: '',
     lastName: '',
@@ -56,7 +58,11 @@ const updateData = async () => {
                     text: "แก้ไขข้อมูลผู้ใช้สำเร็จ",
                     icon: "success",
                 });
+                if(role === 'teacher'){
+                    router.push('/teacher-index/list-ec4');
+                }else{
                 router.push('/admin-index/list-ec4');
+                }
             }
         } catch (error) {
             Swal.fire({

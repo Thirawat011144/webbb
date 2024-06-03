@@ -4,12 +4,14 @@ import config from '../../../config';
 import {checkAuth} from "./authRouteFunction"
 
 import FormCreateNews from '../../components/news/CreateNews.vue';
-import ListNews from '../../components/news/ListNews.vue'
-import EditNews from '../../components/news/EditNews.vue'
+import ListNews from '../../components/news/ListNews.vue';
+import EditNews from '../../components/news/EditNews.vue';
 
-import Cr2 from '../../views/admin/list-student/Cr2.vue';
-import Ec2 from '../../views/admin/list-student/Ec2.vue';
-import Ec4 from '../../views/admin/list-student/Ec4.vue';
+import listTeachers from '../../views/admin/list-teacher/listTeachers.vue'
+
+import Cr2 from '../../views/admin/list-student/Cr2.vue'
+import Ec2 from '../../views/admin/list-student/Ec2.vue'
+import Ec4 from '../../views/admin/list-student/Ec4.vue'
 
 import Cr2Req from '../../views/admin/list-student-request/Cr2Req.vue';
 import Ec2Req from '../../views/admin/list-student-request/Ec2Req.vue';
@@ -30,6 +32,11 @@ const routeAdmin = [
         component: AdminIndex,
         beforeEnter: checkAuth,
         children: [
+          {
+            path:'list-teachers' ,
+            name:'list-teachers',
+            component:listTeachers
+          },
           {
             path: 'list-cr2',
             name: 'list-cr2',

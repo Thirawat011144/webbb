@@ -36,7 +36,10 @@ const handleLogin = async () => {
 
             if (response.data.data.role === "admin") {
                 router.push('/admin-index')
-            } else {
+            } else if(response.data.data.role === "teacher"){
+                router.push('/teacher-index')
+            }
+            else {
                 router.push('/user-index')
             }
         }
@@ -104,9 +107,9 @@ const handleLogin = async () => {
                         </form>
                         <div class="input-group mb-3"></div>
                         <div class="row">
-                            <p>ยังไม่มีบัญชีผู้ใช้ ใช่ไหม</p>
+                            <!-- <p>ยังไม่มีบัญชีผู้ใช้ ใช่ไหม</p> -->
                             <router-link to="/register"><small href="#">สมัครสำหรับนักศึกษา</small></router-link>
-                            <router-link to="/register"><small href="#">สมัครสำหรับอาจารย์</small></router-link>
+                            <router-link to="/teacher-register"><small href="#">สมัครสำหรับอาจารย์</small></router-link>
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 const express = require("express");
-const { Op } = require('sequelize');
+const { Op, Sequelize } = require('sequelize');
 const { UsersModel, CompaniesModel } = require("../Models/index");
 // const authenticateToken = require('../Middleware/Authorization');
 
@@ -21,10 +21,14 @@ router.get("/users", async (req, res) => {
     }
 });
 
-
 router.get("/user/:id", async (req, res) => {
     try {
-        const user = await UsersModel.findByPk(req.params.id);
+        const user = await UsersModel.findByPk(req.params.id, {
+            include: [{
+                model: CompaniesModel,
+                as: 'companyDetails'
+            }]
+        });
         if (!user) {
             return res.status(404).send({ message: "User not found" });
         }
@@ -32,7 +36,7 @@ router.get("/user/:id", async (req, res) => {
     } catch (error) {
         res.status(500).send({ message: error.message });
     }
-})
+});
 
 
 router.get("/users/search", async (req, res) => {
@@ -84,8 +88,8 @@ router.put('/user/:id', async (req, res) => {
         if (!user) {
             return res.status(404).send({ message: "User not found" });
         }
-        const { firstName, lastName, userName, password, phoneNumber, gender, year, branch, status, studentID } = req.body;
-        Object.assign(user, { firstName, lastName, userName, password, phoneNumber, gender, year, branch, status, studentID })
+        const { firstName, lastName, userName, password, phoneNumber, gender, year, branch, status, studentID, role } = req.body;
+        Object.assign(user, { firstName, lastName, userName, password, phoneNumber, gender, year, branch, status, studentID, role })
         await user.save();
         res.json({ data: user, message: "Success" });
     } catch (error) {
@@ -104,7 +108,7 @@ router.delete('/users/:id', async (req, res) => {
         }
         await CompaniesModel.destroy({ where: { studentID: studentID } });
         await user.destroy();
-       
+
         res.send({ message: "User deleted successfully" });
     } catch (error) {
         res.status(500).send({ message: error.message });

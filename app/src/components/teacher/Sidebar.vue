@@ -13,7 +13,7 @@ const getUserName = computed(() => {
 
 <template>
     <!-- Main Sidebar Container -->
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <aside class="main-sidebar bg-secondary sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
         <a href="index3.html" class="brand-link">
             <img src="../../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
@@ -23,28 +23,14 @@ const getUserName = computed(() => {
 
         <!-- Sidebar -->
         <div class="sidebar">
-            <!-- Sidebar user panel (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                <!-- <div class="image">
-                    <img src="../../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-                </div> -->
                 <div class="info">
-                    <router-link to="/admin-index"> <a href="#" class="d-block fw-bold">Admin: {{ getUserName }}</a>
+                    <router-link to="/admin-index"> <a href="#" class="d-block fw-bold">อาจารย์: {{ getUserName }}</a>
                     </router-link>
                 </div>
             </div>
             <!-- SidebarSearch Form -->
-            <!-- <div class="form-inline">
-                <div class="input-group" data-widget="sidebar-search">
-                    <input class="form-control form-control-sidebar" type="search" placeholder="Search"
-                        aria-label="Search">
-                    <div class="input-group-append">
-                        <button class="btn btn-sidebar">
-                            <i class="fas fa-search fa-fw"></i>
-                        </button>
-                    </div>
-                </div>
-            </div> -->
+
 
             <!-- Sidebar Menu -->
             <nav class="mt-2">
@@ -53,25 +39,6 @@ const getUserName = computed(() => {
                     <div class="nav-header text-white">
                         เมนู
                     </div>
-                    <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-                    <!-- <li class="nav-item menu-open">
-                        <a href="#" class="nav-link ">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
-                            <p>
-                                Dashboard
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="./index.html" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Dashboard v1</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li> -->
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="fa-solid fa-user-graduate"></i>
@@ -81,31 +48,27 @@ const getUserName = computed(() => {
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
+
+
                             <li class="nav-item">
-                                <router-link to="/admin-index/list-teachers" class="nav-link ms-4">
-                                    <p>อาจารย์</p>
+                                <router-link to="/teacher-index/list-cr2" class="nav-link ms-4">
+                                    <p>ปวช ชั้นปีที่&nbsp; 2</p>
                                 </router-link>
                             </li>
 
                             <li class="nav-item">
-                                <router-link :to="{ name: 'list-cr2' }" class="nav-link ms-4">
-                               <p>ปวช ชั้นปีที่ 2</p>
-                                    </router-link>
-                            </li>
-
-                            <li class="nav-item">
-                                <router-link :to="{name: 'list-ec2'}" class="nav-link ms-4">
+                                <router-link to="/teacher-index/list-ec2" class="nav-link ms-4">
                                     <p>ป.ตรี ชั้นปีที่ 2</p>
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link to="/admin-index/list-ec4" class="nav-link ms-4 ">
+                                <router-link to="/teacher-index/list-ec4" class="nav-link ms-4 ">
                                     <p>ป.ตรี ชี่นปีที่ 4</p>
                                 </router-link>
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link">
                             <i class="fa-regular fa-newspaper"></i>
                             <p>
@@ -129,7 +92,7 @@ const getUserName = computed(() => {
                                 </router-link>
                             </li>
                         </ul>
-                    </li>
+                    </li> -->
                 </ul>
             </nav>
             <!-- /.sidebar-menu -->

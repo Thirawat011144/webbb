@@ -6,7 +6,7 @@ export function checkAuth(to, from, next) {
     if (!token) {
         next('login');
     } else {
-        if (role === 'admin') {
+        if (role === 'admin' || 'teacher') {
             next();
         } else if (role === 'user') {
             next('user-index');
