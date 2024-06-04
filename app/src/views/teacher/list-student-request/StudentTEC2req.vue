@@ -89,11 +89,18 @@ import axios from "axios";
 import { ref, onMounted, computed } from 'vue';
 import config from "../../../../config";
 import Swal from 'sweetalert2';
+// import Modal from "@/views/Modal.vue";
 import { useRoute, useRouter } from 'vue-router';
 
 const users = ref([]);
 const isModalVisible = ref(false);
 const modalData = ref(null);
+// const term = ref();
+
+// const handleFormSubmit = (e) => {
+//     e.preventDefault();
+
+// }
 
 const fetchData = async () => {
     try {

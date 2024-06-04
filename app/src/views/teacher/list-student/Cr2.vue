@@ -9,21 +9,9 @@ import { RouterLink, RouterView } from 'vue-router';
 // const route = useRoute();
 // const router = useRouter();
 
-// const user = ref({
-//   firstName: '',
-//   lastName: '',
-//   userName: '',
-//   password: '',
-//   phoneNumber: '',
-//   gender: '',
-//   year: '',
-//   branch: '',
-//   status: '',
-//   studentID: '',
-//   company: ''
-// });
-
 const users = ref([]); // เปลี่ยน {} เป็น []
+const isModalVisible = ref(false);
+const modalData = ref(null);
 
 const fetchData = async () => {
   try {
@@ -39,6 +27,29 @@ const fetchData = async () => {
     });
   }
 };
+
+
+// modal
+const showModal = async (id) => {
+  isModalVisible.value = true;
+  try {
+    const response = await axios.get(`${config.api_path}/user/${id}`);
+    modalData.value = response.data;
+  } catch (error) {
+    Swal.fire({
+      title: "error",
+      text: (error.message, "Cr2 Error Fetching Data"),
+      icon: 'error'
+    });
+  }
+};
+
+const closeModal = () => {
+  isModalVisible.value = false;
+  modalData.value = null;
+};
+// modal
+
 
 const removeData = async (id) => {
   // แสดงป๊อปอัพยืนยันการลบ
@@ -98,7 +109,8 @@ onMounted(() => {
                 class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
             <router-link :to="`/teacher-index/student-vcr2active`"> <button
                 class="btn btn-warning m-1">กำลังฝึก</button></router-link>
-            <router-link :to="`/teacher-index/student-vcr2success`"> <button class="btn btn-success m-1">ฝึกจบแล้ว</button>
+            <router-link :to="`/teacher-index/student-vcr2success`"> <button
+                class="btn btn-success m-1">ฝึกจบแล้ว</button>
             </router-link>
           </div>
         </div>
@@ -121,7 +133,9 @@ onMounted(() => {
               <td>{{ user.firstName }} {{ user.lastName }}</td>
               <td>{{ user.branch }}</td>
               <td>{{ user.year }}</td>
-              <td class="text-center">{{ user.companyDetails ? user.companyDetails.companyName : 'Null' }} </td>
+              <td class="text-center">
+                <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
+              </td>
               <td>
                 <router-link :to="`/edit-cr2/${user.id}`">
                   <button class="btn btn-primary m-1">Edit</button>
@@ -132,7 +146,36 @@ onMounted(() => {
           </tbody>
         </table>
       </div>
-      <!-- <router-view></router-view> -->
+    </div>
+    <!-- Modal -->
+    <div v-if="isModalVisible" class="modal fade show" tabindex="-1" style="display: block;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel">ข้อมูลผู้ใช้</h5>
+            <button type="button" class="btn-close" @click="isModalVisible = false" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" v-if="modalData">
+            <p>รหัสนักศึกษา: {{ modalData.studentID }}</p>
+            <p>ชื่อ-นามสกุล: {{ modalData.firstName }} {{ modalData.lastName }}</p>
+            <p>สาขา: {{ modalData.branch }}</p>
+            <p>ชั้นปี: {{ modalData.year }}</p>
+            <div v-if="modalData.companyDetails">
+              <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
+              <p>ประเภทหน่วยงาน: {{ modalData.companyDetails.companyType }}</p>
+              <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
+              <p>Email: {{ modalData.companyDetails.companyEmail }}</p>
+              <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
+            </div>
+            <div v-else>
+              <p>ไม่มีข้อมูลสถานประกอบการ</p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="closeModal">ปิด</button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 </template>
