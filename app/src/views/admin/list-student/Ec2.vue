@@ -8,19 +8,12 @@ import { useRoute, useRouter } from 'vue-router';
 const route = useRoute();
 const router = useRouter();
 
-// const user = ref({
-//   firstName: '',
-//   lastName: '',
-//   userName: '',
-//   password: '',
-//   phoneNumber: '',
-//   gender: '',
-//   year: '',
-//   branch: '',
-//   status: '',
-//   studentID: '',
-//   company: ''
-// });
+const teacherStatus = ref('/admin-index/Ec2-req');
+const companyStatus = ref('/admin-index/Ec2-active');
+
+const navigate = (status) => {
+  router.push(status);
+};
 
 const users = ref([]); // เปลี่ยน {} เป็น []
 const isModalVisible = ref(false);
@@ -114,12 +107,41 @@ onMounted(() => {
       <div class="card-header">
         <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรี ชั้นปีที่ 2
           <div>
-            <router-link :to="`/admin-index/Ec2-req`"> <button
-                class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
+            <div>
+
+            </div>
+            <!-- <label for="">อาจารย์:</label>
+            <router-link :to="`/admin-index/Ec2-req`"> <button class="btn btn-primary m-1">
+                ขออนุมัติ</button></router-link>
             <router-link :to="`/admin-index/Ec2-active`"> <button
-                class="btn btn-warning m-1">กำลังฝึก</button></router-link>
-            <router-link :to="`/admin-index/Ec2-success`"> <button class="btn btn-success m-1">ฝึกจบแล้ว</button>
-            </router-link>
+                class="btn btn-success m-1">อนุมัติ</button></router-link>
+            <router-link :to="`/admin-index/Ec2-active`"> <button
+                class="btn btn-danger m-1">ไม่อนุมัติ</button></router-link> -->
+
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;"
+              class="mt-3 mb-3">
+              <div style="display: flex; align-items: center; margin-right: 20px;">
+                <label for="teacherStatus">อาจารย์:</label>
+                <select v-model="teacherStatus" id="teacherStatus" class="form-select ms-3">
+                  <option value="/admin-index/Ec2-req">ขออนุมัติ</option>
+                  <option value="/admin-index/Ec2-active-success">อนุมัติ</option>
+                  <option value="/admin-index/Ec2-active-danger">ไม่อนุมัติ</option>
+                </select>
+                <button class="btn btn-primary ms-3" @click="navigate(teacherStatus)">Go</button>
+              </div>
+              <div style="display: flex; align-items: center; margin-left: 20px;">
+                <label for="companyStatus" style="white-space: nowrap;">สถานประกอบการ:</label>
+                <select v-model="companyStatus" id="companyStatus" class="form-select ms-3">
+                  <option value="/admin-index/Ec2-active">ขออนุมัติ</option>
+                  <option value="/admin-index/Ec2-active-danger">ไม่อนุมัติ</option>
+                  <option value="/admin-index/Ec2-active-success">อนุมัติ</option>
+                  <option value="/admin-index/Ec2-active-training">กำลังฝึก</option>
+                  <option value="/admin-index/Ec2-success">ฝึกจบแล้ว</option>
+                </select>
+                <button class="btn btn-primary ms-3" @click="navigate(companyStatus)">Go</button>
+              </div>
+            </div>
+
           </div>
         </div>
         <table class="table">

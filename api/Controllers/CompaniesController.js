@@ -1,27 +1,138 @@
 const express = require('express');
 const router = express.Router();
-const CompaniesModel = require("../Models/Companies")
+// const CompaniesModel = require("../Models/Companies")
+const { UsersModel, CompaniesModel } = require("../Models/index");
+
 const authenticateToken = require('../Middleware/Authorization');
+
+// router.post('/company', async (req, res) => {
+//     try {
+//         const { companyName, companyType, companyPhone, companyEmail, companyAddress, studentID } = req.body;
+//         const newCompany = await CompaniesModel.create({
+//             companyName,
+//             companyType,
+//             companyPhone,
+//             companyEmail,
+//             companyAddress,
+//             studentID
+//         });
+//         console.log(req.body)
+
+//         res.status(201).send({ message: "Success", newCompany });
+//     } catch (error) {
+//         res.status(500).send({ message: error.message });
+//     }
+// });
+
+// router.post('/company', async (req, res) => {
+//     try {
+//         const { companyName, companyType, companyPhone, companyEmail, companyAddress, studentID, status } = req.body;
+
+//         const user = await UsersModel.findOne({ where: { studentID } });
+//         if (user) {
+//             user.status = status;
+//             await user.save();
+//         } else {
+//             res.status(404).send({ message: "ไม่พบข้อมูล studentID ในตาราง Users" });
+//             return;
+//         }
+
+//         if (status === 'ไม่อนุมัติ') {
+//             // หา record ที่มี studentID ตรงกับค่าในฐานข้อมูล
+//             const existingCompany = await CompaniesModel.findOne({ where: { studentID } });
+
+//             if (existingCompany) {
+//                 // อัปเดตข้อมูลในฐานข้อมูล
+//                 existingCompany.companyName = companyName;
+//                 existingCompany.companyType = companyType;
+//                 existingCompany.companyPhone = companyPhone;
+//                 existingCompany.companyEmail = companyEmail;
+//                 existingCompany.companyAddress = companyAddress;
+//                 await existingCompany.save();
+
+//                 res.status(200).send({ message: "ข้อมูลถูกอัปเดตเรียบร้อยแล้ว", existingCompany });
+//             } else {
+//                 res.status(404).send({ message: "ไม่พบข้อมูล studentID ในฐานข้อมูล" });
+//             }
+//         } else if (status === 'ขออนุมัติ') {
+//             // สร้าง record ใหม่
+//             const newCompany = await CompaniesModel.create({
+//                 companyName,
+//                 companyType,
+//                 companyPhone,
+//                 companyEmail,
+//                 companyAddress,
+//                 studentID
+//             });
+//             res.status(201).send({ message: "Success", newCompany });
+//         } else {
+//             res.status(400).send({ message: "สถานะไม่ถูกต้อง" });
+//         }
+//     } catch (error) {
+//         res.status(500).send({ message: error.message });
+//     }
+// });
+
 
 router.post('/company', async (req, res) => {
     try {
-        const { companyName, companyType, companyPhone, companyEmail, companyAddress, studentID } = req.body;
-        const newCompany = await CompaniesModel.create({
-            companyName,
-            companyType,
-            companyPhone,
-            companyEmail,
-            companyAddress,
-            studentID
-        });
+        const { companyName, companyType, companyPhone, companyEmail, companyAddress, studentID, status } = req.body;
 
-        res.status(201).send({ message: "Success", newCompany });
+        // หา record ที่มี studentID ตรงกับค่าในตาราง Users
+        const user = await UsersModel.findOne({ where: { studentID } });
+
+        if (!user) {
+            res.status(404).send({ message: "ไม่พบข้อมูล studentID ในตาราง Users" });
+            return;
+        }
+
+        // ตรวจสอบค่า status
+        if (status === 'ไม่อนุมัติ') {
+            // อัปเดต status ใน Users table
+            user.status = 'ขออนุมัติ';
+            await user.save();
+
+            // หา record ที่มี studentID ตรงกับค่าในตาราง Companies
+            const existingCompany = await CompaniesModel.findOne({ where: { studentID } });
+
+            if (existingCompany) {
+                // อัปเดตข้อมูลในฐานข้อมูล
+                existingCompany.companyName = companyName;
+                existingCompany.companyType = companyType;
+                existingCompany.companyPhone = companyPhone;
+                existingCompany.companyEmail = companyEmail;
+                existingCompany.companyAddress = companyAddress;
+                await existingCompany.save();
+
+                res.status(200).send({ message: "Success", existingCompany });
+            } else {
+                res.status(404).send({ message: "ไม่พบข้อมูล studentID ในตาราง Companies" });
+            }
+        } else if (status === 'ขออนุมัติ') {
+            // อัปเดต status ใน Users table
+            user.status = status;
+            await user.save();
+
+            // สร้าง record ใหม่
+            const newCompany = await CompaniesModel.create({
+                companyName,
+                companyType,
+                companyPhone,
+                companyEmail,
+                companyAddress,
+                studentID
+            });
+            res.status(201).send({ message: "Success", newCompany });
+        } else {
+            res.status(400).send({ message: "สถานะไม่ถูกต้อง" });
+        }
     } catch (error) {
         res.status(500).send({ message: error.message });
     }
 });
 
-router.get('/company/:studentID', authenticateToken, async (req, res) => {
+
+router.get('/company/:studentID', async (req, res) => {
     try {
         const companyData = await CompaniesModel.findOne({ where: { studentID: req.params.studentID } });
         if (!companyData) return res.status(404).send({ message: 'User not found' });

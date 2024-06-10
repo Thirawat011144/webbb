@@ -24,7 +24,7 @@ const CompaniesModel = connect.define("companies", {
     },
     studentID: {
         type: DataTypes.STRING(50),
-        unique: true
+        // unique: true
     }
 })
 

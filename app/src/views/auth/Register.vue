@@ -7,19 +7,16 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter();
 
-const firstName = ref(''); //ชื่อ
-const lastName = ref('') //นามสกุล
-const userName = ref(''); //user
-const password = ref(''); //pass
-const phoneNumber = ref(''); //เบอร์โทร
-const gender = ref('') //เพศ
-const year = ref(''); //ชั้นปี
-const branch = ref(''); //สาขา
-const status = ref(''); //สถานะ
-const studentID = ref(''); //รหัสนักศึกษา
-// const company = ref(''); //สถานที่ขอออกฝึก
-
-
+const firstName = ref('');
+const lastName = ref('');
+const userName = ref('');
+const password = ref('');
+const phoneNumber = ref('');
+const gender = ref('');
+const year = ref('');
+const branch = ref('');
+const status = ref('');
+const studentID = ref('');
 
 const handleRegister = async () => {
     try {
@@ -34,7 +31,6 @@ const handleRegister = async () => {
             branch: branch.value,
             status: status.value,
             studentID: studentID.value,
-            // company: company.value
         }
         const response = await axios.post(`${config.api_path}/register`, payload);
         if (response.data.message === "Success") {
@@ -55,9 +51,8 @@ const handleRegister = async () => {
         console.log(error)
     }
 }
-
-
 </script>
+
 <template>
     <section class="h-100 bg-light">
         <div class="container py-5 h-100">
@@ -69,115 +64,133 @@ const handleRegister = async () => {
                                 <div class="card-body p-md-5 text-black">
                                     <h3 class="mb-5 text-uppercase">สมัครสมาชิก</h3>
 
-                                    <div class="row">
-                                        <div class="col-md-6 mb-4">
-                                            <div class="form-outline">
-                                                <label class="form-label" for="form3Example1m">First name</label>
-                                                <input type="text" id="form3Example1m"
-                                                    class="form-control form-control-lg" v-model="firstName" />
+                                    <form @submit.prevent="handleRegister">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline">
+                                                    <label class="form-label" for="form3Example1m">First name</label>
+                                                    <input type="text" id="form3Example1m"
+                                                        class="form-control form-control-lg" v-model="firstName"
+                                                        required />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline">
+                                                    <label class="form-label" for="form3Example1n">Last name</label>
+                                                    <input type="text" id="form3Example1n"
+                                                        class="form-control form-control-lg" v-model="lastName"
+                                                        required />
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 mb-4">
-                                            <div class="form-outline">
-                                                <label class="form-label" for="form3Example1n">Last name</label>
-                                                <input type="text" id="form3Example1n"
-                                                    class="form-control form-control-lg" v-model="lastName" />
+
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline">
+                                                    <label class="form-label" for="form3Example1m1">Username</label>
+                                                    <input type="text" id="form3Example1m1"
+                                                        class="form-control form-control-lg" v-model="userName"
+                                                        required />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline">
+                                                    <label class="form-label" for="form3Example1n1">Password</label>
+                                                    <input type="password" id="form3Example1n1"
+                                                        class="form-control form-control-lg" v-model="password"
+                                                        required />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="row">
-                                        <div class="col-md-6 mb-4">
-                                            <div class="form-outline">
-                                                <label class="form-label" for="form3Example1m1">Username</label>
-                                                <input type="text" id="form3Example1m1"
-                                                    class="form-control form-control-lg" v-model="userName" />
+                                        <div class="form-outline mb-4">
+                                            <label class="form-label" for="form3Example8">Tel</label>
+                                            <input type="text" id="form3Example8" class="form-control form-control-lg"
+                                                v-model="phoneNumber" required minlength="10" maxlength="10"
+                                                placeholder="Ex. 0987654321" />
+                                        </div>
+
+                                        <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
+                                            <h6 class="mb-0 me-4">Gender: </h6>
+                                            <div class="form-check form-check-inline mb-0 me-4">
+                                                <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                                    id="femaleGender" value="Female" v-model="gender" required />
+                                                <label class="form-check-label" for="femaleGender">Female</label>
+                                            </div>
+                                            <div class="form-check form-check-inline mb-0 me-4">
+                                                <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                                    id="maleGender" value="Male" v-model="gender" required />
+                                                <label class="form-check-label" for="maleGender">Male</label>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 mb-4">
-                                            <div class="form-outline">
-                                                <label class="form-label" for="form3Example1n1">Password</label>
-                                                <input type="password" id="form3Example1n1"
-                                                    class="form-control form-control-lg" v-model="password" />
+
+                                        <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
+                                            <h6 class="mb-0 me-4">Year: </h6>
+                                            <div class="form-check form-check-inline mb-0 me-4">
+                                                <input class="form-check-input" type="radio" name="yearOptions"
+                                                    id="voc2" value="ปวช 2" v-model="year" required />
+                                                <label class="form-check-label" for="voc2">ปวช 2</label>
+                                            </div>
+                                            <div class="form-check form-check-inline mb-0 me-4">
+                                                <input class="form-check-input" type="radio" name="yearOptions"
+                                                    id="bach2" value="ป.ตรี ปีที่ 2" v-model="year" required />
+                                                <label class="form-check-label" for="bach2">ป.ตรี ปีที่ 2</label>
+                                            </div>
+                                            <div class="form-check form-check-inline mb-0 me-4">
+                                                <input class="form-check-input" type="radio" name="yearOptions"
+                                                    id="bach4" value="ป.ตรี ปีที่ 4" v-model="year" required />
+                                                <label class="form-check-label" for="bach4">ป.ตรี ปีที่ 4</label>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="form-outline mb-4">
-                                        <label class="form-label" for="form3Example8">Tel</label>
-                                        <input type="text" id="form3Example8" class="form-control form-control-lg"
-                                            v-model="phoneNumber" />
-                                    </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <div>
+                                                    <label for="">สาขา</label>
+                                                    <select v-model="branch" class="form-select" required>
+                                                        <option value="" disabled>-</option>
+                                                        <option value="สาขาครุศาสตร์อุตสาหกรรมโยธา">
+                                                            สาขาครุศาสตร์อุตสาหกรรมโยธา</option>
+                                                        <option value="สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า">
+                                                            สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า</option>
+                                                        <option value="สาขาครุศาสตร์อุตสาหกรรมเครื่องกล">
+                                                            สาขาครุศาสตร์อุตสาหกรรมเครื่องกล</option>
+                                                        <option value="สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ">
+                                                            สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ</option>
+                                                        <option
+                                                            value="สสาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม">
+                                                            สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม</option>
+                                                        <option value="สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์">
+                                                            สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์</option>
+                                                        <option value="สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ">
+                                                            สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <div>
+                                                    <label for="">สถานะ</label>
+                                                    <select v-model="status" class="form-select" required>
+                                                        <option value="" disabled>-</option>
+                                                        <option value="ขออนุมัติ">ขออนุมัติ</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                    <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
-                                        <h6 class="mb-0 me-4">Gender: </h6>
-                                        <div class="form-check form-check-inline mb-0 me-4">
-                                            <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                                id="femaleGender" value="Female" v-model="gender" />
-                                            <label class="form-check-label" for="femaleGender">Female</label>
+                                        <div class="form-outline mb-4">
+                                            <label class="form-label" for="form3Example9">Student ID</label>
+                                            <input v-model="studentID" type="text" id="form3Example9"
+                                                class="form-control form-control-lg" required maxlength="13"
+                                                minlength="13" placeholder="Ex. 64322110094-5" />
                                         </div>
-                                        <div class="form-check form-check-inline mb-0 me-4">
-                                            <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                                id="maleGender" value="Male" v-model="gender" />
-                                            <label class="form-check-label" for="maleGender">Male</label>
-                                        </div>
-                                    </div>
 
-                                    <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
-                                        <h6 class="mb-0 me-4">Year: </h6>
-                                        <div class="form-check form-check-inline mb-0 me-4">
-                                            <input class="form-check-input" type="radio" name="yearOptions" id="voc2"
-                                                value="ปวช 2" v-model="year" />
-                                            <label class="form-check-label" for="voc2">ปวช 2</label>
+                                        <div class="d-flex justify-content-end pt-3">
+                                            <button type="submit" class="btn btn-lg"
+                                                style="background-color: mediumvioletred; color: white;">Submit
+                                                form</button>
                                         </div>
-                                        <div class="form-check form-check-inline mb-0 me-4">
-                                            <input class="form-check-input" type="radio" name="yearOptions" id="bach2"
-                                                value="ป.ตรี ปีที่ 2" v-model="year" />
-                                            <label class="form-check-label" for="bach2">ป.ตรี ปีที่ 2</label>
-                                        </div>
-                                        <div class="form-check form-check-inline mb-0 me-4">
-                                            <input class="form-check-input" type="radio" name="yearOptions" id="bach4"
-                                                value="ป.ตรี ปีที่ 4" v-model="year" />
-                                            <label class="form-check-label" for="bach4">ป.ตรี ปีที่ 4</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6 mb-4">
-                                            <select v-model="branch" class="form-select">
-                                                <option value="" disabled>Branch</option>
-                                                <option value="Computer">Computer</option>
-                                                <option value="ComSci">ComSci</option>
-                                                <option value="Auto mechanic">Auto mechanic</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 mb-4">
-                                            <select v-model="status" class="form-select">
-                                                <option value="" disabled>Status</option>
-                                                <option value="Request training">Request training</option>
-                                                <!-- <option value="training">training</option>
-                                                <option value="Finished training">Finished training</option> -->
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-outline mb-4">
-                                        <label class="form-label" for="form3Example9">Student ID</label>
-                                        <input v-model="studentID" type="text" id="form3Example9"
-                                            class="form-control form-control-lg" />
-                                    </div>
-
-                                    <!--                    <div class="form-outline mb-4">
-                                        <label class="form-label" for="form3Example90">Company</label>
-                                        <input v-model="company" type="text" id="form3Example90"
-                                            class="form-control form-control-lg" />
-                                    </div> -->
-
-                                    <div class="d-flex justify-content-end pt-3">
-                                        <button @click="handleRegister" type="button" class="btn btn-lg"
-                                            style="background-color: mediumvioletred; color: white;">Submit
-                                            form</button>
-                                    </div>
+                                    </form>
 
                                     <div class="d-flex justify-content-end pt-3">
                                         <router-link to="/login">
@@ -193,8 +206,6 @@ const handleRegister = async () => {
         </div>
     </section>
 </template>
-
-
 
 <style scoped>
 .bg-light {

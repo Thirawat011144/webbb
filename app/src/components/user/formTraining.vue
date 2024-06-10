@@ -5,7 +5,6 @@ import config from '../../../config';
 import Swal from 'sweetalert2';
 import { useRouter } from 'vue-router';
 
-
 const router = useRouter();
 
 const userData = JSON.parse(localStorage.getItem('userData') || '{}');
@@ -16,9 +15,11 @@ const companyPhone = ref('');
 const companyEmail = ref('');
 const companyAddress = ref('');
 const studentID = ref('')
+const status = ref('');
 
 if (userData.studentID) {
     studentID.value = userData.studentID;
+    status.value = userData.status;
 } else {
     console.log('No userData found in localStorage');
 }
@@ -42,7 +43,8 @@ const handleSubmit = async () => {
                 companyPhone: companyPhone.value,
                 companyEmail: companyEmail.value,
                 companyAddress: companyAddress.value,
-                studentID:studentID.value
+                studentID: studentID.value,
+                status: status.value
             };
             const response = await axios.post(`${config.api_path}/company`, formData);
             if (response.data.message === 'Success') {
@@ -51,16 +53,17 @@ const handleSubmit = async () => {
                     text: "เพิ่มข้อมูลสำเร็จ",
                     icon: "success",
                 });
-                console.log(response.data.newCompany)
+                console.log(response.data.newCompany);
                 localStorage.setItem('companyData', JSON.stringify(response.data.newCompany));
-                router.push('/user-index/data-student')
+                router.push('/user-index/data-student');
             }
         } catch (error) {
             Swal.fire({
                 title: "error",
-                text: (error.message, "Creating Data Company Error"),
+                text: "Creating Data Company Error: " + error.message,
                 icon: "error"
             });
+            console.log(error);
         }
     }
 };
@@ -76,50 +79,65 @@ const handleSubmit = async () => {
                         <div class="row mb-4">
                             <div class="col">
                                 <div data-mdb-input-init class="form-outline">
-                                    <label class="form-label" for="form6Example1">ชื่อสถานประกอบการ</label>
-                                    <input type="text" id="form6Example1" class="form-control" v-model="companyName" />
+                                    <label class="form-label" for="companyName">ชื่อสถานประกอบการ
+                                        <span class="text-red">*</span></label>
+                                    <input type="text" id="companyName" class="form-control" v-model="companyName"
+                                        required />
                                 </div>
                             </div>
 
-                        <!-- List input -->
                             <div class="col">
                                 <div data-mdb-input-init class="form-outline">
-                                    <label class="form-label" for="form6Example2">ประเภทหน่วยงาน</label>
-                                    <select id="form6Example2" class="form-control" v-model="companyType">
-                                        <option value="">กรุณาเลือกประเภทหน่วยงาน</option>
-                                        <option value="หน่วยงานรัฐบาล">หน่วยงานรัฐบาล</option>
-                                        <option value="รัฐวิสาหกิจ">รัฐวิสาหกิจ</option>
-                                        <option value="องค์การมหาชน">องค์การมหาชน</option>
-                                        <option value="องค์การนิติบุคคล">องค์การนิติบุคคล</option>
-                                        <option value="องค์การไม่แสวงหาผลกำไร">องค์การไม่แสวงหาผลกำไร</option>
-                                        <option value="สถาบันการศึกษา">สถาบันการศึกษา</option>
-                                    </select>
+                                    <label class="form-label" for="companyType">แผนก <span
+                                            class="text-red">*</span></label>
+                                    <input type="text" id="companyType" class="form-control" v-model="companyType"
+                                        required />
                                 </div>
                             </div>
                         </div>
 
+                        <label class="form-label" for="contactInfo">ข้อมูลผู้ประสานงานสถานประกอบการ</label>
                         <!-- Text input -->
+                        <div data-mdb-input-init class="form-outline row mb-4 ">
+                            <div class="col">
+                                <label class="form-label" for="contactFirstName">ชื่อ <span
+                                        class="text-red">*</span></label>
+                                <input type="text" id="contactFirstName" class="form-control" v-model="contactFirstName"
+                                    required />
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="contactLastName">นามสกุล <span
+                                        class="text-red">*</span></label>
+                                <input type="text" id="contactLastName" class="form-control" v-model="contactLastName"
+                                    required />
+                            </div>
+                        </div>
+
                         <div data-mdb-input-init class="form-outline mb-4">
-                            <label class="form-label" for="form6Example3">เบอร์โทรศัพท์สถานประกอบการ</label>
-                            <input type="text" id="form6Example3" class="form-control" v-model="companyPhone" />
+                            <label class="form-label" for="companyPhone">เบอร์โทรศัพท์ <span
+                                    class="text-red">*</span></label>
+                            <input type="tel" id="companyPhone" class="form-control" v-model="companyPhone"
+                                maxlength="10" required />
                         </div>
 
                         <!-- Email input -->
                         <div data-mdb-input-init class="form-outline mb-4">
-                            <label class="form-label" for="form6Example5">Email สถานประกอบการ</label>
-                            <input type="email" id="form6Example5" class="form-control" v-model="companyEmail" />
+                            <label class="form-label" for="companyEmail">Email </label>
+                            <input type="email" id="companyEmail" class="form-control" v-model="companyEmail" />
                         </div>
-                         <!-- StudentID input -->
+
+                        <!-- StudentID input -->
                         <div data-mdb-input-init class="form-outline mb-4">
-                            <label class="form-label" for="form6Example5">Student ID</label>
-                            <input type="text" id="form6Example5" class="form-control" v-model="studentID" />
+                            <label class="form-label" for="studentID">Student ID <span class="text-red">*</span></label>
+                            <input type="text" id="studentID" class="form-control" v-model="studentID" disabled />
                         </div>
 
                         <!-- Message input -->
                         <div data-mdb-input-init class="form-outline mb-4">
-                            <label class="form-label" for="form6Example7">ที่ตั้งสถานประกอบการ</label>
-                            <textarea class="form-control" id="form6Example7" rows="4"
-                                v-model="companyAddress"></textarea>
+                            <label class="form-label" for="companyAddress">ที่ตั้งสถานประกอบการ <span
+                                    class="text-red">*</span></label>
+                            <textarea class="form-control" id="companyAddress" rows="4" v-model="companyAddress"
+                                required></textarea>
                         </div>
 
                         <!-- Submit button -->

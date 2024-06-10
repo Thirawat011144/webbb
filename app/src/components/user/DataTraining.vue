@@ -28,6 +28,7 @@ const fetchCompany = async () => {
     } catch (error) {
         console.error('Error fetching company:', error);
     }
+    console.log(error)
 };
 
 onMounted(() => {

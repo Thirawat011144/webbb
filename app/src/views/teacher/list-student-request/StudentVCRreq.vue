@@ -13,11 +13,19 @@ import { RouterLink, RouterView } from 'vue-router';
 const users = ref([]); // เปลี่ยน {} เป็น []
 const isModalVisible = ref(false);
 const modalData = ref(null);
+const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+let branch = null
+
+if (userData.branch) {
+    branch = userData.branch;
+} else {
+    console.log('No userData found in localStorage');
+}
 
 const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => user.status === "Request training" && user.year === "ปวช 2");
+        users.value = response.data.filter(user => user.status === "ขออนุมัติ" && user.year === "ปวช 2" && user.branch === branch);
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -50,43 +58,63 @@ const closeModal = () => {
 
 
 
-const removeData = async (id) => {
-    // แสดงป๊อปอัพยืนยันการลบ
-    const result = await Swal.fire({
-        title: 'คุณแน่ใจหรือไม่?',
-        text: 'คุณจะไม่สามารถย้อนกลับได้!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'ใช่, ลบเลย!',
-        cancelButtonText: 'ยกเลิก'
-    });
+// const removeData = async (id) => {
+//     // แสดงป๊อปอัพยืนยันการลบ
+//     const result = await Swal.fire({
+//         title: 'คุณแน่ใจหรือไม่?',
+//         text: 'คุณจะไม่สามารถย้อนกลับได้!',
+//         icon: 'warning',
+//         showCancelButton: true,
+//         confirmButtonColor: '#3085d6',
+//         cancelButtonColor: '#d33',
+//         confirmButtonText: 'ใช่, ลบเลย!',
+//         cancelButtonText: 'ยกเลิก'
+//     });
 
-    // ตรวจสอบว่าผู้ใช้กดยืนยันการลบหรือไม่
-    if (result.isConfirmed) {
-        try {
-            const response = await axios.delete(`${config.api_path}/users/${id}`);
-            users.value = users.value.filter(user => user.id !== id);
+//     // ตรวจสอบว่าผู้ใช้กดยืนยันการลบหรือไม่
+//     if (result.isConfirmed) {
+//         try {
+//             const response = await axios.delete(`${config.api_path}/users/${id}`);
+//             users.value = users.value.filter(user => user.id !== id);
+//             Swal.fire({
+//                 title: 'สำเร็จ',
+//                 text: 'ลบข้อมูลผู้ใช้สำเร็จ',
+//                 icon: 'success',
+//             }).then((result) => {
+//                 if (result.value) {
+//                     fetchData(); // รีเฟรชข้อมูลหลังจากการลบ
+//                 }
+//             });
+//         } catch (error) {
+//             Swal.fire({
+//                 title: 'error',
+//                 text: (error.message, 'Cr2 Error DeleteData'),
+//                 icon: 'error'
+//             });
+//             console.log(error);
+//         }
+//     }
+// };
+const handleStatus = async (id, newStatus) => { // ฟังก์ชันเพื่ออัพเดตสถานะ
+    try {
+        const response = await axios.put(`${config.api_path}/user/${id}`, { status: newStatus }); // ส่งข้อมูลไปที่ API
+        if (response.data.message === "Success") {
             Swal.fire({
-                title: 'สำเร็จ',
-                text: 'ลบข้อมูลผู้ใช้สำเร็จ',
-                icon: 'success',
-            }).then((result) => {
-                if (result.value) {
-                    fetchData(); // รีเฟรชข้อมูลหลังจากการลบ
-                }
+                title: "สำเร็จ",
+                text: "อัปเดตสถานะสำเร็จ",
+                icon: "success",
             });
-        } catch (error) {
-            Swal.fire({
-                title: 'error',
-                text: (error.message, 'Cr2 Error DeleteData'),
-                icon: 'error'
-            });
-            console.log(error);
+            fetchData(); // รีเฟรชข้อมูลหลังจากอัพเดตสถานะ
         }
+    } catch (error) {
+        Swal.fire({
+            title: "error",
+            text: (error.message, "Cr2 Error Updating Status"),
+            icon: "error"
+        });
     }
 };
+
 
 
 const sortedUsers = computed(() => {
@@ -136,10 +164,14 @@ onMounted(() => {
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
                             </td>
                             <td>
-                                <router-link :to="`/edit-cr2/${user.id}`">
-                                    <button class="btn btn-primary m-1">Edit</button>
-                                </router-link>
-                                <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button>
+                                <button class="btn btn-primary"
+                                    @click="handleStatus(user.id, 'อนุมัติ')">อนุมัติ</button> &nbsp;
+                                <button class="btn btn-danger"
+                                    @click="handleStatus(user.id, 'ไม่อนุมัติ')">ไม่อนุมัติ</button>
+                                <!-- <router-link :to="`/edit-cr2/${user.id}`"> -->
+                                <!-- <button class="btn btn-primary m-1">Edit</button> -->
+                                <!-- </router-link> -->
+                                <!-- <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button> -->
                             </td>
                         </tr>
                     </tbody>
@@ -164,7 +196,9 @@ onMounted(() => {
                             <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
                             <p>ประเภทหน่วยงาน: {{ modalData.companyDetails.companyType }}</p>
                             <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
-                            <p>Email: {{ modalData.companyDetails.companyEmail }}</p>
+                            <p v-if="modalData.companyDetails.companyEmail">Email: {{
+                                modalData.companyDetails.companyEmail }}</p>
+                            <p v-else></p>
                             <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
                         </div>
                         <div v-else>

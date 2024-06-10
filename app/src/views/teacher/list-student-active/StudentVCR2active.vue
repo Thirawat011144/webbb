@@ -12,12 +12,20 @@ import { RouterLink, RouterView } from 'vue-router';
 const users = ref([]); // เปลี่ยน {} เป็น []
 const isModalVisible = ref(false);
 const modalData = ref(null);
+const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+let branch = null
+
+if (userData.branch) {
+    branch = userData.branch;
+} else {
+    console.log('No userData found in localStorage');
+}
 
 
 const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => user.status === "Training" && user.year === "ปวช 2");
+        users.value = response.data.filter(user => user.status === "อนุมัติ" && user.year === "ปวช 2" && user.branch === branch);
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -159,11 +167,14 @@ onMounted(() => {
                         <p>ชื่อ-นามสกุล: {{ modalData.firstName }} {{ modalData.lastName }}</p>
                         <p>สาขา: {{ modalData.branch }}</p>
                         <p>ชั้นปี: {{ modalData.year }}</p>
+                        <p>สถานะ: {{ modalData.status }}</p>
                         <div v-if="modalData.companyDetails">
                             <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
                             <p>ประเภทหน่วยงาน: {{ modalData.companyDetails.companyType }}</p>
                             <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
-                            <p>Email: {{ modalData.companyDetails.companyEmail }}</p>
+                            <p v-if="modalData.companyDetails.companyEmail">Email: {{ modalData.companyDetails.companyEmail }}</p>
+                            <p v-if="modalData.companyDetails.companyEmail">Email: {{ modalData.companyDetails.companyEmail }}</p>
+                            <p v-else></p>
                             <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
                         </div>
                         <div v-else>

@@ -25,7 +25,7 @@ const getUserName = computed(() => {
         <div class="sidebar">
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="info">
-                    <router-link to="/admin-index"> <a href="#" class="d-block fw-bold">อาจารย์: {{ getUserName }}</a>
+                    <router-link to="/teacher-index"> <a href="#" class="d-block fw-bold">อาจารย์: {{ getUserName }}</a>
                     </router-link>
                 </div>
             </div>
@@ -40,8 +40,14 @@ const getUserName = computed(() => {
                         เมนู
                     </div>
                     <li class="nav-item">
+                        <router-link to="/teacher-index/information" class="nav-link">
+                            <i class="fa-solid fa-user"></i> &nbsp;
+                            <p>ข้อมูลส่วนตัว</p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
                         <a href="#" class="nav-link">
-                            <i class="fa-solid fa-user-graduate"></i>
+                            <i class="fa-solid fa-user-graduate"></i>&nbsp;
                             <p>
                                 รายชื่อ
                                 <i class="right fas fa-angle-left"></i>

@@ -174,6 +174,7 @@ onMounted(() => {
                                     <option value="Request training">Request training</option>
                                     <option value="Training">Training</option>
                                     <option value="Finished training">Finished training</option>
+                                    <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
                                 </select>
                             </div>
                         </div>
