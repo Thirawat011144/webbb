@@ -120,8 +120,9 @@ onMounted(() => {
                 class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
             <router-link :to="`/teacher-index/student-vcr2active`"> <button
                 class="btn btn-warning m-1">กำลังฝึก</button></router-link>
-            <router-link :to="`/teacher-index/student-vcr2success`"> <button
-                class="btn btn-success m-1">ฝึกจบแล้ว</button>
+            <router-link :to="`/teacher-index/student-vcr2success`"> <button class="btn btn-success m-1">ผ่าน</button>
+            </router-link>
+            <router-link :to="`/teacher-index/student-vcr2notpass`"> <button class="btn btn-danger m-1">ไม่ผ่าน</button>
             </router-link>
           </div>
         </div>

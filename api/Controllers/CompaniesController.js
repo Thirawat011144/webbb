@@ -143,6 +143,32 @@ router.get('/company/:studentID', async (req, res) => {
     }
 });
 
+// router.get('/companies', async (req, res) => {
+//     try {
+//       const companies = await CompaniesModel.findAll();
+//       res.send(companies);
+//     } catch (error) {
+//       res.status(500).send({ message: error.message });
+//     }
+//   });
+
+router.get('/companies', async (req, res) => {
+    try {
+      const companies = await CompaniesModel.findAll({
+        include: [
+          {
+            model: UsersModel,
+            as: 'userDetails',
+            attributes: ['firstName', 'lastName'] // เลือกเฉพาะฟิลด์ firstName และ lastName
+          }
+        ]
+      });
+      res.send(companies);
+    } catch (error) {
+      res.status(500).send({ message: error.message });
+    }
+  });
+  
 
 
 module.exports = router;

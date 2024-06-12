@@ -16,9 +16,9 @@ const userData = JSON.parse(localStorage.getItem('userData') || '{}');
 let branch = null
 
 if (userData.branch) {
-    branch = userData.branch;
+  branch = userData.branch;
 } else {
-    console.log('No userData found in localStorage');
+  console.log('No userData found in localStorage');
 }
 
 const fetchData = async () => {
@@ -115,7 +115,10 @@ onMounted(() => {
             <router-link :to="`/teacher-index/student-tec4active`"> <button
                 class="btn btn-warning m-1">กำลังฝึก</button></router-link>
             <router-link :to="`/teacher-index/student-tec4success`"> <button
-                class="btn btn-success m-1">ฝึกจบแล้ว</button>
+                class="btn btn-success m-1">ไม่ผ่าน</button>
+            </router-link>
+            <router-link :to="`/teacher-index/student-tec4notpass`"> <button
+                class="btn btn-danger m-1">ไม่ผ่าน</button>
             </router-link>
           </div>
         </div>
@@ -127,8 +130,8 @@ onMounted(() => {
               <th>ชื่อ-นามสกุล</th>
               <th>สาขา</th>
               <th>ชั้นปี</th>
-              <th class="text-center">ชื่อสถานประกอบการ</th>
-              <th>Tools</th>
+              <th class="text-center">ข้อมูลสถานประกอบการ</th>
+              <!-- <th>Tools</th> -->
             </tr>
           </thead>
           <tbody>
@@ -141,12 +144,12 @@ onMounted(() => {
               <td class="text-center">
                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
               </td>
-              <td>
+              <!-- <td>
                 <router-link :to="`/edit-ec4/${user.id}`">
                   <button class="btn btn-primary m-1">Edit</button>
                 </router-link>
                 <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button>
-              </td>
+              </td> -->
             </tr>
           </tbody>
         </table>
@@ -165,11 +168,13 @@ onMounted(() => {
             <p>ชื่อ-นามสกุล: {{ modalData.firstName }} {{ modalData.lastName }}</p>
             <p>สาขา: {{ modalData.branch }}</p>
             <p>ชั้นปี: {{ modalData.year }}</p>
+            <p>สถานะ: {{ modalData.status }}</p>
             <div v-if="modalData.companyDetails">
               <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
               <p>ประเภทหน่วยงาน: {{ modalData.companyDetails.companyType }}</p>
               <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
-              <p>Email: {{ modalData.companyDetails.companyEmail }}</p>
+              <p v-if="modalData.companyDetails.companyEmail">Email: {{ modalData.companyDetails.companyEmail }}</p>
+              <p v-else></p>
               <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
             </div>
             <div v-else>

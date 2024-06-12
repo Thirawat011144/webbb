@@ -58,12 +58,12 @@ const updateData = async () => {
                     text: "แก้ไขข้อมูลผู้ใช้สำเร็จ",
                     icon: "success",
                 });
-                if(role === 'teacher'){
+                if (role === 'teacher') {
                     router.push('/teacher-index/list-ec2');
-                }else{
-                router.push('/admin-index/list-ec2');
+                } else {
+                    router.push('/admin-index/list-ec2');
                 }
-            
+
             }
         } catch (error) {
             Swal.fire({
@@ -159,22 +159,33 @@ onMounted(() => {
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-4">
-                                <label class="form-label" for="branch">Branch</label>
+                                <label class="form-label" for="branch">สาขา</label>
                                 <select v-model="user.branch" class="form-select">
-                                    <option value="" disabled>Branch</option>
-                                    <option value="Computer">Computer</option>
-                                    <option value="ComSci">ComSci</option>
-                                    <option value="Auto mechanic">Auto mechanic</option>
+                                    <option value="" disabled>-</option>
+                                    <option value="สาขาครุศาสตร์อุตสาหกรรมโยธา">
+                                        สาขาครุศาสตร์อุตสาหกรรมโยธา</option>
+                                    <option value="สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า">
+                                        สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า</option>
+                                    <option value="สาขาครุศาสตร์อุตสาหกรรมเครื่องกล">
+                                        สาขาครุศาสตร์อุตสาหกรรมเครื่องกล</option>
+                                    <option value="สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ">
+                                        สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ</option>
+                                    <option value="สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม">
+                                        สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม</option>
+                                    <option value="สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์">
+                                        สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์</option>
+                                    <option value="สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ">
+                                        สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ</option>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label class="form-label" for="status">Status</label>
                                 <select v-model="user.status" class="form-select">
-                                    <option value="" disabled>Status</option>
-                                    <option value="Request training">Request training</option>
-                                    <option value="Training">Training</option>
-                                    <option value="Finished training">Finished training</option>
+                                    <option value="" disabled>-</option>
                                     <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
+                                    <option value="ขออนุมัติ">ขออนุมัติ</option>
+                                    <option value="อนุมัติ">อนุมัติ</option>
+                                    <option value="ผ่าน">ผ่าน</option>
                                 </select>
                             </div>
                         </div>

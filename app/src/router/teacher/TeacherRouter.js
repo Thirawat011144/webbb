@@ -1,6 +1,8 @@
 
 import TeacherIndex from '../../views/teacher/index.vue'
 import information from '../../components/teacher/information.vue'
+import SearchTeacher from '../../views/teacher/SearchTeacher.vue'
+import Companies from '../../views/teacher/Companies.vue'
 
 import Cr2 from '../../views/teacher/list-student/Cr2.vue';
 import Ec2 from '../../views/teacher/list-student/Ec2.vue';
@@ -18,6 +20,9 @@ import StudentVCR2success from '../../views/teacher/list-student-success/Student
 import StudentTEC2success from '../../views/teacher/list-student-success/StudentTEC2success.vue'
 import StudentTEC4success from '../../views/teacher/list-student-success/StudentTEC4success.vue'
 
+import StudentVCR2notpass from '../../views/teacher/list-student-notpass/StudentVCR2NotPass.vue'
+import StudentTEC2notpass from '../../views/teacher/list-student-notpass/StudentTEC2NotPass.vue'
+import StudentTEC4notpass from '../../views/teacher/list-student-notpass/StudentTEC4NotPass.vue'
 
 const routeTeacher = [
     {
@@ -26,9 +31,20 @@ const routeTeacher = [
         component: TeacherIndex,
         children: [
             {
-                path:'information',
-                name:'information',
-                component:information
+                path: 'companies',
+                name: 'companies',
+                component: Companies
+            },
+            {
+                path: 'search-teacher',
+                name: 'search-teacher',
+                component: SearchTeacher
+            }
+            ,
+            {
+                path: 'information',
+                name: 'information',
+                component: information
             },
             {
                 path: 'list-cr2',
@@ -89,6 +105,21 @@ const routeTeacher = [
                 path: 'student-tec4success',
                 name: 'student-tec4success',
                 component: StudentTEC4success
+            },
+            {
+                path: 'student-vcr2notpass',
+                name: 'student-vcr2notpass',
+                component: StudentVCR2notpass
+            },
+            {
+                path: 'student-tec2notpass',
+                name: 'student-tec2notpass',
+                component: StudentTEC2notpass
+            },
+            {
+                path: 'student-tec4notpass',
+                name: 'student-tec4notpass',
+                component: StudentTEC4notpass
             },
         ]
     }

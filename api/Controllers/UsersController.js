@@ -53,6 +53,9 @@ router.get("/users/search", async (req, res) => {
                 { firstName: { [Op.like]: `%${query}%` } },
                 { lastName: { [Op.like]: `%${query}%` } },
                 { userName: { [Op.like]: `%${query}%` } },
+                { year: { [Op.like]: `%${query}%` } },
+                { studentID: { [Op.like]: `%${query}%` } },
+
                 //สร้างเงื่อนไขยังไม่ครบ
             ]
         };
@@ -62,7 +65,7 @@ router.get("/users/search", async (req, res) => {
             whereClause = {
                 [Op.and]: [
                     { firstName: { [Op.like]: `%${firstName}%` } },
-                    { lastName: { [Op.like]: `%${lastName}%` } }
+                    { lastName: { [Op.like]: `%${lastName}%` } },
                 ]
             };
         }

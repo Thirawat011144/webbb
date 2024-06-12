@@ -9,7 +9,6 @@ import { RouterLink, RouterView } from 'vue-router';
 // const route = useRoute();
 // const router = useRouter();
 
-
 const users = ref([]); // เปลี่ยน {} เป็น []
 const isModalVisible = ref(false);
 const modalData = ref(null);
@@ -22,10 +21,11 @@ if (userData.branch) {
     console.log('No userData found in localStorage');
 }
 
+
 const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => user.status === "ขออนุมัติ" && user.year === "ปวช 2" && user.branch === branch);
+        users.value = response.data.filter(user => (user.status === "ไม่อนุมัติ" || user.status === "ไม่ผ่าน") && user.year === "ป.ตรี ปีที่ 4" && user.branch === branch);
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -57,64 +57,65 @@ const closeModal = () => {
 // modal
 
 
-
-// const removeData = async (id) => {
-//     // แสดงป๊อปอัพยืนยันการลบ
-//     const result = await Swal.fire({
-//         title: 'คุณแน่ใจหรือไม่?',
-//         text: 'คุณจะไม่สามารถย้อนกลับได้!',
-//         icon: 'warning',
-//         showCancelButton: true,
-//         confirmButtonColor: '#3085d6',
-//         cancelButtonColor: '#d33',
-//         confirmButtonText: 'ใช่, ลบเลย!',
-//         cancelButtonText: 'ยกเลิก'
-//     });
-
-//     // ตรวจสอบว่าผู้ใช้กดยืนยันการลบหรือไม่
-//     if (result.isConfirmed) {
-//         try {
-//             const response = await axios.delete(`${config.api_path}/users/${id}`);
-//             users.value = users.value.filter(user => user.id !== id);
+// const handleStatus = async (id, newStatus) => { // ฟังก์ชันเพื่ออัพเดตสถานะ
+//     try {
+//         const response = await axios.put(`${config.api_path}/user/${id}`, { status: newStatus }); // ส่งข้อมูลไปที่ API
+//         if (response.data.message === "Success") {
 //             Swal.fire({
-//                 title: 'สำเร็จ',
-//                 text: 'ลบข้อมูลผู้ใช้สำเร็จ',
-//                 icon: 'success',
-//             }).then((result) => {
-//                 if (result.value) {
-//                     fetchData(); // รีเฟรชข้อมูลหลังจากการลบ
-//                 }
+//                 title: "สำเร็จ",
+//                 text: "อัปเดตสถานะสำเร็จ",
+//                 icon: "success",
 //             });
-//         } catch (error) {
-//             Swal.fire({
-//                 title: 'error',
-//                 text: (error.message, 'Cr2 Error DeleteData'),
-//                 icon: 'error'
-//             });
-//             console.log(error);
+//             fetchData(); // รีเฟรชข้อมูลหลังจากอัพเดตสถานะ
 //         }
+//     } catch (error) {
+//         Swal.fire({
+//             title: "error",
+//             text: (error.message, "Cr2 Error Updating Status"),
+//             icon: "error"
+//         });
 //     }
 // };
-const handleStatus = async (id, newStatus) => { // ฟังก์ชันเพื่ออัพเดตสถานะ
-    try {
-        const response = await axios.put(`${config.api_path}/user/${id}`, { status: newStatus }); // ส่งข้อมูลไปที่ API
-        if (response.data.message === "Success") {
+
+
+
+const removeData = async (id) => {
+    // แสดงป๊อปอัพยืนยันการลบ
+    const result = await Swal.fire({
+        title: 'คุณแน่ใจหรือไม่?',
+        text: 'คุณจะไม่สามารถย้อนกลับได้!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, ลบเลย!',
+        cancelButtonText: 'ยกเลิก'
+    });
+
+    // ตรวจสอบว่าผู้ใช้กดยืนยันการลบหรือไม่
+    if (result.isConfirmed) {
+        try {
+            const response = await axios.delete(`${config.api_path}/users/${id}`);
+            users.value = users.value.filter(user => user.id !== id);
             Swal.fire({
-                title: "สำเร็จ",
-                text: "อัปเดตสถานะสำเร็จ",
-                icon: "success",
+                title: 'สำเร็จ',
+                text: 'ลบข้อมูลผู้ใช้สำเร็จ',
+                icon: 'success',
+            }).then((result) => {
+                if (result.value) {
+                    fetchData(); // รีเฟรชข้อมูลหลังจากการลบ
+                }
             });
-            fetchData(); // รีเฟรชข้อมูลหลังจากอัพเดตสถานะ
+        } catch (error) {
+            Swal.fire({
+                title: 'error',
+                text: (error.message, 'Cr2 Error DeleteData'),
+                icon: 'error'
+            });
+            console.log(error);
         }
-    } catch (error) {
-        Swal.fire({
-            title: "error",
-            text: (error.message, "Cr2 Error Updating Status"),
-            icon: "error"
-        });
     }
 };
-
 
 
 const sortedUsers = computed(() => {
@@ -130,16 +131,16 @@ onMounted(() => {
     <section class="content mt-4">
         <div class="card">
             <div class="card-header">
-                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นประกาศนียบัตรวิชาชีพ ชั้นปีที่ 2 (ผู้ขออนุมัติ)
+                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรีชั้นปีที่ 4 (ไม่ผ่าน)
                     <div>
-                        <router-link :to="`/teacher-index/student-vcr2req`"> <button
-                                class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
-                        <router-link :to="`/teacher-index/student-vcr2active`"> <button
+                        <router-link :to="`/teacher-index/student-tec4req`">
+                            <button class="btn btn-primary m-1"> ขออนุมัติ</button></router-link>
+                        <router-link :to="`/teacher-index/student-tec4active`"> <button
                                 class="btn btn-warning m-1">กำลังฝึก</button></router-link>
-                        <router-link :to="`/teacher-index/student-vcr2success`"> <button
-                                class="btn btn-success m-1">ผ่าน</button>
+                        <router-link :to="`/teacher-index/student-tec4success`"> <button
+                                class="btn btn-success m-1">ไม่ผ่าน</button>
                         </router-link>
-                        <router-link :to="`/teacher-index/student-vcr2notpass`"> <button
+                        <router-link :to="`/teacher-index/student-tec4notpass`"> <button
                                 class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
                     </div>
@@ -153,7 +154,7 @@ onMounted(() => {
                             <th>สาขา</th>
                             <th>ชั้นปี</th>
                             <th class="text-center">ข้อมูลสถานประกอบการ</th>
-                            <th>Tools</th>
+                            <!-- <th>Tools</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -166,16 +167,16 @@ onMounted(() => {
                             <td class="text-center">
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
                             </td>
-                            <td>
-                                <button class="btn btn-primary"
-                                    @click="handleStatus(user.id, 'อนุมัติ')">อนุมัติ</button> &nbsp;
+                            <!-- <td> -->
+                            <!-- <button class="btn btn-primary" @click="handleStatus(user.id, 'ผ่าน')">ผ่าน</button>
+                                &nbsp;
                                 <button class="btn btn-danger"
-                                    @click="handleStatus(user.id, 'ไม่อนุมัติ')">ไม่อนุมัติ</button>
-                                <!-- <router-link :to="`/edit-cr2/${user.id}`"> -->
-                                <!-- <button class="btn btn-primary m-1">Edit</button> -->
-                                <!-- </router-link> -->
-                                <!-- <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button> -->
-                            </td>
+                                    @click="handleStatus(user.id, 'ไม่ผ่าน')">ไม่ผ่าน</button> -->
+                            <!-- <router-link :to="`/edit-cr2/${user.id}`">
+                                    <button class="btn btn-primary m-1">Edit</button>
+                                </router-link>
+                                <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button> -->
+                            <!-- </td> -->
                         </tr>
                     </tbody>
                 </table>
@@ -200,6 +201,8 @@ onMounted(() => {
                             <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
                             <p>ประเภทหน่วยงาน: {{ modalData.companyDetails.companyType }}</p>
                             <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
+                            <p v-if="modalData.companyDetails.companyEmail">Email: {{
+                                modalData.companyDetails.companyEmail }}</p>
                             <p v-if="modalData.companyDetails.companyEmail">Email: {{
                                 modalData.companyDetails.companyEmail }}</p>
                             <p v-else></p>

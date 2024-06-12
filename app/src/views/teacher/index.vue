@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import Navbar from '@/components/admin/Navbar.vue';
+import Navbar from '@/components/teacher/NavbarTeacher.vue';
 import Sidebar from '@/components/teacher/Sidebar.vue';
 </script>
 

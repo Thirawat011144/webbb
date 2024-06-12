@@ -57,6 +57,28 @@ const closeModal = () => {
 // modal
 
 
+const handleStatus = async (id, newStatus) => { // ฟังก์ชันเพื่ออัพเดตสถานะ
+    try {
+        const response = await axios.put(`${config.api_path}/user/${id}`, { status: newStatus }); // ส่งข้อมูลไปที่ API
+        if (response.data.message === "Success") {
+            Swal.fire({
+                title: "สำเร็จ",
+                text: "อัปเดตสถานะสำเร็จ",
+                icon: "success",
+            });
+            fetchData(); // รีเฟรชข้อมูลหลังจากอัพเดตสถานะ
+        }
+    } catch (error) {
+        Swal.fire({
+            title: "error",
+            text: (error.message, "Cr2 Error Updating Status"),
+            icon: "error"
+        });
+    }
+};
+
+
+
 const removeData = async (id) => {
     // แสดงป๊อปอัพยืนยันการลบ
     const result = await Swal.fire({
@@ -116,7 +138,10 @@ onMounted(() => {
                         <router-link :to="`/teacher-index/student-vcr2active`"> <button
                                 class="btn btn-warning m-1">กำลังฝึก</button></router-link>
                         <router-link :to="`/teacher-index/student-vcr2success`"> <button
-                                class="btn btn-success m-1">ฝึกจบแล้ว</button>
+                                class="btn btn-success m-1">ผ่าน</button>
+                        </router-link>
+                        <router-link :to="`/teacher-index/student-vcr2notpass`"> <button
+                                class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
                     </div>
                 </div>
@@ -128,7 +153,7 @@ onMounted(() => {
                             <th>ชื่อ-นามสกุล</th>
                             <th>สาขา</th>
                             <th>ชั้นปี</th>
-                            <th class="text-center">ชื่อสถานประกอบการ</th>
+                            <th class="text-center">ข้อมูลสถานประกอบการ</th>
                             <th>Tools</th>
                         </tr>
                     </thead>
@@ -143,10 +168,14 @@ onMounted(() => {
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
                             </td>
                             <td>
-                                <router-link :to="`/edit-cr2/${user.id}`">
+                                <button class="btn btn-primary" @click="handleStatus(user.id, 'ผ่าน')">ผ่าน</button>
+                                &nbsp;
+                                <button class="btn btn-danger"
+                                    @click="handleStatus(user.id, 'ไม่ผ่าน')">ไม่ผ่าน</button>
+                                <!-- <router-link :to="`/edit-cr2/${user.id}`">
                                     <button class="btn btn-primary m-1">Edit</button>
                                 </router-link>
-                                <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button>
+                                <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button> -->
                             </td>
                         </tr>
                     </tbody>
@@ -172,8 +201,10 @@ onMounted(() => {
                             <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
                             <p>ประเภทหน่วยงาน: {{ modalData.companyDetails.companyType }}</p>
                             <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
-                            <p v-if="modalData.companyDetails.companyEmail">Email: {{ modalData.companyDetails.companyEmail }}</p>
-                            <p v-if="modalData.companyDetails.companyEmail">Email: {{ modalData.companyDetails.companyEmail }}</p>
+                            <p v-if="modalData.companyDetails.companyEmail">Email: {{
+                                modalData.companyDetails.companyEmail }}</p>
+                            <p v-if="modalData.companyDetails.companyEmail">Email: {{
+                                modalData.companyDetails.companyEmail }}</p>
                             <p v-else></p>
                             <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
                         </div>

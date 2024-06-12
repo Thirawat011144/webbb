@@ -46,33 +46,38 @@ const getUserName = computed(() => {
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fa-solid fa-user-graduate"></i>&nbsp;
+                        <router-link to="#" class="nav-link">
+                            <i class="fa-solid fa-user-graduate"></i>
                             <p>
                                 รายชื่อ
                                 <i class="right fas fa-angle-left"></i>
                             </p>
-                        </a>
+                        </router-link>
                         <ul class="nav nav-treeview">
-
-
                             <li class="nav-item">
                                 <router-link to="/teacher-index/list-cr2" class="nav-link ms-4">
-                                    <p>ปวช ชั้นปีที่&nbsp; 2</p>
+                                    <p>ปวช ชั้นปีที่ 2</p>
                                 </router-link>
                             </li>
-
                             <li class="nav-item">
                                 <router-link to="/teacher-index/list-ec2" class="nav-link ms-4">
                                     <p>ป.ตรี ชั้นปีที่ 2</p>
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link to="/teacher-index/list-ec4" class="nav-link ms-4 ">
-                                    <p>ป.ตรี ชี่นปีที่ 4</p>
+                                <router-link to="/teacher-index/list-ec4" class="nav-link ms-4">
+                                    <p>ป.ตรี ชั้นปีที่ 4</p>
                                 </router-link>
                             </li>
                         </ul>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <router-link to="/teacher-index/companies" class="nav-link">
+                            <i class="fa-solid fa-building"></i> &nbsp;
+                            <p>ข้อมูลสถานประกอบการ</p>
+                        </router-link>
                     </li>
                     <!-- <li class="nav-item">
                         <a class="nav-link">

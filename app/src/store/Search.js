@@ -16,8 +16,9 @@ export const useDataStore = defineStore('fetchData', {
         dataResults: [],
     }),
     actions: {
-        setDataResults(results) { // เปลี่ยนชื่อ method จาก fetchDataResults เป็น setDataResults
-            this.dataResults = results; // อัพเดท state ด้วยข้อมูลที่ดึงมา
+        setDataResults(results) {
+            this.dataResults = results;
         },
     }
 })
+
