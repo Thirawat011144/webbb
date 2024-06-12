@@ -3,6 +3,7 @@ import TeacherIndex from '../../views/teacher/index.vue'
 import information from '../../components/teacher/information.vue'
 import SearchTeacher from '../../views/teacher/SearchTeacher.vue'
 import Companies from '../../views/teacher/Companies.vue'
+import Dashboard from '../../views/teacher/Dashboard.vue'
 
 import Cr2 from '../../views/teacher/list-student/Cr2.vue';
 import Ec2 from '../../views/teacher/list-student/Ec2.vue';
@@ -30,6 +31,11 @@ const routeTeacher = [
         name: 'teacher-home',
         component: TeacherIndex,
         children: [
+            {
+                path:'dashboard',
+                name:'dashboard',
+                component:Dashboard
+            },
             {
                 path: 'companies',
                 name: 'companies',

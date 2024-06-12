@@ -36,8 +36,8 @@ const handleLogin = async () => {
 
             if (response.data.data.role === "admin") {
                 router.push('/admin-index')
-            } else if(response.data.data.role === "teacher"){
-                router.push('/teacher-index')
+            } else if (response.data.data.role === "teacher") {
+                router.push('/teacher-index/dashboard')
             }
             else {
                 router.push('/homeview')
@@ -196,4 +196,3 @@ body {
     border-radius: 10px;
 }
 </style>
-

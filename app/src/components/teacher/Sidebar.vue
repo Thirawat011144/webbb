@@ -71,12 +71,16 @@ const getUserName = computed(() => {
                             </li>
                         </ul>
                     </li>
-
-
                     <li class="nav-item">
                         <router-link to="/teacher-index/companies" class="nav-link">
                             <i class="fa-solid fa-building"></i> &nbsp;
                             <p>ข้อมูลสถานประกอบการ</p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link to="/teacher-index/dashboard" class="nav-link">
+                            <i class="fa-solid fa-dashboard"></i> &nbsp;
+                            <p>DashBoard</p>
                         </router-link>
                     </li>
                     <!-- <li class="nav-item">

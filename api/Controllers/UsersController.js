@@ -63,9 +63,14 @@ router.get("/users/search", async (req, res) => {
         if (terms.length === 2) {
             const [firstName, lastName] = terms;
             whereClause = {
-                [Op.and]: [
-                    { firstName: { [Op.like]: `%${firstName}%` } },
-                    { lastName: { [Op.like]: `%${lastName}%` } },
+                [Op.or]: [
+                    {
+                        [Op.and]: [
+                            { firstName: { [Op.like]: `%${firstName}%` } },
+                            { lastName: { [Op.like]: `%${lastName}%` } },
+                        ]
+                    },
+                    { year: { [Op.like]: `%${query}%` } },
                 ]
             };
         }

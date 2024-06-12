@@ -43,6 +43,7 @@ onMounted(() => {
     updateSearchResults();
 });
 
+
 watch(
     () => searchStore.searchResults,
     (newResults) => {
@@ -52,7 +53,7 @@ watch(
 </script>
 
 <template>
-    <section class="content">
+    <section class="content mt-4">
         <div class="card">
             <div class="card-header">
                 <div class="card-title">
