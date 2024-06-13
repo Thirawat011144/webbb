@@ -7,6 +7,7 @@ import routeUser from './user/userRouter';
 import routeEditAdmin from './admin/EditAdminRouter'
 import routeNews from './newsRouter'
 import routeTeacher from './teacher/TeacherRouter'
+import routeEstablishment from './Establishment';
 
 const routes = [
   ...routeHome,
@@ -15,7 +16,8 @@ const routes = [
   ...routeUser,
   ...routeEditAdmin,
   ...routeNews,
-  ...routeTeacher
+  ...routeTeacher,
+  ...routeEstablishment
 ];
 
 const router = createRouter({

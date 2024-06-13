@@ -89,12 +89,12 @@ const getUserName = computed(() => {
 
                             <li class="nav-item">
                                 <router-link :to="{ name: 'list-cr2' }" class="nav-link ms-4">
-                               <p>ปวช ชั้นปีที่ 2</p>
-                                    </router-link>
+                                    <p>ปวช ชั้นปีที่ 2</p>
+                                </router-link>
                             </li>
 
                             <li class="nav-item">
-                                <router-link :to="{name: 'list-ec2'}" class="nav-link ms-4">
+                                <router-link :to="{ name: 'list-ec2' }" class="nav-link ms-4">
                                     <p>ป.ตรี ชั้นปีที่ 2</p>
                                 </router-link>
                             </li>
@@ -109,14 +109,14 @@ const getUserName = computed(() => {
                         <a class="nav-link">
                             <i class="fa-regular fa-newspaper"></i>
                             <p>
-                                News
+                                ข่าวสาร
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item ms-4">
                                 <router-link to="/admin-index/create-news" class="nav-link">
-                                    <p>CreateNews</p>
+                                    <p>สร้างข่าว</p>
                                     <i class="fa-solid fa-plus ms-2"></i>
                                 </router-link>
                             </li>
@@ -124,13 +124,40 @@ const getUserName = computed(() => {
                         <ul class="nav nav-treeview">
                             <li class="nav-item ms-4">
                                 <router-link to="/admin-index/list-news" class="nav-link">
-                                    <p>ListNews</p>
+                                    <p>รายชื่อข่าวสาร</p>
                                     <i class="fa-solid fa-book ms-4"></i>
                                 </router-link>
                             </li>
                         </ul>
                     </li>
+                    <!-- Establishment -->
+                    <li class="nav-item">
+                        <a class="nav-link">
+                            <i class="fa-solid fa-building"></i>
+                            <p>
+                                ข้อมูลสถานประกอบการ
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item ms-4">
+                                <router-link to="/admin-index/create-es" class="nav-link">
+                                    <p>ลงข้อมูลสถานประกอบการ</p>
+                                    <!-- <i class="fa-solid fa-plus ms-2"></i> -->
+                                </router-link>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item ms-4">
+                                <router-link to="/admin-index/list-news" class="nav-link">
+                                    <p>ข้อมูลสถานประกอบการ</p>
+                                    <!-- <i class="fa-solid fa-book ms-4"></i> -->
+                                </router-link>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
+
             </nav>
             <!-- /.sidebar-menu -->
         </div>

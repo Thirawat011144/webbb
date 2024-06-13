@@ -7,6 +7,8 @@ import FormCreateNews from '../../components/news/CreateNews.vue';
 import ListNews from '../../components/news/ListNews.vue';
 import EditNews from '../../components/news/EditNews.vue';
 
+import CreateInternship from '../../views/Internship/CreateInternship.vue'
+
 import listTeachers from '../../views/admin/list-teacher/listTeachers.vue'
 
 import Cr2 from '../../views/admin/list-student/Cr2.vue'
@@ -32,6 +34,11 @@ const routeAdmin = [
         component: AdminIndex,
         beforeEnter: checkAuth,
         children: [
+          {
+            path:'create-es',
+            name:'create-es' ,
+            component:CreateInternship
+          },
           {
             path:'list-teachers' ,
             name:'list-teachers',

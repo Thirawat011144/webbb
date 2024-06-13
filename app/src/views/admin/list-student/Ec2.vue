@@ -107,18 +107,18 @@ onMounted(() => {
       <div class="card-header">
         <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรี ชั้นปีที่ 2
           <div>
-            <div>
+            <!-- <div> -->
 
-            </div>
-            <!-- <label for="">อาจารย์:</label>
-            <router-link :to="`/admin-index/Ec2-req`"> <button class="btn btn-primary m-1">
-                ขออนุมัติ</button></router-link>
-            <router-link :to="`/admin-index/Ec2-active`"> <button
-                class="btn btn-success m-1">อนุมัติ</button></router-link>
-            <router-link :to="`/admin-index/Ec2-active`"> <button
-                class="btn btn-danger m-1">ไม่อนุมัติ</button></router-link> -->
+          </div>
+          <!-- <label for="">อาจารย์:</label> -->
+          <router-link :to="`/admin-index/Ec2-req`"> <button
+              class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
+          <router-link :to="`/admin-index/Ec2-active`"> <button
+              class="btn btn-warning m-1">กำลังฝึก</button></router-link>
+          <router-link :to="`/admin-index/Ec2-success`"> <button class="btn btn-success m-1">ฝึกจบแล้ว</button>
+          </router-link>
 
-            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;"
+          <!-- <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;"
               class="mt-3 mb-3">
               <div style="display: flex; align-items: center; margin-right: 20px;">
                 <label for="teacherStatus">อาจารย์:</label>
@@ -140,9 +140,9 @@ onMounted(() => {
                 </select>
                 <button class="btn btn-primary ms-3" @click="navigate(companyStatus)">Go</button>
               </div>
-            </div>
+            </div> -->
 
-          </div>
+          <!-- </div> -->
         </div>
         <table class="table">
           <thead>

@@ -11,7 +11,9 @@ const RegisterController = require("./Controllers/RegisterController")
 const LoginController = require("./Controllers/LoginController")
 const UsersController = require("./Controllers/UsersController")
 const NewsController = require("./Controllers/NewsController")
+const InternshipController = require('./Controllers/InternshipController')
 const CompaniesController = require("./Controllers/CompaniesController")
+
 
 const app = express()
 const port = 3000;
@@ -27,6 +29,7 @@ app.use('/api', LoginController)
 app.use('/api', UsersController)
 app.use('/api', NewsController)
 app.use('/api', CompaniesController)
+app.use('/api', InternshipController)
 
 app.listen(port, () => {
     console.log(`Example app listening on port`, port);

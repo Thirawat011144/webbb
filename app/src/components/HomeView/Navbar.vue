@@ -14,7 +14,9 @@
                     <router-link to="/" style="color: black;" class="text-decoration-none">
                         <li class="nav-item mt-2 p-2 abb "><i class="fa-solid fa-house"></i></li>
                     </router-link>
-                    <li class="nav-item p-2">สถานที่ฝึกงาน</li>
+                    <router-link to="/internship">
+                        <li class="nav-item p-2">สถานที่ฝึกงาน</li>
+                    </router-link>
                     <li class="nav-item p-2">ดาวน์โหลด</li>
                     <router-link to="/news" class="text-black text-decoration-none ">
                         <li class="nav-item p-2 abb ">ข่าวสาร</li>

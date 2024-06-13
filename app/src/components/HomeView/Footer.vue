@@ -40,7 +40,7 @@ body {
 
 .footer {
     font-family: 'Kanit', sans-serif;
-    background-color: #666166e3;
+    background-color: #827f82;
     color: white;
     padding: 40px 20px;
     width: 100%;
