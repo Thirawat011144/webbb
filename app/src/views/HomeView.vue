@@ -1,7 +1,8 @@
 <template>
   <div>
     <Navbar />
-    <mainbar/>
+    <mainbar />
+    <!-- <FetherCardVue /> -->
     <Footer />
   </div>
 </template>
@@ -11,6 +12,8 @@
 import Navbar from '../components/HomeView/Navbar.vue';
 import Footer from '../components/HomeView/Footer.vue';
 import Mainbar from '../components/HomeView/Mainbar.vue';
+
+import FetherCardVue from '../components/HomeView/FetherCard.vue';
 
 </script>
 

@@ -17,7 +17,9 @@
                     <router-link to="/internship" class="text-black text-decoration-none">
                         <li class="nav-item p-2">สถานที่ฝึกงาน</li>
                     </router-link>
-                 <router-link to="/downloads">  <li class="nav-item p-2">ดาวน์โหลด</li> </router-link> 
+                    <router-link to="/downloads" class="text-black text-decoration-none">
+                        <li class="nav-item p-2">ดาวน์โหลด</li>
+                    </router-link>
                     <router-link to="/news" class="text-black text-decoration-none ">
                         <li class="nav-item p-2 abb ">ข่าวสาร</li>
                     </router-link>

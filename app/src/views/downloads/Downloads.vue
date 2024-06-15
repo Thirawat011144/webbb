@@ -2,34 +2,61 @@
     <div>
         <Navbar />
         <div class="bg">
-
             <div class="container">
                 <div class="header">
                     <h1>ดาวน์โหลดเอกสาร</h1>
+                    <router-link to="/list-announcements">
+                        <button class="post-news-button">ดูข่าวทั้งหมด</button>
+                    </router-link>
                 </div>
+
                 <div class="content">
                     <div class="table-container">
                         <table>
                             <thead>
-                                <tr>
+                                <tr class="text-center">
                                     <th>ชื่อ</th>
                                     <th>ดาวน์โหลด (PDF)</th>
                                     <th>ดาวน์โหลด (Doc)</th>
+                                    <th>ดาวน์โหลด (ลิงค์)</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(doc, index) in documents" :key="index">
-                                    <td>{{ doc.name }}</td>
-                                    <td><a :href="doc.pdfLink" target="_blank">{{ doc.pdfName }}</a></td>
-                                    <td><a :href="doc.docLink" target="_blank">{{ doc.docName }}</a></td>
+                                    <td class="text-center">{{ doc.name }}</td>
+                                    <td class="text-center">
+                                        <div v-if="doc.pdfFile">
+                                            <a :href="getDownloadPath(doc.pdfFile)" target="_blank">ดาวน์โหลดฟอร์ม</a>
+                                        </div>
+                                        <div v-else>
+                                            <p class="text-center">-</p>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div v-if="doc.docFile">
+                                            <a :href="getDownloadPath(doc.docFile)" target="_blank">ดาวน์โหลดฟอร์ม</a>
+                                        </div>
+                                        <div v-else>
+                                            <p class="text-center">-</p>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div v-if="doc.link">
+                                            <a :href="doc.link" target="_blank">ดาวน์โหลดฟอร์ม</a>
+                                        </div>
+                                        <div v-else>
+                                            <p class="text-center">-</p>
+                                        </div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            <Footer />
+
         </div>
+        <Footer />
     </div>
 </template>
 
@@ -38,36 +65,26 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import Navbar from '../../components/HomeView/Navbar.vue';
 import Footer from '../../components/HomeView/Footer.vue';
-import config from '../../../config';
 
 // ข้อมูลเอกสารดาวน์โหลด
-const documents = ref([
-    {
-        name: "สห-อง-1) บันทึกการนิเทศงาน",
-        pdfLink: "path/to/b07ff89a6f-sh-xc-1banthuk-kar-nithes-ngan.pdf",
-        pdfName: "b07ff89a6f-sh-xc-1banthuk-kar-nithes-ngan.pdf",
-        docLink: "",
-        docName: ""
-    },
-    {
-        name: "สห-อง-2) ประเมินการนิเทศ",
-        pdfLink: "path/to/6e7f6806a3-sh-xc-2pramein-kar-nithes.pdf",
-        pdfName: "6e7f6806a3-sh-xc-2pramein-kar-nithes.pdf",
-        docLink: "",
-        docName: ""
-    },
-    {
-        name: "สห-อง-3) แบบประเมินการนิเทศนักศึกษา",
-        pdfLink: "path/to/0bbb6b8db9-sh-xc-3baeb-pramein-kar-nithes-naksuksa.pdf",
-        pdfName: "0bbb6b8db9-sh-xc-3baeb-pramein-kar-nithes-naksuksa.pdf",
-        docLink: "",
-        docName: ""
+const documents = ref([]);
+
+const fetchDocuments = async () => {
+    try {
+        const response = await axios.get('http://localhost:3000/api/downloads');
+        documents.value = response.data;
+    } catch (error) {
+        console.error('Error fetching documents:', error);
     }
-]);
+};
+
+const getDownloadPath = (fileName) => {
+    return fileName ? `http://localhost:3000/uploads/${fileName}` : '';
+};
 
 // ดึงข้อมูลเมื่อคอมโพเนนต์ถูกเมาท์
 onMounted(() => {
-    // สามารถเพิ่มการดึงข้อมูลจาก API ได้ที่นี่ถ้าจำเป็น
+    fetchDocuments();
 });
 </script>
 
@@ -175,5 +192,14 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+.post-news-button {
+    background-color: #ffffff;
+    color: rgb(255, 255, 255);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 </style>

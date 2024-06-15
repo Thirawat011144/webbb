@@ -1,44 +1,43 @@
 <template>
     <div>
+        <Navbar />
         <div class="bg">
-            <Navbar />
-            <div class="bg">
-                <div class="container">
-                    <div class="header">
-                        <h1>สถานที่ฝึกสอน</h1>
-                        <router-link to="/internship"> <button class="post-job-button">สถานที่ฝึกงาน</button>
-                        </router-link>
-                    </div>
-                    <div class="content">
-                        <div class="job-listing" v-for="job in jobs" :key="job.id">
-                            <div class="job-header">
-                                <h4> <router-link :to="`/data-practice/${job.id}`">{{ job.company }}</router-link>
-                                </h4>
-                                <span class="job-type"> {{ formatDate(job.createdAt) }}</span>
-                            </div>
-                            <div class="job-details">
-                                <!-- <p><span class="text-bold">ตำแหน่ง:</span> {{ job.position }}</p> -->
-                                <p><span class="text-bold">ที่อยู่:</span> {{ job.location }}</p>
-                                <p><span class="text-bold">โทรศัพท์:</span> {{ job.tel }}</p>
-                            </div>
+            <div class="container">
+                <div class="header">
+                    <h1>สถานที่ฝึกสอน</h1>
+
+                    <router-link to="/internship">
+                        <button class="post-job-button">สถานที่ฝึกงาน</button>
+                    </router-link>
+                </div>
+                <div class="content">
+                    <div class="job-listing" v-for="job in jobs" :key="job.id">
+                        <div class="job-header">
+                            <h6><router-link :to="`/data-practice/${job.id}`">{{ job.company }}</router-link></h6>
+                            <span class="job-type">{{ formatDate(job.createdAt) }}</span>
+                        </div>
+                        <div class="job-details">
+                            <p><span class="text-bold">โทรศัพท์:</span> {{ job.tel }}</p>
+                            <p><span class="text-bold">ที่อยู่:</span> {{ job.location }}</p>
+                            <!-- <p><span class="text-bold">โทรศัพท์:</span> {{ job.tel }}</p> -->
                         </div>
                     </div>
                 </div>
             </div>
-            <Footer />
+
         </div>
+        <Footer />
     </div>
 </template>
 
-
 <script setup>
 import { ref, onMounted } from 'vue';
-import Navbar from '../../components/HomeView/Navbar.vue'
-import Footer from '../../components/HomeView/Footer.vue'
 import axios from 'axios';
+import Navbar from '../../components/HomeView/Navbar.vue';
+import Footer from '../../components/HomeView/Footer.vue';
 import config from '../../../config';
 
-const jobs = ref([]); // เก็บข้อมูลสถานที่ฝึกงาน
+const jobs = ref([]); // เก็บข้อมูลสถานที่ฝึกสอน
 
 // ฟังก์ชันดึงข้อมูลจาก API และเรียงลำดับตามวันที่
 const fetchJobs = async () => {
@@ -66,7 +65,10 @@ onMounted(() => {
 .bg {
     position: relative;
     width: 100%;
-    height: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .bg::before {
@@ -81,10 +83,11 @@ onMounted(() => {
     bottom: 0;
     left: 0;
     z-index: -1;
-    /* ทำให้ element อยู่ข้างหลัง content */
 }
 
 .container {
+    width: 100%;
+    max-width: 1000px;
     padding: 20px;
     background-color: #fff;
     background-size: cover;
@@ -92,11 +95,8 @@ onMounted(() => {
     min-height: 100vh;
     margin: 20px auto;
     border-radius: 10px;
-    /* เพิ่มความโค้งมนของมุม */
     border: 1px solid rgba(0, 0, 0, 0.1);
-    /* ปรับสีและความโปร่งใสของเส้นกรอบ */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* เพิ่มเงาเพื่อให้ดูมีมิติ */
 }
 
 .header {
@@ -132,7 +132,7 @@ onMounted(() => {
     padding: 15px;
     margin-bottom: 10px;
     border-radius: 8px;
-    margin: 0px auto;
+    /* margin: 0px auto; */
 }
 
 .job-header {

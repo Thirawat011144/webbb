@@ -16,6 +16,8 @@ import PracticeTeaching from '../../views/practice-teaching/PracticeTeaching.vue
 import EditPracticeTeaching from '../../views/practice-teaching/EditPracticeTeaching.vue'
 
 import CreateDownload from '../../views/downloads/CreateDownload.vue'
+import ListDownloads from '../../views/downloads/ListDownloads.vue'
+import EditDownload from '../../views/downloads/EditDownload.vue'
 
 import listTeachers from '../../views/admin/list-teacher/listTeachers.vue'
 
@@ -42,6 +44,16 @@ const routeAdmin = [
     component: AdminIndex,
     beforeEnter: checkAuth,
     children: [
+      {
+        path: 'edit-download/:id',
+        name: 'edit-download',
+        component: EditDownload
+      },
+      {
+        path: 'list-download',
+        name: 'list-download',
+        component: ListDownloads
+      },
       {
         path: 'create-download',
         name: 'create-download',

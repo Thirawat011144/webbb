@@ -11,15 +11,11 @@ const DownloadsModel = connect.define("downloads", {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
-    pdfLink: {
+    link: {
         type: DataTypes.STRING(255),
         allowNull: true,
     },
     pdfFile: {
-        type: DataTypes.STRING(255),
-        allowNull: true,
-    },
-    docLink: {
         type: DataTypes.STRING(255),
         allowNull: true,
     },
@@ -29,12 +25,12 @@ const DownloadsModel = connect.define("downloads", {
     },
 });
 
-DownloadsModel.sync({ alter: true })
-    .then(() => {
-        console.log("Table created successfully!");
-    })
-    .catch((err) => {
-        console.error("Error creating table:", err);
-    });
+// DownloadsModel.sync({ alter: true })
+//     .then(() => {
+//         console.log("Table created successfully!");
+//     })
+//     .catch((err) => {
+//         console.error("Error creating table:", err);
+//     });
 
 module.exports = DownloadsModel;

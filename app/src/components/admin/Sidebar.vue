@@ -201,7 +201,7 @@ const getUserName = computed(() => {
                         </ul>
                         <ul class="nav nav-treeview">
                             <li class="nav-item ms-4">
-                                <router-link to="/admin-index/practice" class="nav-link">
+                                <router-link to="/admin-index/list-download" class="nav-link">
                                     <p>รายการไฟล์</p>
                                     <!-- <i class="fa-solid fa-book ms-4"></i> -->
                                 </router-link>

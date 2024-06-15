@@ -1,10 +1,15 @@
 <template>
   <div class="feature-card">
-    <img src="../../assets/img/8.1.png" alt="Feature image" />
+    <div>
+      <img src="../../assets/img/8.1.png" alt="Feature image" />
+
+    </div>
+
   </div>
 </template>
 
 <script setup>
+import FetherCardVue from "./FetherCard.vue";
 
 </script>
 

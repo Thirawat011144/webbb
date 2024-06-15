@@ -1,7 +1,7 @@
 <template>
     <div class="content mt-4">
         <div class="card bg-white">
-            <h5 class="card-header"> แบบฟอร์มเพิ่มเอกสารดาวน์โหลด </h5>
+            <h5 class="card-header"> แบบฟอร์มแก้ไขเอกสารดาวน์โหลด </h5>
             <div class="card-body">
                 <form @submit.prevent="submitForm">
                     <div class="mb-3">
@@ -15,15 +15,19 @@
                     <div class="mb-3">
                         <label for="pdfFile" class="form-label">หรืออัพโหลดไฟล์ (PDF)</label>
                         <input @change="handleFileUpload" type="file" id="pdfFile" class="form-control" accept=".pdf">
+                        <p v-if="document.currentPdfFile">ไฟล์ปัจจุบัน: {{ document.currentPdfFile }}
+                            <button @click="removePdfFile" type="button" class="btn btn-danger btn-sm">ลบไฟล์
+                                PDF</button>
+                        </p>
                     </div>
-                    <!-- <div class="mb-3">
-                        <label for="docLink" class="form-label">ลิงค์ดาวน์โหลด (Doc)</label>
-                        <input v-model="document.docLink" type="text" id="docLink" class="form-control">
-                    </div> -->
                     <div class="mb-3">
                         <label for="docFile" class="form-label">หรืออัพโหลดไฟล์ (Doc)</label>
                         <input @change="handleFileUpload" type="file" id="docFile" class="form-control"
                             accept=".doc,.docx">
+                        <p v-if="document.currentDocFile">ไฟล์ปัจจุบัน: {{ document.currentDocFile }}
+                            <button @click="removeDocFile" type="button" class="btn btn-danger btn-sm">ลบไฟล์
+                                Doc</button>
+                        </p>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
@@ -33,19 +37,20 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
 const router = useRouter();
-
+const route = useRoute();
 const document = ref({
     name: '',
     link: '',
     pdfFile: null,
-    // docLink: '',
+    currentPdfFile: '',
     docFile: null,
+    currentDocFile: '',
 });
 
 const handleFileUpload = (event) => {
@@ -57,11 +62,73 @@ const handleFileUpload = (event) => {
     }
 };
 
+const fetchDocument = async () => {
+    try {
+        const response = await axios.get(`http://localhost:3000/api/downloads/${route.params.id}`);
+        document.value = {
+            name: response.data.name,
+            link: response.data.link,
+            pdfFile: null,
+            currentPdfFile: response.data.pdfFile ? response.data.pdfFile.split('/').pop() : '',
+            docFile: null,
+            currentDocFile: response.data.docFile ? response.data.docFile.split('/').pop() : '',
+        };
+    } catch (error) {
+        console.error('Error fetching document:', error);
+        Swal.fire({
+            title: "Error",
+            text: "ไม่สามารถดึงข้อมูลเอกสารได้",
+            icon: "error",
+        });
+    }
+};
+
+const removePdfFile = async () => {
+    try {
+        const response = await axios.delete(`http://localhost:3000/api/downloads/${route.params.id}/pdf`);
+        if (response.status === 200) {
+            document.value.currentPdfFile = '';
+            Swal.fire({
+                title: "Success",
+                text: "ลบไฟล์ PDF เรียบร้อยแล้ว",
+                icon: "success",
+                timer: 2000
+            });
+        }
+    } catch (error) {
+        Swal.fire({
+            title: "Error",
+            text: "ไม่สามารถลบไฟล์ PDF ได้",
+            icon: "error",
+        });
+    }
+};
+
+const removeDocFile = async () => {
+    try {
+        const response = await axios.delete(`http://localhost:3000/api/downloads/${route.params.id}/doc`);
+        if (response.status === 200) {
+            document.value.currentDocFile = '';
+            Swal.fire({
+                title: "Success",
+                text: "ลบไฟล์ Doc เรียบร้อยแล้ว",
+                icon: "success",
+                timer: 2000
+            });
+        }
+    } catch (error) {
+        Swal.fire({
+            title: "Error",
+            text: "ไม่สามารถลบไฟล์ Doc ได้",
+            icon: "error",
+        });
+    }
+};
+
 const submitForm = async () => {
     const formData = new FormData();
     formData.append('name', document.value.name);
     formData.append('link', document.value.link);
-    // formData.append('docLink', document.value.docLink);
     if (document.value.pdfFile) {
         formData.append('pdfFile', document.value.pdfFile);
     }
@@ -69,7 +136,7 @@ const submitForm = async () => {
         formData.append('docFile', document.value.docFile);
     }
     try {
-        const response = await axios.post(`http://localhost:3000/api/downloads`, formData, {
+        const response = await axios.put(`http://localhost:3000/api/downloads/${route.params.id}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -77,7 +144,7 @@ const submitForm = async () => {
         if (response) {
             Swal.fire({
                 title: "Success",
-                text: "เพิ่มเอกสารเรียบร้อยแล้ว",
+                text: "แก้ไขเอกสารเรียบร้อยแล้ว",
                 icon: "success",
                 timer: 2000
             });
@@ -86,16 +153,19 @@ const submitForm = async () => {
     } catch (error) {
         Swal.fire({
             title: "Error",
-            text: "ไม่สามารถเพิ่มเอกสารได้",
+            text: "ไม่สามารถแก้ไขเอกสารได้",
             icon: "error",
         });
     }
 };
+
+onMounted(() => {
+    fetchDocument();
+});
 </script>
 
 <style scoped>
 .content {
-    /* max-width: 600px; */
     margin: 0 auto;
 }
 
@@ -152,5 +222,19 @@ const submitForm = async () => {
 .btn-primary:hover {
     background-color: #0056b3;
     border-color: #004085;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
 }
 </style>
