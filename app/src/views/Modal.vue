@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue';
+
 import axios from "axios";
 import { ref, onMounted, computed } from 'vue';
 // import config from "../../../../config";

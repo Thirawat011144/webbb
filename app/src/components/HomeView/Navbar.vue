@@ -14,14 +14,14 @@
                     <router-link to="/" style="color: black;" class="text-decoration-none">
                         <li class="nav-item mt-2 p-2 abb "><i class="fa-solid fa-house"></i></li>
                     </router-link>
-                    <router-link to="/internship">
+                    <router-link to="/internship" class="text-black text-decoration-none">
                         <li class="nav-item p-2">สถานที่ฝึกงาน</li>
                     </router-link>
-                    <li class="nav-item p-2">ดาวน์โหลด</li>
+                 <router-link to="/downloads">  <li class="nav-item p-2">ดาวน์โหลด</li> </router-link> 
                     <router-link to="/news" class="text-black text-decoration-none ">
                         <li class="nav-item p-2 abb ">ข่าวสาร</li>
                     </router-link>
-                    <li class="nav-item p-2">ติดต่อเรา</li>
+
                     <router-link to="/login" class="text-decoration-none text-black">
                         <li class="nav-item p-2 abb">เข้าสู่ระบบ</li>
                     </router-link>

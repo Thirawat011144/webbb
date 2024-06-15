@@ -149,8 +149,60 @@ const getUserName = computed(() => {
                         </ul>
                         <ul class="nav nav-treeview">
                             <li class="nav-item ms-4">
-                                <router-link to="/admin-index/list-news" class="nav-link">
+                                <router-link to="/admin-index/internship-admin" class="nav-link">
                                     <p>ข้อมูลสถานประกอบการ</p>
+                                    <!-- <i class="fa-solid fa-book ms-4"></i> -->
+                                </router-link>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- Practice -->
+                    <li class="nav-item">
+                        <a class="nav-link">
+                            <i class="fa-solid fa-school"></i>
+                            <p>
+                                ข้อมูลสถานศึกษา
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item ms-4">
+                                <router-link to="/admin-index/create-practice" class="nav-link">
+                                    <p>ลงข้อมูลสถานประกอบการ</p>
+                                    <!-- <i class="fa-solid fa-plus ms-2"></i> -->
+                                </router-link>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item ms-4">
+                                <router-link to="/admin-index/practice" class="nav-link">
+                                    <p>ข้อมูลสถานประกอบการ</p>
+                                    <!-- <i class="fa-solid fa-book ms-4"></i> -->
+                                </router-link>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- Practice -->
+                    <li class="nav-item">
+                        <a class="nav-link">
+                            <i class="fa-solid fa-file"></i>
+                            <p>
+                                จัดการไฟล์
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item ms-4">
+                                <router-link to="/admin-index/create-download" class="nav-link">
+                                    <p>ลงไฟล์สำหรับดาวน์โหลด</p>
+                                    <!-- <i class="fa-solid fa-plus ms-2"></i> -->
+                                </router-link>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item ms-4">
+                                <router-link to="/admin-index/practice" class="nav-link">
+                                    <p>รายการไฟล์</p>
                                     <!-- <i class="fa-solid fa-book ms-4"></i> -->
                                 </router-link>
                             </li>

@@ -4,14 +4,14 @@
             <Navbar />
             <div id="app">
                 <div class="container">
-                    <router-link to="/internship">
+                    <router-link to="/list-practice">
                         <h4 class="text-center">{{ job.company }}</h4>
                     </router-link>
                     <div class="section">
                         <p style="text-align: center;">
                             ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
                         </p>
-                        <p><label>ชื่อบริษัท/ชื่อร้าน:</label> {{ job.company }}</p>
+                        <p><label>ชื่อโรงเรียน/วิทยาลัย:</label> {{ job.company }}</p>
                         <p><label>ที่อยู่:</label> {{ job.location }}</p>
                         <p><label>รหัสไปรษณีย์:</label> {{ job.zipCode }}</p>
                         <p><label>เบอร์โทร:</label> {{ job.tel }}</p>
@@ -20,15 +20,6 @@
                     <div class="">
                         <h2>ตำแหน่งงาน</h2>
                         <table class="table">
-                            <tr>
-                                <th>ตำแหน่งงาน</th>
-                                <td>{{ job.position }}</td>
-                            </tr>
-
-                            <tr>
-                                <th>ประเภทงานหน่วยงาน</th>
-                                <td>{{ job.type }}</td>
-                            </tr>
                             <tr>
                                 <th>อัตราที่รับ</th>
                                 <td>{{ job.vacancies }}</td>
@@ -44,6 +35,10 @@
                             <tr>
                                 <th>การศึกษา</th>
                                 <td>{{ job.educationLevel }}</td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td></td>
                             </tr>
                         </table>
                     </div>
@@ -80,7 +75,7 @@ const job = ref({}); // เก็บข้อมูลสถานที่ฝ�
 // ฟังก์ชันดึงข้อมูลจาก API
 const fetchJob = async () => {
     try {
-        const response = await axios.get(`${config.api_path}/internship/${route.params.id}`);
+        const response = await axios.get(`${config.api_path}/practice-teaching/${route.params.id}`);
         job.value = response.data;
     } catch (error) {
         console.error('Error fetching job:', error);
@@ -100,9 +95,23 @@ h2 {
 
 .bg {
     position: relative;
-    min-height: 100vh;
+    width: 100%;
+    height: 100%;
+}
+
+.bg::before {
+    content: "";
     background-image: url('../../assets/img/8.1.png');
+    background-repeat: no-repeat;
     background-size: cover;
+    filter: blur(3px);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    /* ทำให้ element อยู่ข้างหลัง content */
 }
 
 .container {

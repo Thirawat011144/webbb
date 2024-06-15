@@ -16,8 +16,9 @@
           </div>
         </div>
       </div>
+      <FooterHome />
     </div>
-    <FooterHome />
+
   </div>
 </template>
 
@@ -59,7 +60,7 @@ onMounted(() => {
 .news-container {
   width: 100%;
   max-width: 1000px;
-  margin: 80px auto 20px auto;
+  margin: 50px auto 50px auto;
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

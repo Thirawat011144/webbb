@@ -1,28 +1,26 @@
 <template>
   <div class="content mt-4">
     <div class="card">
-      <h5 class="card-header">ข้อมูลข่าวประชาสัมพันธ์</h5>
+      <h5 class="card-header">ข้อมูลสถานประกอบการที่ลงทะเบียน</h5>
       <table class="table">
         <thead>
           <tr>
             <th scope="col">ลำดับ</th>
-            <th scope="col">Title</th>
-            <th scope="col">Detail</th>
-            <th scope="col">Created At</th>
+            <th scope="col">ชื่อสถานประกอบการ</th>
+            <th scope="col">วันที่สร้าง</th>
             <th scope="col">Tools</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(newsItem, index) in sortedNews" :key="newsItem.id">
+          <tr v-for="(internship, index) in jobs" :key="internship.id">
             <th scope="row">{{ index + 1 }}</th>
-            <td>{{ newsItem.title }}</td>
-            <td>{{ newsItem.detail }}</td>
-            <td>{{ formatDate(newsItem.createdAt) }}</td>
+            <td>{{ internship.company }}</td>
+            <td>{{ formatDate(internship.createdAt) }}</td>
             <td class="p-3">
-              <router-link :to="`/admin-index/edit-news/${newsItem.id}`">
+              <router-link :to="`/admin-index/edit-internship/${internship.id}`">
                 <button class="btn btn-primary">Edit</button>
               </router-link>
-              <button @click="removeData(newsItem.id)" class="btn btn-danger">Delete</button>
+              <button @click="removeData(internship.id)" class="btn btn-danger">Delete</button>
             </td>
           </tr>
         </tbody>
@@ -33,22 +31,19 @@
 
 <script setup>
 import axios from "axios";
-import { ref, onMounted, computed } from 'vue';
-import config from "../../../config";
+import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
+import config from "../../../config";
 
-const news = ref([]);
+const jobs = ref([]);
 
-const fetchData = async () => {
+// ฟังก์ชันดึงข้อมูลสถานที่ฝึกงานและจัดเรียงตามวันที่สร้าง
+const fetchJobs = async () => {
   try {
-    const response = await axios.get(`${config.api_path}/news`);
-    news.value = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const response = await axios.get(`${config.api_path}/internship`);
+    jobs.value = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   } catch (error) {
-    Swal.fire({
-      title: "error",
-      text: (error.message, "Cr2 Error"),
-      icon: "error"
-    });
+    console.error('Error fetching jobs:', error);
   }
 };
 
@@ -72,15 +67,15 @@ const removeData = async (id) => {
 
   if (result.isConfirmed) {
     try {
-      const response = await axios.delete(`${config.api_path}/news/${id}`);
-      news.value = news.value.filter(newsItem => newsItem.id !== id);
+      const response = await axios.delete(`${config.api_path}/internship/${id}`);
+      jobs.value = jobs.value.filter(internship => internship.id !== id);
       Swal.fire({
         title: 'สำเร็จ',
-        text: 'ลบข้อมูลสำเร็จ',
+        text: 'ลบข้อมูลผู้ใช้สำเร็จ',
         icon: 'success',
       }).then((result) => {
         if (result.value) {
-          fetchData();
+          fetchJobs();
         }
       });
     } catch (error) {
@@ -94,12 +89,8 @@ const removeData = async (id) => {
   }
 };
 
-const sortedNews = computed(() => {
-  return news.value.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-});
-
 onMounted(() => {
-  fetchData();
+  fetchJobs();
 });
 </script>
 

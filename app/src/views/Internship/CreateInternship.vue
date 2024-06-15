@@ -127,7 +127,7 @@ const submitForm = async () => {
         icon: "success",
         timer: 2000
       });
-      // router.push('/admin-index/list-internships');
+      router.push('/admin-index/internship-admin');
     }
   } catch (error) {
     Swal.fire({

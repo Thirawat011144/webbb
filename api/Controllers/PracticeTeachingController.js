@@ -1,18 +1,16 @@
 const express = require("express");
-const InternshipModel = require('../Models/Internship')
+const PracticeTeachingModel = require('../Models/PracticeTeaching'); // ตรวจสอบให้แน่ใจว่า path ถูกต้อง
 
 const router = express.Router();
 
-router.post("/internship", async (req, res) => {
+router.post('/practice-teaching', async (req, res) => {
     try {
         const {
             company,
-            position,
             location,
             tel,
             zipCode,
             mail,
-            type,
             vacancies,
             salary,
             gender,
@@ -25,19 +23,17 @@ router.post("/internship", async (req, res) => {
         } = req.body;
 
         // ตรวจสอบว่าข้อมูลที่จำเป็นทั้งหมดถูกส่งมา
-        if (!company || !position || !location || !tel || !mail || !vacancies || !gender || !educationLevel || !contactPerson || !contactEmail || !contactTel) {
-            return res.status(400).json({ message: "กรุณากรอกข้อมูลให้ครบถ้วน" });
+        if (!company || !location || !tel || !mail || !vacancies || !gender || !educationLevel || !contactPerson || !contactEmail || !contactTel) {
+            return res.status(400).json({ message: "กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน" });
         }
 
-        // ตั้งค่าดีฟอลต์เป็น "-" หากฟิลด์ใดไม่มีข้อมูล
-        const newInternship = await InternshipModel.create({
+        // สร้างข้อมูลใหม่
+        const newPracticeTeaching = await PracticeTeachingModel.create({
             company: company || "-",
-            position: position || "-",
             location: location || "-",
             tel: tel || "-",
             zipCode: zipCode || "-",
             mail: mail || "-",
-            type: type || "-",
             vacancies: vacancies || "-",
             salary: salary || "-",
             gender: gender || "-",
@@ -49,42 +45,43 @@ router.post("/internship", async (req, res) => {
             otherContact: otherContact || "-"
         });
 
-        res.status(201).json(newInternship);
+        // ส่งกลับข้อมูลที่สร้างใหม่
+        res.status(201).json({ data: newPracticeTeaching, message: "สร้างข้อมูลสถานที่ฝึกสอนสำเร็จ" });
     } catch (error) {
-        console.error("Error creating internship:", error);
-        res.status(500).json({ message: "ไม่สามารถเพิ่มข้อมูลสถานที่ฝึกงานได้" });
+        console.error("Error creating practice teaching:", error);
+        res.status(500).json({ message: "ไม่สามารถสร้างข้อมูลสถานที่ฝึกสอนได้" });
     }
 });
 
-
-router.get("/internship", async (req, res) => {
+router.get('/practice-teaching', async (req, res) => {
     try {
-        const internships = await InternshipModel.findAll();
-        res.status(200).send(internships);
+        const practiceTeachings = await PracticeTeachingModel.findAll();
+       
+        res.status(200).send(practiceTeachings)
     } catch (error) {
-        console.error("Error fetching internships:", error);
-        res.status(500).json({ message: "ไม่สามารถดึงข้อมูลสถานที่ฝึกงานได้" });
+        console.error("Error fetching practice teachings:", error);
+        res.status(500).json({ message: "ไม่สามารถดึงข้อมูลสถานที่ฝึกสอนได้" });
     }
 });
 
-router.get("/internship/:id", async (req, res) => {
+// API GET สำหรับดึงข้อมูลเฉพาะรายการโดยใช้ ID
+router.get('/practice-teaching/:id', async (req, res) => {
     try {
-        const internship = await InternshipModel.findByPk(req.params.id);
-        if (!internship) {
-            return res.status(404).json({ message: "ไม่พบข้อมูลสถานที่ฝึกงาน" });
+        const practiceTeaching = await PracticeTeachingModel.findByPk(req.params.id);
+        if (!practiceTeaching) {
+            return res.status(404).json({ message: "ไม่พบข้อมูลสถานที่ฝึกสอน" });
         }
-        res.status(200).json(internship);
+        res.status(200).send(practiceTeaching)
     } catch (error) {
-        console.error("Error fetching internship:", error);
-        res.status(500).json({ message: "ไม่สามารถดึงข้อมูลสถานที่ฝึกงานได้" });
+        console.error("Error fetching practice teaching:", error);
+        res.status(500).json({ message: "ไม่สามารถดึงข้อมูลสถานที่ฝึกสอนได้" });
     }
 });
 
-
-router.put('/internship/:id', async (req, res) => {
+router.put('/practice-teaching/:id', async (req, res) => {
     try {
         // หา internship ที่ต้องการอัพเดตโดยใช้ id จาก URL parameter
-        const internship = await InternshipModel.findByPk(req.params.id);
+        const internship = await PracticeTeachingModel.findByPk(req.params.id);
 
         // ถ้าไม่เจอ internship ที่มี id นี้ จะส่งสถานะ 404 และข้อความว่าไม่พบสถานที่ฝึกงาน
         if (!internship) {
@@ -94,12 +91,10 @@ router.put('/internship/:id', async (req, res) => {
         // ดึงค่าที่ต้องการอัพเดตจาก request body
         const {
             company,
-            position,
             location,
             tel,
             zipCode,
             mail,
-            type,
             vacancies,
             salary,
             gender,
@@ -114,12 +109,10 @@ router.put('/internship/:id', async (req, res) => {
         // อัพเดตค่าใหม่ลงใน internship instance
         Object.assign(internship, {
             company,
-            position,
             location,
             tel,
             zipCode,
             mail,
-            type,
             vacancies,
             salary,
             gender,
@@ -142,21 +135,18 @@ router.put('/internship/:id', async (req, res) => {
     }
 });
 
-
-
-router.delete('/internship/:id', async (req, res) => {
+router.delete('/practice-teaching/:id', async (req, res) => {
     try {
-        const internship = await InternshipModel.findByPk(req.params.id);
-        if (!internship) {
+        const practice = await PracticeTeachingModel.findByPk(req.params.id);
+        if (!practice) {
             return res.status(404).send({ message: "InternshipModel not found" });
         }
-        await internship.destroy();
+        await practice.destroy();
         res.send({ message: "News deleted successfully" });
     } catch (error) {
         res.status(500).send({ message: error.message });
         console.log(error)
     }
 })
-
 
 module.exports = router;
