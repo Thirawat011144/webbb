@@ -15,7 +15,7 @@
                     <div class="section">
                         <div class="info-container">
                             <div class="info-column">
-                                <p><label>ชื่อบริษัท/ชื่อร้าน:</label> {{ job.company }}</p>
+                                <p><label>ชื่อวิทยาลัย/โรงเรียน:</label> {{ job.company }}</p>
                                 <p><label>ที่อยู่:</label> {{ job.location }}</p>
                                 <p><label>รหัสไปรษณีย์:</label> {{ job.zipCode }}</p>
                                 <p><label>เบอร์โทร:</label> {{ job.tel }}</p>
@@ -55,8 +55,9 @@
                     </div>
                 </div>
             </div>
-            <Footer />
+
         </div>
+        <Footer />
     </div>
 </template>
 

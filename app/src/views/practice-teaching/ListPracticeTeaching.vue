@@ -11,7 +11,7 @@
                     </router-link>
                 </div>
                 <div class="content">
-                    <div class="job-listing" v-for="job in jobs" :key="job.id">
+                    <div class="job-listing" v-for="job in paginatedJobs" :key="job.id">
                         <div class="job-header">
                             <h6><router-link :to="`/data-practice/${job.id}`">{{ job.company }}</router-link></h6>
                             <span class="job-type">{{ formatDate(job.createdAt) }}</span>
@@ -23,21 +23,29 @@
                         </div>
                     </div>
                 </div>
+                <div class="pagination">
+                    <button @click="prevPage" :disabled="currentPage === 1"><i
+                            class="fa-solid fa-backward"></i></button>
+                    <span>หน้า {{ currentPage }} จาก {{ totalPages }}</span>
+                    <button @click="nextPage" :disabled="currentPage === totalPages"><i
+                            class="fa-solid fa-forward"></i></button>
+                </div>
             </div>
-
         </div>
         <Footer />
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import Navbar from '../../components/HomeView/Navbar.vue';
 import Footer from '../../components/HomeView/Footer.vue';
 import config from '../../../config';
 
 const jobs = ref([]); // เก็บข้อมูลสถานที่ฝึกสอน
+const currentPage = ref(1);
+const perPage = ref(4); // จำนวนรายการต่อหน้า
 
 // ฟังก์ชันดึงข้อมูลจาก API และเรียงลำดับตามวันที่
 const fetchJobs = async () => {
@@ -53,6 +61,27 @@ const fetchJobs = async () => {
 const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString('th-TH', options);
+};
+
+// คำนวณรายการที่จะแสดงในหน้าปัจจุบัน
+const paginatedJobs = computed(() => {
+    const start = (currentPage.value - 1) * perPage.value;
+    const end = start + perPage.value;
+    return jobs.value.slice(start, end);
+});
+
+const totalPages = computed(() => Math.ceil(jobs.value.length / perPage.value));
+
+const nextPage = () => {
+    if (currentPage.value < totalPages.value) {
+        currentPage.value++;
+    }
+};
+
+const prevPage = () => {
+    if (currentPage.value > 1) {
+        currentPage.value--;
+    }
 };
 
 // ดึงข้อมูลเมื่อคอมโพเนนต์ถูกเมาท์
@@ -97,6 +126,9 @@ onMounted(() => {
     border-radius: 10px;
     border: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .header {
@@ -124,16 +156,17 @@ onMounted(() => {
 
 .content {
     padding: 20px;
+    flex: 1;
 }
 
 .job-listing {
     background-color: #fff;
     border: 1px solid #ddd;
-    padding: 15px;
-    margin-bottom: 10px;
+    padding: 20px;
+    margin-bottom: 18px;
     border-radius: 8px;
-    /* margin: 0px auto; */
 }
+
 
 .job-header {
     display: flex;
@@ -151,5 +184,36 @@ onMounted(() => {
 
 .text-bold {
     font-weight: bold;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.pagination button {
+    background-color: #b23aca;
+    color: #fff;
+    border: none;
+    padding: 0 5px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    margin: 0 10px;
 }
 </style>

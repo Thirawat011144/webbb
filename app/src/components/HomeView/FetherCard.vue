@@ -6,8 +6,7 @@
                 <div class="content">
                     <h2>ค้นหาสถานประกอบการ</h2>
                     <p>ค้นหาข้อมูลของสถานประกอบการที่รุ่นก่อนหน้านี้ไปฝึก เพื่อเป็นแนวทางการตัดสินใจ</p>
-                    <!-- <p>Search by subject, course or region to find the right course for you.</p> -->
-                    <a href="#link1" class="cta">GET STARTED →</a>
+                    <router-link to="/internship-teaching" class="cta">GET STARTED →</router-link>
                 </div>
             </div>
             <div class="box">
@@ -15,7 +14,7 @@
                 <div class="content">
                     <h2>ดูข้อมูลข่าวสาร</h2>
                     <p>ติดตามประกาศต่างๆ ที่เกี่ยวข้องกับงานสหกิจศึกษา</p>
-                    <a href="#link2" class="cta">GET STARTED →</a>
+                    <router-link to="/news" class="cta">GET STARTED →</router-link>
                 </div>
             </div>
             <div class="box">
@@ -23,7 +22,7 @@
                 <div class="content">
                     <h2>เกี่ยวกับงานสหกิจศึกษา</h2>
                     <p>หากมีข้อสงสัยสามารถติดต่อมาตามข้อมูลที่ให้ไว้ในเพจของเรา</p>
-                    <a href="#link3" class="cta">GET STARTED →</a>
+                    <router-link to="/cooperative" class="cta">GET STARTED →</router-link>
                 </div>
             </div>
         </div>

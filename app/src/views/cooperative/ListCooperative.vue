@@ -1,39 +1,33 @@
 <template>
     <div class="content mt-4">
         <div class="card">
-            <h5 class="card-header">ข้อมูลเอกสารที่ลงทะเบียน</h5>
+            <h5 class="card-header">ข้อมูลสหกิจศึกษา</h5>
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">ชื่อเอกสาร</th>
-                        <th scope="col">ลิงค์</th>
-                        <th scope="col">ไฟล์ PDF</th>
-                        <th scope="col">ไฟล์ Doc</th>
+                        <th scope="col">ที่อยู่</th>
+                        <th scope="col">อีเมล</th>
+                        <th scope="col">เบอร์โทร</th>
+                        <th scope="col">รายละเอียด (รูปภาพ)</th>
                         <th scope="col">วันที่ลงประกาศ</th>
-                        <th scope="col">Tools</th>
+                        <th scope="col">เครื่องมือ</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(document, index) in documents" :key="document.id">
-                        <td>{{ document.name }}</td>
+                    <tr v-for="(cooperative, index) in cooperatives" :key="cooperative.id">
+                        <td>{{ cooperative.address }}</td>
+                        <td>{{ cooperative.email }}</td>
+                        <td>{{ cooperative.phone }}</td>
                         <td>
-                            <a v-if="document.link" :href="document.link" target="_blank">ดาวน์โหลดลิงค์</a>
-                            <span v-else>-</span>
+                            <img :src="`${config.api_path}${cooperative.description}`" alt="รูปภาพสหกิจศึกษา"
+                                width="100">
                         </td>
-                        <td>
-                            <a v-if="document.pdfFile" :href="document.pdfFile" target="_blank">ดาวน์โหลด PDF</a>
-                            <span v-else>-</span>
-                        </td>
-                        <td>
-                            <a v-if="document.docFile" :href="document.docFile" target="_blank">ดาวน์โหลด Doc</a>
-                            <span v-else>-</span>
-                        </td>
-                        <td>{{ formatDate(document.createdAt) }}</td>
+                        <td>{{ formatDate(cooperative.createdAt) }}</td>
                         <td class="p-3">
-                            <router-link :to="`/admin-index/edit-download/${document.id}`">
-                                <button class="btn btn-primary">Edit</button>
+                            <router-link :to="`/admin-index/edit-cooperative/${cooperative.id}`">
+                                <button class="btn btn-primary">✏️ แก้ไข</button>
                             </router-link>
-                            <button @click="removeData(document.id)" class="btn btn-danger">Delete</button>
+                            <button @click="removeData(cooperative.id)" class="btn btn-danger">🗑️ ลบ</button>
                         </td>
                     </tr>
                 </tbody>
@@ -48,15 +42,19 @@ import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
 import config from "../../../config";
 
-const documents = ref([]);
+const cooperatives = ref([]);
 
-// ฟังก์ชันดึงข้อมูลเอกสารและจัดเรียงตามวันที่สร้าง
-const fetchDocuments = async () => {
+// ฟังก์ชันดึงข้อมูลสหกิจศึกษาและจัดเรียงตามวันที่สร้าง
+const fetchCooperatives = async () => {
     try {
-        const response = await axios.get(`${config.api_path}/downloads`);
-        documents.value = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        const response = await axios.get(`${config.api_path}/contact/admin`);
+        if (Array.isArray(response.data)) {
+            cooperatives.value = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        } else {
+            console.error('Error: Data is not an array');
+        }
     } catch (error) {
-        console.error('Error fetching documents:', error);
+        console.error('Error fetching cooperatives:', error);
     }
 };
 
@@ -80,15 +78,15 @@ const removeData = async (id) => {
 
     if (result.isConfirmed) {
         try {
-            await axios.delete(`${config.api_path}/downloads/${id}`);
-            documents.value = documents.value.filter(document => document.id !== id);
+            await axios.delete(`${config.api_path}/contact/${id}`);
+            cooperatives.value = cooperatives.value.filter(cooperative => cooperative.id !== id);
             Swal.fire({
                 title: 'สำเร็จ',
-                text: 'ลบข้อมูลเอกสารสำเร็จ',
+                text: 'ลบข้อมูลสหกิจศึกษาสำเร็จ',
                 icon: 'success',
             }).then((result) => {
                 if (result.value) {
-                    fetchDocuments();
+                    fetchCooperatives();
                 }
             });
         } catch (error) {
@@ -103,7 +101,7 @@ const removeData = async (id) => {
 };
 
 onMounted(() => {
-    fetchDocuments();
+    fetchCooperatives();
 });
 </script>
 

@@ -23,6 +23,9 @@
                     <router-link to="/news" class="text-black text-decoration-none ">
                         <li class="nav-item p-2 abb ">ข่าวสาร</li>
                     </router-link>
+                    <router-link to="/cooperative" class="text-black text-decoration-none ">
+                        <li class="nav-item p-2 abb ">สหกิจศึกษา</li>
+                    </router-link>
 
                     <router-link to="/login" class="text-decoration-none text-black">
                         <li class="nav-item p-2 abb">เข้าสู่ระบบ</li>

@@ -10,6 +10,7 @@ import routeTeacher from './teacher/TeacherRouter'
 import routeEstablishment from './Internship';
 import routePracticeTeaching from './practice-teaching';
 import routeDownloads from './downloads';
+import routeInternshipAndTeaching from './listInternship-teaching/index';
 
 const routes = [
   ...routeHome,
@@ -21,12 +22,15 @@ const routes = [
   ...routeTeacher,
   ...routeEstablishment,
   ...routePracticeTeaching,
-  ...routeDownloads
+  ...routeDownloads,
+  ...routeInternshipAndTeaching
 ];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
+  routes, scrollBehavior(to, from, savedPosition) {
+    return { top: 130 };  // เลื่อนไปยังตำแหน่งบนสุดเสมอเมื่อมีการเปลี่ยนเส้นทาง
+  }
 });
 
 export default router;

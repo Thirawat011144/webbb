@@ -3,6 +3,8 @@ import { checkAuth } from './authRouterFunction';
 import formTraining from '../../components/user/formTraining.vue'
 import DataStudent from '../../views/user/DataStudent.vue'
 import HomeViewUser from '../../views/user/HomeViewUser.vue'
+
+import FormTeaching from '../../components/user/FormTeaching.vue'
 const routeUser = [
   {
     path: '/user-index',
@@ -19,6 +21,12 @@ const routeUser = [
         path:'data-student',
         name:'data-student',
         component:DataStudent
+      }
+      ,
+      {
+        path:'form-teaching',
+        name:'form-teaching',
+        component:FormTeaching
       }
     ]
   },

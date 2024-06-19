@@ -22,7 +22,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(doc, index) in documents" :key="index">
+                                <tr v-for="(doc, index) in paginatedDocuments" :key="index">
                                     <td class="text-center">{{ doc.name }}</td>
                                     <td class="text-center">
                                         <div v-if="doc.pdfFile">
@@ -52,22 +52,30 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="pagination">
+                    <button @click="prevPage" :disabled="currentPage === 1"><i
+                            class="fa-solid fa-backward"></i></button>
+                    <span>หน้า {{ currentPage }} จาก {{ totalPages }}</span>
+                    <button @click="nextPage" :disabled="currentPage === totalPages"><i
+                            class="fa-solid fa-forward"></i></button>
+                </div>
                 </div>
             </div>
-
         </div>
         <Footer />
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import Navbar from '../../components/HomeView/Navbar.vue';
 import Footer from '../../components/HomeView/Footer.vue';
 
 // ข้อมูลเอกสารดาวน์โหลด
 const documents = ref([]);
+const currentPage = ref(1);
+const perPage = ref(7); // จำนวนรายการต่อหน้า
 
 const fetchDocuments = async () => {
     try {
@@ -80,6 +88,27 @@ const fetchDocuments = async () => {
 
 const getDownloadPath = (fileName) => {
     return fileName ? `http://localhost:3000/uploads/${fileName}` : '';
+};
+
+// คำนวณรายการที่จะแสดงในหน้าปัจจุบัน
+const paginatedDocuments = computed(() => {
+    const start = (currentPage.value - 1) * perPage.value;
+    const end = start + perPage.value;
+    return documents.value.slice(start, end);
+});
+
+const totalPages = computed(() => Math.ceil(documents.value.length / perPage.value));
+
+const nextPage = () => {
+    if (currentPage.value < totalPages.value) {
+        currentPage.value++;
+    }
+};
+
+const prevPage = () => {
+    if (currentPage.value > 1) {
+        currentPage.value--;
+    }
 };
 
 // ดึงข้อมูลเมื่อคอมโพเนนต์ถูกเมาท์
@@ -124,6 +153,8 @@ onMounted(() => {
     border-radius: 10px;
     border: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
 }
 
 .header {
@@ -142,6 +173,10 @@ onMounted(() => {
 
 .content {
     padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .table-container {
@@ -201,5 +236,32 @@ a:hover {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    padding: 20px 0;
+}
+
+.pagination button {
+    background-color: #b23aca;
+    color: #fff;
+    border: none;
+    padding: 0 5px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    margin: 0 10px;
 }
 </style>

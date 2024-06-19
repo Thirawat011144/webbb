@@ -3,6 +3,10 @@ import Search from '../../views/admin/Search.vue';
 import config from '../../../config';
 import { checkAuth } from "./authRouteFunction"
 
+import CreateContact from '../../views/cooperative/CreateContact.vue'
+import ListCooperative from '../../views/cooperative/ListCooperative.vue'
+import EditCooperative from '../../views/cooperative/EditCooperative.vue'
+
 import FormCreateNews from '../../components/news/CreateNews.vue';
 import ListNews from '../../components/news/ListNews.vue';
 import EditNews from '../../components/news/EditNews.vue';
@@ -44,6 +48,21 @@ const routeAdmin = [
     component: AdminIndex,
     beforeEnter: checkAuth,
     children: [
+      {
+        path: 'edit-cooperative/:id',
+        name: 'edit-cooperative',
+        component: EditCooperative
+      },
+      {
+        path: 'cooperative-education',
+        name: 'cooperative-education',
+        component: ListCooperative
+      },
+      {
+        path: 'create-contact',
+        name: 'create-contact',
+        component: CreateContact
+      },
       {
         path: 'edit-download/:id',
         name: 'edit-download',

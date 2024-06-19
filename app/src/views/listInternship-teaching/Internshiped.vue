@@ -13,13 +13,12 @@
         <div class="content">
           <div class="job-listing" v-for="job in paginatedJobs" :key="job.id">
             <div class="job-header">
-              <h6><router-link :to="`/data-internship/${job.id}`">{{ job.company }}</router-link></h6>
+              <h6>{{ job.companyName }}</h6>
               <span class="job-type">{{ formatDate(job.createdAt) }}</span>
             </div>
             <div class="job-details">
-              <p><span class="text-bold">ตำแหน่ง:</span> {{ job.position }}</p>
-              <p><span class="text-bold">ที่อยู่:</span> {{ job.location }}</p>
-              <!-- <p><span class="text-bold">โทรศัพท์:</span> {{ job.tel }}</p> -->
+              <p><span class="text-bold">ที่อยู่:</span> {{ job.companyAddress }}</p>
+              <p><span class="text-bold">โทรศัพท์:</span> {{ job.companyPhone }}</p>
             </div>
           </div>
         </div>
@@ -29,7 +28,6 @@
           <button @click="nextPage" :disabled="currentPage === totalPages"><i class="fa-solid fa-forward"></i></button>
         </div>
       </div>
-
     </div>
     <Footer />
   </div>
@@ -42,7 +40,6 @@ import Navbar from '../../components/HomeView/Navbar.vue';
 import Footer from '../../components/HomeView/Footer.vue';
 
 import config from '../../../config';
-import FetherCardVue from '../../components/HomeView/FetherCard.vue';
 
 const jobs = ref([]);
 const currentPage = ref(1);
@@ -50,12 +47,29 @@ const perPage = ref(4); // จำนวนสถานที่ฝึกงา�
 
 const fetchJobs = async () => {
   try {
-    const response = await axios.get(`${config.api_path}/internship`);
-    jobs.value = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const response = await axios.get(`${config.api_path}/companies`);
+    const uniqueAddresses = new Set();
+    const uniqueCompanyName = new Set();
+
+    jobs.value = response.data
+      .filter(job => {
+        if (
+          job.userDetails.branch === 'สาขาครุศาสตร์อุตสาหกรรมโยธา' &&
+          !uniqueAddresses.has(job.companyAddress) &&
+          !uniqueCompanyName.has(job.companyName)
+        ) {
+          uniqueAddresses.add(job.companyAddress);
+          uniqueCompanyName.add(job.companyName);
+          return true;
+        }
+        return false;
+      })
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   } catch (error) {
     console.error('Error fetching jobs:', error);
   }
 };
+
 
 const formatDate = (dateString) => {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -142,7 +156,7 @@ onMounted(() => {
 }
 
 .post-job-button {
-  background-color: #4CAF50;
+  background-color: #ffffff;
   color: white;
   padding: 10px 20px;
   border: none;

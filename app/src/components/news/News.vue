@@ -10,7 +10,7 @@
           </router-link>
         </div>
         <div class="content">
-          <div class="announcement-listing" v-for="announcement in announcements" :key="announcement.id">
+          <div class="announcement-listing" v-for="announcement in paginatedAnnouncements" :key="announcement.id">
             <div class="announcement-header">
               <h6>{{ announcement.title }}</h6>
               <span class="announcement-date">
@@ -22,23 +22,28 @@
             </div>
           </div>
         </div>
+        <div class="pagination">
+          <button @click="prevPage" :disabled="currentPage === 1"><i class="fa-solid fa-backward"></i></button>
+          <span>หน้า {{ currentPage }} จาก {{ totalPages }}</span>
+          <button @click="nextPage" :disabled="currentPage === totalPages"><i class="fa-solid fa-forward"></i></button>
+        </div>
       </div>
-
     </div>
     <Footer />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import Navbar from '../../components/HomeView/Navbar.vue';
 import Footer from '../../components/HomeView/Footer.vue';
 import config from '../../../config';
 
-const announcements = ref([]); // เก็บข้อมูลข่าวประชาสัมพันธ์
+const announcements = ref([]);
+const currentPage = ref(1);
+const perPage = ref(4); // จำนวนข่าวประชาสัมพันธ์ต่อหน้า
 
-// ฟังก์ชันดึงข้อมูลจาก API และเรียงลำดับตามวันที่
 const fetchAnnouncements = async () => {
   try {
     const response = await axios.get(`${config.api_path}/news`);
@@ -48,13 +53,31 @@ const fetchAnnouncements = async () => {
   }
 };
 
-// ฟังก์ชันฟอร์แมตวันที่
 const formatDate = (dateString) => {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   return new Date(dateString).toLocaleDateString('th-TH', options);
 };
 
-// ดึงข้อมูลเมื่อคอมโพเนนต์ถูกเมาท์
+const paginatedAnnouncements = computed(() => {
+  const start = (currentPage.value - 1) * perPage.value;
+  const end = start + perPage.value;
+  return announcements.value.slice(start, end);
+});
+
+const totalPages = computed(() => Math.ceil(announcements.value.length / perPage.value));
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
+
 onMounted(() => {
   fetchAnnouncements();
 });
@@ -96,6 +119,8 @@ onMounted(() => {
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding-bottom: 80px;
+  /* เพิ่มระยะห่างด้านล่าง */
 }
 
 .header {
@@ -128,12 +153,11 @@ onMounted(() => {
 .announcement-listing {
   background-color: #fff;
   border: 1px solid #ddd;
-  padding: 15px;
+  padding: 25px;
   margin-bottom: 10px;
   border-radius: 8px;
   margin: 0px auto;
   margin-bottom: 20px;
-  /* เพิ่มระยะห่างระหว่างข่าวแต่ละข่าว */
 }
 
 .announcement-header {
@@ -148,5 +172,35 @@ onMounted(() => {
 
 .announcement-details p {
   margin: 5px 0;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  position: absolute;
+  bottom: 45px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.pagination button {
+  background-color: #b23aca;
+  color: #fff;
+  border: none;
+  padding: 0 5px;
+  margin: 0 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  margin: 0 10px;
 }
 </style>

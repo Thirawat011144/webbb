@@ -58,6 +58,12 @@ const handleSignOut = () => {
                             </router-link>
                         </li>
                         <li class="nav-item">
+                            <router-link to="/user-index/form-teaching" class="nav-link">
+                                <i class="fa-solid fa-comment me-2"></i>
+                                <p>ลงทะเบียนขอออกฝึกสอน</p>
+                            </router-link>
+                        </li>
+                        <li class="nav-item">
                             <router-link to="/homeview" class="nav-link">
                                 <i class="fa-solid fa-house me-2"></i>
                                 <p>หน้าแรก</p>

@@ -35,7 +35,7 @@ const handleLogin = async () => {
             searchData.setDataResults(response.data.data);
 
             if (response.data.data.role === "admin") {
-                router.push('/admin-index')
+                router.push('/admin-index/list-teachers')
             } else if (response.data.data.role === "teacher") {
                 router.push('/teacher-index/dashboard')
             }

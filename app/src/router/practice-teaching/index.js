@@ -1,6 +1,7 @@
 import ListPracticeTeaching from '../../views/practice-teaching/ListPracticeTeaching.vue'
 import DataPracticeTeaching from '../../views/practice-teaching/DataPracticeTeaching.vue'
 
+
 const routePracticeTeaching = [
   {
     path: '/list-practice',
