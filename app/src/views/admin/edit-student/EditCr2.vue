@@ -13,13 +13,13 @@ const role = localStorage.getItem(config.role_name);
 const user = ref({
     firstName: '',
     lastName: '',
-    userName: '',
-    password: '',
+    // userName: '',
+    // password: '',
     phoneNumber: '',
     gender: '',
     year: '',
     branch: '',
-    status: '',
+    // status: '',
     studentID: '',
     // company: ''
 });
@@ -105,20 +105,20 @@ onMounted(() => {
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 mb-4">
+                            <!-- <div class="col-md-6 mb-4">
                                 <div class="form-outline">
                                     <label class="form-label" for="userName">Username</label>
                                     <input type="text" id="userName" class="form-control form-control-lg"
                                         v-model="user.userName" />
                                 </div>
-                            </div>
-                            <div class="col-md-6 mb-4">
+                            </div> -->
+                            <!-- <div class="col-md-6 mb-4">
                                 <div class="form-outline">
                                     <label class="form-label" for="password">Password</label>
                                     <input type="password" id="password" class="form-control form-control-lg"
                                         v-model="user.password" />
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="form-outline mb-4">
                             <label class="form-label" for="phoneNumber">Tel</label>
@@ -177,7 +177,7 @@ onMounted(() => {
                                         สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ</option>
                                 </select>
                             </div>
-                            <div class="col-md-6 mb-4">
+                            <!-- <div class="col-md-6 mb-4">
                                 <label class="form-label" for="status">สถานะ</label>
                                 <select v-model="user.status" class="form-select">
                                     <option value="" disabled>-</option>
@@ -186,7 +186,7 @@ onMounted(() => {
                                     <option value="อนุมัติ">อนุมัติ</option>
                                     <option value="ผ่าน">ผ่าน</option>
                                 </select>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="form-outline mb-4">
                             <label class="form-label" for="studentID">Student ID</label>
@@ -201,10 +201,10 @@ onMounted(() => {
                         <div class="d-flex justify-content-end pt-3">
                             <button type="submit" class="btn btn-primary btn-lg ms-2">Submit Form</button>
                         </div>
-                        <div class="d-flex justify-content-end pt-3">
+                        <!-- <div class="d-flex justify-content-end pt-3">
                             <router-link to="/login"><small>Already have an account? Click <a
                                         href="#">Login</a></small></router-link>
-                        </div>
+                        </div> -->
                     </form>
                 </div>
             </div>
@@ -235,6 +235,7 @@ onMounted(() => {
 }
 
 .card-registration {
+    margin: 10px 0 10px 0;
     background: rgba(255, 255, 255, 0.9);
     border-radius: 1rem;
     padding: 2rem;

@@ -10,6 +10,8 @@ const router = useRouter();
 const userData = JSON.parse(localStorage.getItem('userData') || '{}');
 
 const collegeName = ref('');
+const contactFirstName = ref('');
+const contactLastName = ref('');
 const collegePhone = ref('');
 const collegeEmail = ref('');
 const collegeAddress = ref('');
@@ -38,6 +40,8 @@ const handleSubmit = async () => {
         try {
             const formData = {
                 collegeName: collegeName.value,
+                contactFirstName: contactFirstName.value,
+                contactLastName: contactLastName.value,
                 collegePhone: collegePhone.value,
                 collegeEmail: collegeEmail.value,
                 collegeAddress: collegeAddress.value,

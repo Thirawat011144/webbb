@@ -30,7 +30,7 @@ const modalData = ref(null);
 const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => user.status === "Finished training" && user.year === "ปวช 2");
+        users.value = response.data.filter(user => user.status === "ผ่าน" && user.year === "ปวช 2");
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -113,14 +113,17 @@ onMounted(() => {
     <section class="content">
         <div class="card">
             <div class="card-header">
-                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นประกาศนียบัตรวิชาชีพ ชั้นปีที่ 2 (ฝึกจบแล้ว)
+                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นประกาศนียบัตรวิชาชีพ ชั้นปีที่ 2 (่ผ่าน)
                     <div>
                         <router-link :to="`/admin-index/cr2-req`"> <button
                                 class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
                         <router-link :to="`/admin-index/cr2-active`"> <button
                                 class="btn btn-warning m-1">กำลังฝึก</button></router-link>
-                        <router-link :to="`/admin-index/cr2-success`"> <button
-                                class="btn btn-success m-1">ฝึกจบแล้ว</button> </router-link>
+                        <router-link :to="`/admin-index/cr2-success`"> <button class="btn btn-success m-1">ผ่าน</button>
+                        </router-link>
+                        <router-link :to="`/admin-index/cr2-notpass`"> <button
+                                class="btn btn-danger m-1">ไม่ผ่าน</button>
+                        </router-link>
                     </div>
                 </div>
                 <table class="table">
@@ -131,7 +134,7 @@ onMounted(() => {
                             <th>ชื่อ-นามสกุล</th>
                             <th>สาขา</th>
                             <th>ชั้นปี</th>
-                            <th class="text-center">ชื่อสถานประกอบการ</th>
+                            <th class="text-center">ข้อมูลสถานประกอบการ</th>
                             <th>Tools</th>
                         </tr>
                     </thead>
@@ -146,7 +149,7 @@ onMounted(() => {
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
                             </td>
                             <td>
-                                <router-link :to="`/edit-ec2/${user.id}`">
+                                <router-link :to="`/edit-cr2/${user.id}`">
                                     <button class="btn btn-primary m-1">Edit</button>
                                 </router-link>
                                 <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button>
@@ -170,12 +173,33 @@ onMounted(() => {
                         <p>ชื่อ-นามสกุล: {{ modalData.firstName }} {{ modalData.lastName }}</p>
                         <p>สาขา: {{ modalData.branch }}</p>
                         <p>ชั้นปี: {{ modalData.year }}</p>
+                        <p>สถานะ: {{ modalData.status }}</p>
+                        <p>เบอร์โทรศัพท์: {{ modalData.phoneNumber }}</p>
+                        <p v-if="modalData.email">Email: {{ modalData.email }}</p>
+                        <p v-else></p>
                         <div v-if="modalData.companyDetails">
+                            <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
                             <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
-                            <p>ประเภทหน่วยงาน: {{ modalData.companyDetails.companyType }}</p>
+                            <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
+                            <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{
+                                modalData.companyDetails.contactLastName }}</p>
                             <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
-                            <p>Email: {{ modalData.companyDetails.companyEmail }}</p>
+                            <p v-if="modalData.companyDetails.companyEmail">Email: {{
+                                modalData.companyDetails.companyEmail }}</p>
+                            <p v-else></p>
                             <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
+                        </div>
+                        <div v-else-if="modalData.collegeDetails">
+                            <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
+                            <p>สถานประกอบการ: {{ modalData.collegeDetails.collegeName }}</p>
+                            <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{
+                                modalData.collegeDetails.contactLastName }}</p>
+                            <p>เบอร์โทรศัพท์: {{ modalData.collegeDetails.collegePhone }}</p>
+                            <p v-if="modalData.collegeDetails.collegeEmail">Email: {{
+                                modalData.collegeDetails.collegeEmail }}</p>
+                            <p v-else></p>
+                            <p>ที่ตั้งวิทยาลัย: {{ modalData.collegeDetails.collegeAddress }}</p>
+
                         </div>
                         <div v-else>
                             <p>ไม่มีข้อมูลสถานประกอบการ</p>

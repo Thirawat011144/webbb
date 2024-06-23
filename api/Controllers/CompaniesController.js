@@ -76,7 +76,7 @@ const authenticateToken = require('../Middleware/Authorization');
 
 router.post('/company', async (req, res) => {
     try {
-        const { companyName, companyType, companyPhone, companyEmail, companyAddress, studentID, status } = req.body;
+        const { companyName, companyDepartment,contactFirstName,contactLastName, companyPhone, companyEmail, companyAddress, studentID, status } = req.body;
 
         // หา record ที่มี studentID ตรงกับค่าในตาราง Users
         const user = await UsersModel.findOne({ where: { studentID } });
@@ -98,7 +98,9 @@ router.post('/company', async (req, res) => {
             if (existingCompany) {
                 // อัปเดตข้อมูลในฐานข้อมูล
                 existingCompany.companyName = companyName;
-                existingCompany.companyType = companyType;
+                existingCompany.companyDepartment = companyDepartment;
+                existingCompany.contactFirstName = contactFirstName;
+                existingCompany.contactLastName = contactLastName;
                 existingCompany.companyPhone = companyPhone;
                 existingCompany.companyEmail = companyEmail;
                 existingCompany.companyAddress = companyAddress;
@@ -116,7 +118,9 @@ router.post('/company', async (req, res) => {
             // สร้าง record ใหม่
             const newCompany = await CompaniesModel.create({
                 companyName,
-                companyType,
+                companyDepartment,
+                contactFirstName,
+                contactLastName,
                 companyPhone,
                 companyEmail,
                 companyAddress,

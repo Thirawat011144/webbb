@@ -9,23 +9,23 @@ import { RouterLink, RouterView } from 'vue-router';
 // const route = useRoute();
 // const router = useRouter();
 
-
 const users = ref([]); // เปลี่ยน {} เป็น []
 const isModalVisible = ref(false);
 const modalData = ref(null);
-const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-let branch = null
+// const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+// let branch = null
 
-if (userData.branch) {
-    branch = userData.branch;
-} else {
-    console.log('No userData found in localStorage');
-}
+// if (userData.branch) {
+//     branch = userData.branch;
+// } else {
+//     console.log('No userData found in localStorage');
+// }
+
 
 const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => user.status === "ผ่าน" && user.year === "ปวช 2" && user.branch === branch);
+        users.value = response.data.filter(user => (user.status === "ไม่อนุมัติ" || user.status === "ไม่ผ่าน") && user.year === "ป.ตรี ปีที่ 2");
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -34,7 +34,6 @@ const fetchData = async () => {
         });
     }
 };
-
 
 // modal
 const showModal = async (id) => {
@@ -56,6 +55,28 @@ const closeModal = () => {
     modalData.value = null;
 };
 // modal
+
+
+// const handleStatus = async (id, newStatus) => { // ฟังก์ชันเพื่ออัพเดตสถานะ
+//     try {
+//         const response = await axios.put(`${config.api_path}/user/${id}`, { status: newStatus }); // ส่งข้อมูลไปที่ API
+//         if (response.data.message === "Success") {
+//             Swal.fire({
+//                 title: "สำเร็จ",
+//                 text: "อัปเดตสถานะสำเร็จ",
+//                 icon: "success",
+//             });
+//             fetchData(); // รีเฟรชข้อมูลหลังจากอัพเดตสถานะ
+//         }
+//     } catch (error) {
+//         Swal.fire({
+//             title: "error",
+//             text: (error.message, "Cr2 Error Updating Status"),
+//             icon: "error"
+//         });
+//     }
+// };
+
 
 
 const removeData = async (id) => {
@@ -107,19 +128,18 @@ onMounted(() => {
 </script>
 
 <template>
-    <section class="content mt-4">
+    <section class="content ">
         <div class="card">
             <div class="card-header">
-                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นประกาศนียบัตรวิชาชีพ ชั้นปีที่ 2 (ผ่าน)
+                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรีชั้นปีที่ 2 (ไม่ผ่าน)
                     <div>
-                        <router-link :to="`/teacher-index/student-vcr2req`"> <button
+                        <router-link :to="`/admin-index/Ec2-req`"> <button
                                 class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
-                        <router-link :to="`/teacher-index/student-vcr2active`"> <button
+                        <router-link :to="`/admin-index/Ec2-active`"> <button
                                 class="btn btn-warning m-1">กำลังฝึก</button></router-link>
-                        <router-link :to="`/teacher-index/student-vcr2success`"> <button
-                                class="btn btn-success m-1">ผ่าน</button>
+                        <router-link :to="`/admin-index/Ec2-success`"> <button class="btn btn-success m-1">ผ่าน</button>
                         </router-link>
-                        <router-link :to="`/teacher-index/student-vcr2notpass`"> <button
+                        <router-link :to="`/admin-index/Ec2-notpass`"> <button
                                 class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
                     </div>
@@ -133,7 +153,7 @@ onMounted(() => {
                             <th>สาขา</th>
                             <th>ชั้นปี</th>
                             <th class="text-center">ข้อมูลสถานประกอบการ</th>
-                            <!-- <th>Tools</th> -->
+                            <th>Tools</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -146,16 +166,17 @@ onMounted(() => {
                             <td class="text-center">
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
                             </td>
-                            <!-- <td>
-                                <button class="btn btn-primary"
-                                    @click="handleStatus(user.id, 'อนุมัติ')">อนุมัติ</button> &nbsp;
+                            <td>
+                                <!-- <button class="btn btn-primary" @click="handleStatus(user.id, 'ผ่าน')">ผ่าน</button>
+                                &nbsp;
                                 <button class="btn btn-danger"
-                                    @click="handleStatus(user.id, 'ไม่อนุมัติ')">ไม่อนุมัติ</button> -->
-                            <!-- <router-link :to="`/edit-ec2/${user.id}`">
+                                    @click="handleStatus(user.id, 'ไม่ผ่าน')">ไม่ผ่าน</button> -->
+
+                                <router-link :to="`/edit-cr2/${user.id}`">
                                     <button class="btn btn-primary m-1">Edit</button>
                                 </router-link>
                                 <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button>
-                            </td> -->
+                            </td>
                         </tr>
                     </tbody>
                 </table>

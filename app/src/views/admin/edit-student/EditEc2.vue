@@ -105,7 +105,7 @@ onMounted(() => {
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-md-6 mb-4">
                                 <div class="form-outline">
                                     <label class="form-label" for="userName">Username</label>
@@ -120,7 +120,7 @@ onMounted(() => {
                                         v-model="user.password" />
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-outline mb-4">
                             <label class="form-label" for="phoneNumber">Tel</label>
                             <input type="text" id="phoneNumber" class="form-control form-control-lg"
@@ -178,7 +178,7 @@ onMounted(() => {
                                         สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ</option>
                                 </select>
                             </div>
-                            <div class="col-md-6 mb-4">
+                            <!-- <div class="col-md-6 mb-4">
                                 <label class="form-label" for="status">Status</label>
                                 <select v-model="user.status" class="form-select">
                                     <option value="" disabled>-</option>
@@ -187,25 +187,25 @@ onMounted(() => {
                                     <option value="อนุมัติ">อนุมัติ</option>
                                     <option value="ผ่าน">ผ่าน</option>
                                 </select>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="form-outline mb-4">
                             <label class="form-label" for="studentID">Student ID</label>
                             <input v-model="user.studentID" type="text" id="studentID"
                                 class="form-control form-control-lg" />
                         </div>
-                        <div class="form-outline mb-4">
+                        <!-- <div class="form-outline mb-4">
                             <label class="form-label" for="company">Company</label>
                             <input v-model="user.company" type="text" id="company"
                                 class="form-control form-control-lg" />
-                        </div>
+                        </div> -->
                         <div class="d-flex justify-content-end pt-3">
                             <button type="submit" class="btn btn-primary btn-lg ms-2">Submit Form</button>
                         </div>
-                        <div class="d-flex justify-content-end pt-3">
+                        <!-- <div class="d-flex justify-content-end pt-3">
                             <router-link to="/login"><small>Already have an account? Click <a
                                         href="#">Login</a></small></router-link>
-                        </div>
+                        </div> -->
                     </form>
                 </div>
             </div>

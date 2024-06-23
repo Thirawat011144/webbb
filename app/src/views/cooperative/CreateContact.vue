@@ -10,7 +10,8 @@
           </div>
           <div class="mb-3">
             <label for="address" class="form-label">ที่อยู่</label>
-            <textarea v-model="cooperativeEducation.address" id="address" class="form-control" rows="2" required></textarea>
+            <textarea v-model="cooperativeEducation.address" id="address" class="form-control" rows="2"
+              required></textarea>
           </div>
           <div class="mb-3">
             <label for="email" class="form-label">อีเมลล์</label>
@@ -69,7 +70,7 @@ const submitForm = async () => {
         icon: "success",
         timer: 2000
       });
-      router.push('/admin-index/list-cooperative-education');
+      router.push('/admin-index/cooperative-education');
     }
   } catch (error) {
     Swal.fire({

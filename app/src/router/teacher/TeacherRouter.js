@@ -3,6 +3,7 @@ import TeacherIndex from '../../views/teacher/index.vue'
 import information from '../../components/teacher/information.vue'
 import SearchTeacher from '../../views/teacher/SearchTeacher.vue'
 import Companies from '../../views/teacher/Companies.vue'
+import CollegeTeacher from '../../views/teacher/College.vue'
 import Dashboard from '../../views/teacher/Dashboard.vue'
 
 import Cr2 from '../../views/teacher/list-student/Cr2.vue';
@@ -35,6 +36,11 @@ const routeTeacher = [
                 path:'dashboard',
                 name:'dashboard',
                 component:Dashboard
+            },
+            {
+                path: 'college-teacher',
+                name: 'college-teacher',
+                component: CollegeTeacher
             },
             {
                 path: 'companies',

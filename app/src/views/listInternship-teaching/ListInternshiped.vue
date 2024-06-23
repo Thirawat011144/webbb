@@ -5,36 +5,48 @@
             <div class="container">
                 <!-- <h1>รายละเอียดของสาขา</h1> -->
                 <div class="branch-list">
-                    <router-link to="/internshiped-list" style="text-decoration: none;">
+                    <router-link to="/internshiped-civil" style="text-decoration: none;">
                         <div class="branch-item">
                             <div class="icon">🏗️</div>
                             <p>สาขาครุศาสตร์อุตสาหกรรมโยธา</p>
                         </div>
                     </router-link>
-                    <div class="branch-item">
-                        <div class="icon">⚡</div>
-                        <p>สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า</p>
-                    </div>
-                    <div class="branch-item">
-                        <div class="icon">🔧</div>
-                        <p>สาขาครุศาสตร์อุตสาหกรรมเครื่องกล</p>
-                    </div>
-                    <div class="branch-item">
-                        <div class="icon">🏭</div>
-                        <p>สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ</p>
-                    </div>
-                    <div class="branch-item">
-                        <div class="icon">📡</div>
-                        <p>สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม</p>
-                    </div>
-                    <div class="branch-item">
-                        <div class="icon">💻</div>
-                        <p>สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์</p>
-                    </div>
-                    <div class="branch-item">
+                    <router-link to="/internshiped-electrical" style="text-decoration: none;">
+                        <div class="branch-item">
+                            <div class="icon">⚡</div>
+                            <p>สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า</p>
+                        </div>
+                    </router-link>
+                    <router-link to="/internshiped-mechanical" style="text-decoration: none;">
+                        <div class="branch-item">
+                            <div class="icon">🔧</div>
+                            <p>สาขาครุศาสตร์อุตสาหกรรมเครื่องกล</p>
+                        </div>
+                    </router-link>
+                    <router-link to="/industrial-industry" style="text-decoration: none;">
+                        <div class="branch-item">
+                            <div class="icon">🏭</div>
+                            <p>สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ</p>
+                        </div>
+                    </router-link>
+                    <router-link to="/electronics-telecommunications" style="text-decoration: none;">
+                        <div class="branch-item">
+                            <div class="icon">📡</div>
+                            <p>สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม</p>
+                        </div>
+                    </router-link>
+                    <router-link to="/computer" style="text-decoration: none;">
+                        <div class="branch-item">
+                            <div class="icon">💻</div>
+                            <p>สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์</p>
+                        </div>
+                    </router-link>
+                    <router-link to="/welder" style="text-decoration: none;">
+                            <div class="branch-item">
                         <div class="icon">🔩</div>
                         <p>สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ</p>
                     </div>
+                    </router-link>
                 </div>
             </div>
         </div>

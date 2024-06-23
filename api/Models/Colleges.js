@@ -10,6 +10,12 @@ const CollegesModel = connect.define("colleges", {
     collegeName: {
         type: DataTypes.STRING(255),
     },
+    contactFirstName: {
+        type: DataTypes.STRING(255),
+    },
+    contactLastName: {
+        type: DataTypes.STRING(255),
+    },
     collegePhone: {
         type: DataTypes.STRING(255),
     },

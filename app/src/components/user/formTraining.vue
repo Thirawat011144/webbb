@@ -10,7 +10,9 @@ const router = useRouter();
 const userData = JSON.parse(localStorage.getItem('userData') || '{}');
 
 const companyName = ref('');
-const companyType = ref('');
+const companyDepartment = ref('');
+const contactFirstName = ref('');
+const contactLastName = ref('');
 const companyPhone = ref('');
 const companyEmail = ref('');
 const companyAddress = ref('');
@@ -39,7 +41,9 @@ const handleSubmit = async () => {
         try {
             const formData = {
                 companyName: companyName.value,
-                companyType: companyType.value,
+                companyDepartment: companyDepartment.value,
+                contactFirstName: contactFirstName.value,
+                contactLastName: contactLastName.value,
                 companyPhone: companyPhone.value,
                 companyEmail: companyEmail.value,
                 companyAddress: companyAddress.value,
@@ -90,7 +94,7 @@ const handleSubmit = async () => {
                                 <div data-mdb-input-init class="form-outline">
                                     <label class="form-label" for="companyType">แผนก <span
                                             class="text-red">*</span></label>
-                                    <input type="text" id="companyType" class="form-control" v-model="companyType"
+                                    <input type="text" id="companyType" class="form-control" v-model="companyDepartment"
                                         required />
                                 </div>
                             </div>

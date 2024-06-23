@@ -36,10 +36,10 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
-import Navbar from '../../components/HomeView/Navbar.vue';
-import Footer from '../../components/HomeView/Footer.vue';
+import Navbar from '@/components/HomeView/Navbar.vue';
+import Footer from '@/components/HomeView/Footer.vue';
 
-import config from '../../../config';
+import config from '../../../../config';
 
 const jobs = ref([]);
 const currentPage = ref(1);

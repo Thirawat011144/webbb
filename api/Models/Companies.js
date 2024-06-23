@@ -10,7 +10,13 @@ const CompaniesModel = connect.define("companies", {
     companyName: {
         type: DataTypes.STRING(255),
     },
-    companyType: {
+    companyDepartment: {
+        type: DataTypes.STRING(255),
+    },
+    contactFirstName: {
+        type: DataTypes.STRING(255),
+    },
+    contactLastName: {
         type: DataTypes.STRING(255),
     },
     companyPhone: {

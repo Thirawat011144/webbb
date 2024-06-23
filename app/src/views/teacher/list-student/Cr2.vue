@@ -4,15 +4,14 @@ import { ref, onMounted, computed } from 'vue';
 import config from "../../../../config";
 import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
-import { RouterLink, RouterView } from 'vue-router';
 
-// const route = useRoute();
-// const router = useRouter();
+const route = useRoute();
+const router = useRouter();
+
 
 const users = ref([]); // เปลี่ยน {} เป็น []
 const isModalVisible = ref(false);
 const modalData = ref(null);
-
 const userData = JSON.parse(localStorage.getItem('userData') || '{}');
 let branch = null
 
@@ -21,8 +20,6 @@ if (userData.branch) {
 } else {
   console.log('No userData found in localStorage');
 }
-
-// console.log(branch)
 
 const fetchData = async () => {
   try {
@@ -60,7 +57,6 @@ const closeModal = () => {
   modalData.value = null;
 };
 // modal
-
 
 const removeData = async (id) => {
   // แสดงป๊อปอัพยืนยันการลบ
@@ -148,12 +144,12 @@ onMounted(() => {
               <td class="text-center">
                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
               </td>
-              <!-- <td> -->
-              <!-- <router-link :to="`/edit-cr2/${user.id}`">
+              <!-- <td>
+                <router-link :to="`/edit-ec4/${user.id}`">
                   <button class="btn btn-primary m-1">Edit</button>
                 </router-link>
-                <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button> -->
-              <!-- </td> -->
+                <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button>
+              </td> -->
             </tr>
           </tbody>
         </table>
@@ -173,13 +169,30 @@ onMounted(() => {
             <p>สาขา: {{ modalData.branch }}</p>
             <p>ชั้นปี: {{ modalData.year }}</p>
             <p>สถานะ: {{ modalData.status }}</p>
+            <p>เบอร์โทรศัพท์: {{ modalData.phoneNumber }}</p>
+            <p v-if="modalData.email">Email: {{ modalData.email }}</p>
+            <p v-else></p>
             <div v-if="modalData.companyDetails">
+              <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
               <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
-              <p>ประเภทหน่วยงาน: {{ modalData.companyDetails.companyType }}</p>
+              <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
+              <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{
+                modalData.companyDetails.contactLastName }}</p>
               <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
               <p v-if="modalData.companyDetails.companyEmail">Email: {{ modalData.companyDetails.companyEmail }}</p>
               <p v-else></p>
               <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
+            </div>
+            <div v-else-if="modalData.collegeDetails">
+              <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
+              <p>สถานประกอบการ: {{ modalData.collegeDetails.collegeName }}</p>
+              <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{
+                modalData.collegeDetails.contactLastName }}</p>
+              <p>เบอร์โทรศัพท์: {{ modalData.collegeDetails.collegePhone }}</p>
+              <p v-if="modalData.collegeDetails.collegeEmail">Email: {{ modalData.collegeDetails.collegeEmail }}</p>
+              <p v-else></p>
+              <p>ที่ตั้งวิทยาลัย: {{ modalData.collegeDetails.collegeAddress }}</p>
+
             </div>
             <div v-else>
               <p>ไม่มีข้อมูลสถานประกอบการ</p>

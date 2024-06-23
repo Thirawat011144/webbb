@@ -1,6 +1,6 @@
 const express = require("express");
 const { Op, Sequelize } = require('sequelize');
-const { UsersModel, CompaniesModel } = require("../Models/index");
+const { UsersModel, CompaniesModel, CollegesModel } = require("../Models/index");
 // const authenticateToken = require('../Middleware/Authorization');
 
 const router = express.Router();
@@ -9,11 +9,18 @@ router.get("/users", async (req, res) => {
     try {
         const users = await UsersModel.findAll({
             attributes: { exclude: ['password'] },
-            include: [{
-                model: CompaniesModel,
-                as: 'companyDetails',
-                attributes: ['companyName'] //ทำส่วนหน้าเว็บให้แสดงผลข้อมูลการสถานประกอบการณ์ทั้งหมด
-            }]
+            include: [
+                {
+                    model: CompaniesModel,
+                    as: 'companyDetails',
+                    // attributes: ['companyName']
+                },
+                {
+                    model: CollegesModel,
+                    as: 'collegeDetails',
+                    // attributes: ['collegeName']
+                }
+            ]
         });
         res.send(users);
     } catch (error) {
@@ -24,10 +31,16 @@ router.get("/users", async (req, res) => {
 router.get("/user/:id", async (req, res) => {
     try {
         const user = await UsersModel.findByPk(req.params.id, {
-            include: [{
-                model: CompaniesModel,
-                as: 'companyDetails'
-            }]
+            include: [
+                {
+                    model: CompaniesModel,
+                    as: 'companyDetails'
+                },
+                {
+                    model: CollegesModel,
+                    as: 'collegeDetails'
+                }
+            ]
         });
         if (!user) {
             return res.status(404).send({ message: "User not found" });

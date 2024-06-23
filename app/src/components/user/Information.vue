@@ -22,6 +22,9 @@
                 <p class="card-text">
                     <span>ชั้นปี:</span> {{ dataResult.year }}
                 </p>
+                <p class="card-text">
+                    <span>Email:</span> {{ dataResult.email }}
+                </p>
             </div>
         </div>
         <div v-else>
@@ -35,14 +38,14 @@ import { ref, onMounted, watch } from 'vue';
 import { useDataStore } from '../../store/Search';
 
 const searchData = useDataStore();
-const dataResult = ref({}); 
+const dataResult = ref({});
 
 const updateDataResults = () => {
     const storedData = localStorage.getItem('userData');
     if (storedData) {
-        dataResult.value = JSON.parse(storedData); 
+        dataResult.value = JSON.parse(storedData);
     } else {
-        dataResult.value = searchData.dataResults; 
+        dataResult.value = searchData.dataResults;
     }
 }
 

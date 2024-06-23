@@ -126,7 +126,9 @@ onMounted(() => {
                 class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
             <router-link :to="`/admin-index/cr2-active`"> <button
                 class="btn btn-warning m-1">กำลังฝึก</button></router-link>
-            <router-link :to="`/admin-index/cr2-success`"> <button class="btn btn-success m-1">ฝึกจบแล้ว</button>
+            <router-link :to="`/admin-index/cr2-success`"> <button class="btn btn-success m-1">ผ่าน</button>
+            </router-link>
+            <router-link :to="`/admin-index/cr2-notpass`"> <button class="btn btn-danger m-1">ไม่ผ่าน</button>
             </router-link>
           </div>
         </div>
@@ -149,6 +151,7 @@ onMounted(() => {
               <td>{{ user.firstName }} {{ user.lastName }}</td>
               <td>{{ user.branch }}</td>
               <td>{{ user.year }}</td>
+             
               <td class="text-center">
                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
               </td>
@@ -176,12 +179,31 @@ onMounted(() => {
             <p>ชื่อ-นามสกุล: {{ modalData.firstName }} {{ modalData.lastName }}</p>
             <p>สาขา: {{ modalData.branch }}</p>
             <p>ชั้นปี: {{ modalData.year }}</p>
+            <p>สถานะ: {{ modalData.status }}</p>
+            <p>เบอร์โทรศัพท์: {{ modalData.phoneNumber }}</p>
+            <p v-if="modalData.email">Email: {{ modalData.email }}</p>
+            <p v-else></p>
             <div v-if="modalData.companyDetails">
+              <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
               <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
-              <p>ประเภทหน่วยงาน: {{ modalData.companyDetails.companyType }}</p>
+              <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
+              <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{
+                modalData.companyDetails.contactLastName }}</p>
               <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
-              <p>Email: {{ modalData.companyDetails.companyEmail }}</p>
+              <p v-if="modalData.companyDetails.companyEmail">Email: {{ modalData.companyDetails.companyEmail }}</p>
+              <p v-else></p>
               <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
+            </div>
+            <div v-else-if="modalData.collegeDetails">
+              <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
+              <p>สถานประกอบการ: {{ modalData.collegeDetails.collegeName }}</p>
+              <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{
+                modalData.collegeDetails.contactLastName }}</p>
+              <p>เบอร์โทรศัพท์: {{ modalData.collegeDetails.collegePhone }}</p>
+              <p v-if="modalData.collegeDetails.collegeEmail">Email: {{ modalData.collegeDetails.collegeEmail }}</p>
+              <p v-else></p>
+              <p>ที่ตั้งวิทยาลัย: {{ modalData.collegeDetails.collegeAddress }}</p>
+
             </div>
             <div v-else>
               <p>ไม่มีข้อมูลสถานประกอบการ</p>
@@ -196,7 +218,7 @@ onMounted(() => {
   </section>
 </template>
 
-<style>
+<style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800&display=swap');
 
 body {

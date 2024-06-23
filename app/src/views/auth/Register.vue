@@ -17,6 +17,7 @@ const year = ref('');
 const branch = ref('');
 const status = ref('');
 const studentID = ref('');
+const email = ref('');
 
 const handleRegister = async () => {
     try {
@@ -31,6 +32,7 @@ const handleRegister = async () => {
             branch: branch.value,
             status: status.value,
             studentID: studentID.value,
+            email:email.value
         }
         const response = await axios.post(`${config.api_path}/register`, payload);
         if (response.data.message === "Success") {
@@ -102,6 +104,13 @@ const handleRegister = async () => {
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="form-outline mb-4">
+                                            <label class="form-label" for="form3Example8">Email</label>
+                                            <input type="email" id="form3Example8" class="form-control form-control-lg"
+                                                v-model="email" required placeholder="example@example.com" />
+                                        </div>
+
 
                                         <div class="form-outline mb-4">
                                             <label class="form-label" for="form3Example8">Tel</label>

@@ -181,40 +181,55 @@ onMounted(() => {
                 </table>
             </div>
         </div>
-        <!-- Modal -->
-        <div v-if="isModalVisible" class="modal fade show" tabindex="-1" style="display: block;">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="infoModalLabel">ข้อมูลผู้ใช้</h5>
-                        <button type="button" class="btn-close" @click="isModalVisible = false"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body" v-if="modalData">
-                        <p>รหัสนักศึกษา: {{ modalData.studentID }}</p>
-                        <p>ชื่อ-นามสกุล: {{ modalData.firstName }} {{ modalData.lastName }}</p>
-                        <p>สาขา: {{ modalData.branch }}</p>
-                        <p>ชั้นปี: {{ modalData.year }}</p>
-                        <p>สถานะ: {{ modalData.status }}</p>
-                        <div v-if="modalData.companyDetails">
-                            <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
-                            <p>ประเภทหน่วยงาน: {{ modalData.companyDetails.companyType }}</p>
-                            <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
-                            <p v-if="modalData.companyDetails.companyEmail">Email: {{
-                                modalData.companyDetails.companyEmail }}</p>
-                            <p v-else></p>
-                            <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
-                        </div>
-                        <div v-else>
-                            <p>ไม่มีข้อมูลสถานประกอบการ</p>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @click="closeModal">ปิด</button>
-                    </div>
-                </div>
+     <!-- Modal -->
+     <div v-if="isModalVisible" class="modal fade show" tabindex="-1" style="display: block;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel">ข้อมูลผู้ใช้</h5>
+            <button type="button" class="btn-close" @click="isModalVisible = false" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" v-if="modalData">
+            <p>รหัสนักศึกษา: {{ modalData.studentID }}</p>
+            <p>ชื่อ-นามสกุล: {{ modalData.firstName }} {{ modalData.lastName }}</p>
+            <p>สาขา: {{ modalData.branch }}</p>
+            <p>ชั้นปี: {{ modalData.year }}</p>
+            <p>สถานะ: {{ modalData.status }}</p>
+            <p>เบอร์โทรศัพท์: {{ modalData.phoneNumber }}</p>
+            <p v-if="modalData.email">Email: {{ modalData.email }}</p>
+            <p v-else></p>
+            <div v-if="modalData.companyDetails">
+              <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
+              <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
+              <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
+              <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{
+                modalData.companyDetails.contactLastName }}</p>
+              <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
+              <p v-if="modalData.companyDetails.companyEmail">Email: {{ modalData.companyDetails.companyEmail }}</p>
+              <p v-else></p>
+              <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
             </div>
+            <div v-else-if="modalData.collegeDetails">
+              <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
+              <p>สถานประกอบการ: {{ modalData.collegeDetails.collegeName }}</p>
+              <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{
+                modalData.collegeDetails.contactLastName }}</p>
+              <p>เบอร์โทรศัพท์: {{ modalData.collegeDetails.collegePhone }}</p>
+              <p v-if="modalData.collegeDetails.collegeEmail">Email: {{ modalData.collegeDetails.collegeEmail }}</p>
+              <p v-else></p>
+              <p>ที่ตั้งวิทยาลัย: {{ modalData.collegeDetails.collegeAddress }}</p>
+
+            </div>
+            <div v-else>
+              <p>ไม่มีข้อมูลสถานประกอบการ</p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="closeModal">ปิด</button>
+          </div>
         </div>
+      </div>
+    </div>
     </section>
 </template>
 

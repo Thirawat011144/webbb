@@ -58,10 +58,10 @@ const updateData = async () => {
                     text: "แก้ไขข้อมูลผู้ใช้สำเร็จ",
                     icon: "success",
                 });
-                if(role === 'teacher'){
+                if (role === 'teacher') {
                     router.push('/teacher-index/list-ec4');
-                }else{
-                router.push('/admin-index/list-ec4');
+                } else {
+                    router.push('/admin-index/list-ec4');
                 }
             }
         } catch (error) {
@@ -104,7 +104,7 @@ onMounted(() => {
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-md-6 mb-4">
                                 <div class="form-outline">
                                     <label class="form-label" for="userName">Username</label>
@@ -119,7 +119,7 @@ onMounted(() => {
                                         v-model="user.password" />
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-outline mb-4">
                             <label class="form-label" for="phoneNumber">Tel</label>
                             <input type="text" id="phoneNumber" class="form-control form-control-lg"
@@ -158,15 +158,26 @@ onMounted(() => {
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-4">
-                                <label class="form-label" for="branch">Branch</label>
+                                <label class="form-label" for="branch">สาขา</label>
                                 <select v-model="user.branch" class="form-select">
-                                    <option value="" disabled>Branch</option>
-                                    <option value="Computer">Computer</option>
-                                    <option value="ComSci">ComSci</option>
-                                    <option value="Auto mechanic">Auto mechanic</option>
+                                    <option value="" disabled>-</option>
+                                    <option value="สาขาครุศาสตร์อุตสาหกรรมโยธา">
+                                        สาขาครุศาสตร์อุตสาหกรรมโยธา</option>
+                                    <option value="สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า">
+                                        สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า</option>
+                                    <option value="สาขาครุศาสตร์อุตสาหกรรมเครื่องกล">
+                                        สาขาครุศาสตร์อุตสาหกรรมเครื่องกล</option>
+                                    <option value="สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ">
+                                        สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ</option>
+                                    <option value="สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม">
+                                        สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม</option>
+                                    <option value="สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์">
+                                        สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์</option>
+                                    <option value="สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ">
+                                        สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ</option>
                                 </select>
                             </div>
-                            <div class="col-md-6 mb-4">
+                            <!-- <div class="col-md-6 mb-4">
                                 <label class="form-label" for="status">Status</label>
                                 <select v-model="user.status" class="form-select">
                                     <option value="" disabled>Status</option>
@@ -174,25 +185,25 @@ onMounted(() => {
                                     <option value="Training">Training</option>
                                     <option value="Finished training">Finished training</option>
                                 </select>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="form-outline mb-4">
                             <label class="form-label" for="studentID">Student ID</label>
                             <input v-model="user.studentID" type="text" id="studentID"
                                 class="form-control form-control-lg" />
                         </div>
-                        <div class="form-outline mb-4">
+                        <!-- <div class="form-outline mb-4">
                             <label class="form-label" for="company">Company</label>
                             <input v-model="user.company" type="text" id="company"
                                 class="form-control form-control-lg" />
-                        </div>
+                        </div> -->
                         <div class="d-flex justify-content-end pt-3">
                             <button type="submit" class="btn btn-primary btn-lg ms-2">Submit Form</button>
                         </div>
-                        <div class="d-flex justify-content-end pt-3">
+                        <!-- <div class="d-flex justify-content-end pt-3">
                             <router-link to="/login"><small>Already have an account? Click <a
                                         href="#">Login</a></small></router-link>
-                        </div>
+                        </div> -->
                     </form>
                 </div>
             </div>

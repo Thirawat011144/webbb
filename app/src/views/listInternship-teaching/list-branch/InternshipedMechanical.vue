@@ -4,22 +4,21 @@
     <div class="bg">
       <div class="container">
         <div class="header">
-          <h1>สถานที่ฝึกสอน</h1>
+          <h1>สถานที่ฝึกงาน</h1>
 
           <router-link to="/list-practice">
             <button class="post-job-button">สถานที่ฝึกสอน</button>
           </router-link>
         </div>
         <div class="content">
-          <div class="job-listing" v-for="user in paginatedUsers" :key="user.id">
+          <div class="job-listing" v-for="job in paginatedJobs" :key="job.id">
             <div class="job-header">
-              <h6>{{ user.collegeDetails.collegeName }}</h6>
-              <span class="job-type">{{ formatDate(user.createdAt) }}</span>
+              <h6>{{ job.companyName }}</h6>
+              <span class="job-type">{{ formatDate(job.createdAt) }}</span>
             </div>
             <div class="job-details">
-              <p><span class="text-bold">ที่อยู่:</span> {{ user.collegeDetails.collegeAddress }}</p>
-              <p><span class="text-bold">โทรศัพท์:</span> {{ user.collegeDetails.collegePhone }}</p>
-              <p><span class="text-bold">ผู้ฝึกเรียนสาขา:</span> {{ user.branch }}</p>
+              <p><span class="text-bold">ที่อยู่:</span> {{ job.companyAddress }}</p>
+              <p><span class="text-bold">โทรศัพท์:</span> {{ job.companyPhone }}</p>
             </div>
           </div>
         </div>
@@ -37,38 +36,53 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
-import Navbar from '../../components/HomeView/Navbar.vue';
-import Footer from '../../components/HomeView/Footer.vue';
+import Navbar from '@/components/HomeView/Navbar.vue';
+import Footer from '@/components/HomeView/Footer.vue';
 
-import config from '../../../config';
+import config from '../../../../config';
 
-const users = ref([]);
+const jobs = ref([]);
 const currentPage = ref(1);
 const perPage = ref(4); // จำนวนสถานที่ฝึกงานต่อหน้า
 
-const fetchUsers = async () => {
+const fetchJobs = async () => {
   try {
-    const response = await axios.get(`${config.api_path}/users`);
-    users.value = response.data
-      .filter(user => user.year === "ป.ตรี ปีที่ 4" && user.collegeDetails)
+    const response = await axios.get(`${config.api_path}/companies`);
+    const uniqueAddresses = new Set();
+    const uniqueCompanyName = new Set();
+
+    jobs.value = response.data
+      .filter(job => {
+        if (
+          job.userDetails.branch === 'สาขาครุศาสตร์อุตสาหกรรมเครื่องกล' &&
+          !uniqueAddresses.has(job.companyAddress) &&
+          !uniqueCompanyName.has(job.companyName)
+        ) {
+          uniqueAddresses.add(job.companyAddress);
+          uniqueCompanyName.add(job.companyName);
+          return true;
+        }
+        return false;
+      })
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   } catch (error) {
-    console.error('Error fetching users:', error);
+    console.error('Error fetching jobs:', error);
   }
 };
+
 
 const formatDate = (dateString) => {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   return new Date(dateString).toLocaleDateString('th-TH', options);
 };
 
-const paginatedUsers = computed(() => {
+const paginatedJobs = computed(() => {
   const start = (currentPage.value - 1) * perPage.value;
   const end = start + perPage.value;
-  return users.value.slice(start, end);
+  return jobs.value.slice(start, end);
 });
 
-const totalPages = computed(() => Math.ceil(users.value.length / perPage.value));
+const totalPages = computed(() => Math.ceil(jobs.value.length / perPage.value));
 
 const nextPage = () => {
   if (currentPage.value < totalPages.value) {
@@ -83,10 +97,9 @@ const prevPage = () => {
 };
 
 onMounted(() => {
-  fetchUsers();
+  fetchJobs();
 });
 </script>
-
 
 <style scoped>
 .bg {
@@ -125,6 +138,7 @@ onMounted(() => {
   border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding-bottom: 80px;
+  /* เพิ่มระยะห่างด้านล่าง */
 }
 
 .header {

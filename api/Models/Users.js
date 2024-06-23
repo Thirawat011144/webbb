@@ -19,6 +19,9 @@ const UsersModel = connect.define("users", {
     password: {
         type: DataTypes.STRING(255),
     },
+    email: {
+        type: DataTypes.STRING(255),
+    },
     phoneNumber: {
         type: DataTypes.STRING(50),
     },

@@ -41,6 +41,10 @@ import Cr2Success from "../../views/admin/list-student-success/Cr2Success.vue";
 import Ec2Success from "../../views/admin/list-student-success/Ec2Success.vue";
 import Ec4Success from "../../views/admin/list-student-success/Ec4Success.vue";
 
+import Cr2NotPass from '../../views/admin/list-student-notpass/Cr2NotPass.vue'
+import Ec2NotPass from '../../views/admin/list-student-notpass/Ec2NotPass.vue'
+import Ec4NotPass from '../../views/admin/list-student-notpass/Ec4NotPass.vue'
+
 const routeAdmin = [
   {
     path: '/admin-index',
@@ -194,6 +198,21 @@ const routeAdmin = [
         path: 'edit-news/:id',
         name: 'edit-news',
         component: EditNews
+      },
+      {
+        path: 'cr2-notpass',
+        name: 'cr2-notpass',
+        component: Cr2NotPass
+      },
+      {
+        path: 'Ec2-notpass',
+        name: 'Ec2-notpass',
+        component: Ec2NotPass
+      },
+      {
+        path: 'Ec4-notpass',
+        name: 'Ec4-notpass',
+        component: Ec4NotPass
       },
     ]
   }
