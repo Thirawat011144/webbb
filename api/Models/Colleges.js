@@ -27,7 +27,7 @@ const CollegesModel = connect.define("colleges", {
     },
     studentID: {
         type: DataTypes.STRING(50),
-        // unique: true
+        unique: true
     }
 });
 

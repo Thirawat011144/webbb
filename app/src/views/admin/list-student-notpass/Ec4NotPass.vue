@@ -200,7 +200,7 @@ onMounted(() => {
                         <p>เบอร์โทรศัพท์: {{ modalData.phoneNumber }}</p>
                         <p v-if="modalData.email">Email: {{ modalData.email }}</p>
                         <p v-else></p>
-                        <div v-if="modalData.companyDetails">
+                        <!-- <div v-if="modalData.companyDetails">
                             <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
                             <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
                             <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
@@ -211,10 +211,10 @@ onMounted(() => {
                                 modalData.companyDetails.companyEmail }}</p>
                             <p v-else></p>
                             <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
-                        </div>
-                        <div v-else-if="modalData.collegeDetails">
+                        </div> -->
+                        <div v-if="modalData.collegeDetails">
                             <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
-                            <p>สถานประกอบการ: {{ modalData.collegeDetails.collegeName }}</p>
+                            <p>โรงเรียน/วิทยาลัย: {{ modalData.collegeDetails.collegeName }}</p>
                             <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{
                                 modalData.collegeDetails.contactLastName }}</p>
                             <p>เบอร์โทรศัพท์: {{ modalData.collegeDetails.collegePhone }}</p>
@@ -222,7 +222,6 @@ onMounted(() => {
                                 modalData.collegeDetails.collegeEmail }}</p>
                             <p v-else></p>
                             <p>ที่ตั้งวิทยาลัย: {{ modalData.collegeDetails.collegeAddress }}</p>
-
                         </div>
                         <div v-else>
                             <p>ไม่มีข้อมูลสถานประกอบการ</p>

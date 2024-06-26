@@ -8,7 +8,7 @@
                 </div>
                 <div class="content" v-if="cooperativeEducation">
                     <div class="section">
-                        <h2>สหกิจศึกษาคืออะไร?</h2>
+                        <!-- <h2>สหกิจศึกษาคืออะไร?</h2> -->
                         <img :src="`${config.api_path}/${cooperativeEducation.description}`"
                             alt="เกี่ยวกับสหกิจศึกษา" />
                     </div>

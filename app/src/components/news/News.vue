@@ -18,8 +18,13 @@
               </span>
             </div>
             <div class="announcement-details mt-4">
-              <a :href="announcement.detail" target="_blank" class="news-link">คลิ๊กเพื่อดูรายละเอียด</a>
+              <router-link to="/news-detail/:id">
+                <p><router-link :to="`/news-detail/${announcement.id}`">
+                    <p v-if="announcement.title">ดูรายละเอียด</p>
+                  </router-link></p>
+              </router-link>
             </div>
+   
           </div>
         </div>
         <div class="pagination">
@@ -57,6 +62,12 @@ const formatDate = (dateString) => {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   return new Date(dateString).toLocaleDateString('th-TH', options);
 };
+
+
+const getFileTypeUrl = (fileUrl) => {
+  return fileUrl ? `${config.api_path}/uploads/${fileUrl}` : '#';
+};
+
 
 const paginatedAnnouncements = computed(() => {
   const start = (currentPage.value - 1) * perPage.value;

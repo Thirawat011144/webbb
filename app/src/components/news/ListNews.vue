@@ -5,24 +5,35 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">ลำดับ</th>
-            <th scope="col">Title</th>
-            <th scope="col">Detail</th>
-            <th scope="col">Created At</th>
+            <th scope="col">ชื่อข่าว</th>
+            <th scope="col">ลิงค์</th>
+            <th scope="col">ไฟล์ PDF</th>
+            <th scope="col">ไฟล์ Doc</th>
+            <th scope="col">วันที่ลงประกาศ</th>
             <th scope="col">Tools</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(newsItem, index) in sortedNews" :key="newsItem.id">
-            <th scope="row">{{ index + 1 }}</th>
-            <td>{{ newsItem.title }}</td>
-            <td>{{ newsItem.detail }}</td>
-            <td>{{ formatDate(newsItem.createdAt) }}</td>
+          <tr v-for="(document, index) in documents" :key="document.id">
+            <td>{{ document.title }}</td>
+            <td>
+              <a v-if="document.detail" :href="document.detail" target="_blank">ดาวน์โหลดลิงค์</a>
+              <span v-else>-</span>
+            </td>
+            <td>
+              <a v-if="document.pdfFile" :href="document.pdfFile" target="_blank">ดาวน์โหลด PDF</a>
+              <span v-else>-</span>
+            </td>
+            <td>
+              <a v-if="document.docFile" :href="document.docFile" target="_blank">ดาวน์โหลด Doc</a>
+              <span v-else>-</span>
+            </td>
+            <td>{{ formatDate(document.createdAt) }}</td>
             <td class="p-3">
-              <router-link :to="`/admin-index/edit-news/${newsItem.id}`">
+              <router-link :to="`/admin-index/edit-download/${document.id}`">
                 <button class="btn btn-primary">Edit</button>
               </router-link>
-              <button @click="removeData(newsItem.id)" class="btn btn-danger">Delete</button>
+              <button @click="removeData(document.id)" class="btn btn-danger">Delete</button>
             </td>
           </tr>
         </tbody>
@@ -33,22 +44,19 @@
 
 <script setup>
 import axios from "axios";
-import { ref, onMounted, computed } from 'vue';
-import config from "../../../config";
+import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
+import config from "../../../config";
 
-const news = ref([]);
+const documents = ref([]);
 
-const fetchData = async () => {
+// ฟังก์ชันดึงข้อมูลเอกสารและจัดเรียงตามวันที่สร้าง
+const fetchDocuments = async () => {
   try {
     const response = await axios.get(`${config.api_path}/news`);
-    news.value = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    documents.value = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   } catch (error) {
-    Swal.fire({
-      title: "error",
-      text: (error.message, "Cr2 Error"),
-      icon: "error"
-    });
+    console.error('Error fetching documents:', error);
   }
 };
 
@@ -72,15 +80,15 @@ const removeData = async (id) => {
 
   if (result.isConfirmed) {
     try {
-      const response = await axios.delete(`${config.api_path}/news/${id}`);
-      news.value = news.value.filter(newsItem => newsItem.id !== id);
+      await axios.delete(`${config.api_path}/news/${id}`);
+      documents.value = documents.value.filter(document => document.id !== id);
       Swal.fire({
         title: 'สำเร็จ',
-        text: 'ลบข้อมูลสำเร็จ',
+        text: 'ลบข้อมูลเอกสารสำเร็จ',
         icon: 'success',
       }).then((result) => {
         if (result.value) {
-          fetchData();
+          fetchDocuments();
         }
       });
     } catch (error) {
@@ -94,13 +102,77 @@ const removeData = async (id) => {
   }
 };
 
-const sortedNews = computed(() => {
-  return news.value.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-});
-
 onMounted(() => {
-  fetchData();
+  fetchDocuments();
 });
 </script>
 
-<style></style>
+<style scoped>
+.content {
+  /* max-width: 1000px; */
+  margin: 0 auto;
+}
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.card-header {
+  background-color: #f7f7f7;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 20px;
+  font-size: 1.25em;
+  font-weight: bold;
+}
+
+.table {
+  width: 100%;
+  margin: 20px 0;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 12px 15px;
+  border: 1px solid #dddddd;
+}
+
+.table tbody tr:nth-of-type(even) {
+  background-color: #f9f9f9;
+}
+
+.table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #004085;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+</style>

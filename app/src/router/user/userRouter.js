@@ -4,6 +4,8 @@ import formTraining from '../../components/user/formTraining.vue'
 import DataStudent from '../../views/user/DataStudent.vue'
 import HomeViewUser from '../../views/user/HomeViewUser.vue'
 
+import DownloadUser from '../../components/user/home/Navbar/DownloadUser.vue'
+
 import FormTeaching from '../../components/user/FormTeaching.vue'
 const routeUser = [
   {
@@ -13,28 +15,35 @@ const routeUser = [
     beforeEnter: checkAuth,
     children: [
       {
-      path: 'form',
-      name:'form',
-      component: formTraining
+        path: 'form',
+        name: 'form',
+        component: formTraining
       },
       {
-        path:'data-student',
-        name:'data-student',
-        component:DataStudent
+        path: 'data-student',
+        name: 'data-student',
+        component: DataStudent
       }
       ,
       {
-        path:'form-teaching',
-        name:'form-teaching',
-        component:FormTeaching
+        path: 'form-teaching',
+        name: 'form-teaching',
+        component: FormTeaching
       }
     ]
   },
   {
     path: '/homeview',
-    name:'homeview',
+    name: 'homeview',
     component: HomeViewUser,
     beforeEnter: checkAuth,
+  }
+  ,
+  {
+    path: '/download-user',
+    name: '/download-user',
+    component: DownloadUser,
+    // beforeEnter: checkAuth,
   }
 ]
 

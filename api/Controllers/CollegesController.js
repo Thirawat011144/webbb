@@ -6,7 +6,7 @@ const authenticateToken = require('../Middleware/Authorization');
 
 router.post('/college', async (req, res) => {
     try {
-        const { collegeName,contactFirstName,contactLastName, collegePhone, collegeEmail, collegeAddress, studentID, status } = req.body;
+        const { collegeName, contactFirstName, contactLastName, collegePhone, collegeEmail, collegeAddress, studentID, status } = req.body;
 
         // หา record ที่มี studentID ตรงกับค่าในตาราง Users
         const user = await UsersModel.findOne({ where: { studentID } });
@@ -20,6 +20,7 @@ router.post('/college', async (req, res) => {
         if (status === 'ไม่อนุมัติ') {
             // อัปเดต status ใน Users table
             user.status = 'ขออนุมัติ';
+            user.college = collegeName;
             await user.save();
 
             // หา record ที่มี studentID ตรงกับค่าในตาราง Colleges
@@ -40,8 +41,13 @@ router.post('/college', async (req, res) => {
                 res.status(404).send({ message: "ไม่พบข้อมูล studentID ในตาราง Colleges" });
             }
         } else if (status === 'ขออนุมัติ') {
+            const existingCollege = await CollegesModel.findOne({ where: { studentID } });
+            if (existingCollege) {
+                res.status(409).send({ message: "studentID นี้มีอยู่แล้วในตาราง Colleges" });
+            }else{
             // อัปเดต status ใน Users table
             user.status = status;
+            user.college = collegeName;
             await user.save();
 
             // สร้าง record ใหม่
@@ -53,8 +59,27 @@ router.post('/college', async (req, res) => {
                 collegeEmail,
                 collegeAddress,
                 studentID
+            
             });
             res.status(201).send({ message: "Success", newCollege });
+        }
+        } else if (status === 'ผ่าน') {
+            // เปลี่ยน status และ year ใน Users table
+            user.status = 'ขออนุมัติ';
+            user.year = 'ป.ตรี ปีที่ 4';
+            await user.save();
+            // สร้าง record ใหม่
+            const newCollege = await CollegesModel.create({
+                collegeName,
+                contactFirstName,
+                contactLastName,
+                collegePhone,
+                collegeEmail,
+                collegeAddress,
+                studentID
+            });
+            res.status(201).send({ message: "Success", newCollege });
+            // res.status(200).send({ message: "Status and year updated successfully", user });
         } else {
             res.status(400).send({ message: "สถานะไม่ถูกต้อง" });
         }

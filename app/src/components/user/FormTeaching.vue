@@ -18,14 +18,20 @@ const collegeAddress = ref('');
 const studentID = ref('')
 const status = ref('');
 
+
+
 if (userData.studentID) {
     studentID.value = userData.studentID;
     status.value = userData.status;
+    console.log("sss", status.value)
 } else {
     console.log('No userData found in localStorage');
 }
 
+
+
 const handleSubmit = async () => {
+
     const result = await Swal.fire({
         title: 'เพิ่มข้อมูล',
         text: 'คุณจะไม่สามารถย้อนกลับได้!',
@@ -34,7 +40,7 @@ const handleSubmit = async () => {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'ยืนยัน',
-        cancelButtonText: 'ยกเลิก'
+        cancelButtonText: 'ยกเลิก',
     });
     if (result.isConfirmed) {
         try {

@@ -102,7 +102,6 @@ router.get("/users/search", async (req, res) => {
     }
 });
 
-
 router.put('/user/:id', async (req, res) => {
     try {
         const user = await UsersModel.findByPk(req.params.id);
@@ -112,6 +111,7 @@ router.put('/user/:id', async (req, res) => {
         const { firstName, lastName, userName, password, phoneNumber, gender, year, branch, status, studentID, role } = req.body;
         Object.assign(user, { firstName, lastName, userName, password, phoneNumber, gender, year, branch, status, studentID, role })
         await user.save();
+        
         res.json({ data: user, message: "Success" });
     } catch (error) {
         res.status(500).send({ message: error.message });

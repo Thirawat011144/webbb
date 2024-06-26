@@ -69,8 +69,8 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
-import Navbar from '../../components/HomeView/Navbar.vue';
-import Footer from '../../components/HomeView/Footer.vue';
+import Navbar from '../../../../components/user/home/Navbar.vue';
+import Footer from '../../../../components/HomeView/Footer.vue';
 
 // ข้อมูลเอกสารดาวน์โหลด
 const documents = ref([]);

@@ -40,6 +40,12 @@ const getUserName = computed(() => {
                         เมนู
                     </div>
                     <li class="nav-item">
+                        <router-link to="/" class="nav-link">
+                            <i class="fa-solid fa-house me-2"></i>
+                            <p>หน้าแรก</p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
                         <router-link to="/teacher-index/information" class="nav-link">
                             <i class="fa-solid fa-user"></i> &nbsp;
                             <p>ข้อมูลส่วนตัว</p>

@@ -73,6 +73,12 @@ const getUserName = computed(() => {
                         </ul>
                     </li> -->
                     <li class="nav-item">
+                        <router-link to="/" class="nav-link">
+                            <i class="fa-solid fa-house me-2"></i>
+                            <p>หน้าแรก</p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="fa-solid fa-user-graduate"></i>
                             <p>
@@ -100,7 +106,7 @@ const getUserName = computed(() => {
                             </li>
                             <li class="nav-item">
                                 <router-link to="/admin-index/list-ec4" class="nav-link ms-4 ">
-                                    <p>ป.ตรี ชี่นปีที่ 4</p>
+                                    <p>ป.ตรี ชั้นปีที่ 4</p>
                                 </router-link>
                             </li>
                         </ul>
@@ -131,6 +137,7 @@ const getUserName = computed(() => {
                         </ul>
                     </li>
                     <!-- Establishment -->
+
                     <li class="nav-item">
                         <a class="nav-link">
                             <i class="fa-solid fa-building"></i>

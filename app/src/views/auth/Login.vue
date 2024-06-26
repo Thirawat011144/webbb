@@ -40,7 +40,7 @@ const handleLogin = async () => {
                 router.push('/teacher-index/dashboard')
             }
             else {
-                router.push('/homeview')
+                router.push('/')
             }
         }
     } catch (error) {

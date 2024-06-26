@@ -3,26 +3,12 @@ import axios from "axios";
 import { ref, onMounted, computed } from 'vue';
 import config from "../../../../config";
 import Swal from 'sweetalert2';
-import { useRoute, useRouter } from 'vue-router';
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
+import { saveAs } from 'file-saver';
+import THSarabunNewFont from '../../../../THSarabunNew-normal'; // Base64-encoded font file
 
-const route = useRoute();
-const router = useRouter();
-
-// const user = ref({
-//   firstName: '',
-//   lastName: '',
-//   userName: '',
-//   password: '',
-//   phoneNumber: '',
-//   gender: '',
-//   year: '',
-//   branch: '',
-//   status: '',
-//   studentID: '',
-//   company: ''
-// });
-
-const users = ref([]); // เปลี่ยน {} เป็น []
+const users = ref([]);
 const isModalVisible = ref(false);
 const modalData = ref(null);
 
@@ -32,8 +18,8 @@ const fetchData = async () => {
     users.value = response.data.filter(user => user.year === "ป.ตรี ปีที่ 4");
   } catch (error) {
     Swal.fire({
-      title: "error",
-      text: (error.message, "Cr2 Error"),
+      title: "Error",
+      text: error.message,
       icon: "error"
     });
   }
@@ -60,53 +46,87 @@ const closeModal = () => {
 };
 // modal
 
-const removeData = async (id) => {
-  // แสดงป๊อปอัพยืนยันการลบ
-  const result = await Swal.fire({
-    title: 'คุณแน่ใจหรือไม่?',
-    text: 'คุณจะไม่สามารถย้อนกลับได้!',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'ใช่, ลบเลย!',
-    cancelButtonText: 'ยกเลิก'
+
+// const downloadPDF = () => {
+//   const doc = new jsPDF();
+//   doc.addFileToVFS("THSarabunNew.ttf", THSarabunNewFont);
+//   doc.addFont("THSarabunNew.ttf", "THSarabunNew", "normal");
+//   doc.setFont("THSarabunNew");
+
+//   doc.setFontSize(20);
+//   doc.text('ข้อมูลนักศึกษาชั้นปีที่ 4', 10, 10);
+
+//   const tableColumn = ['ลำดับ', 'รหัสนักศึกษา', 'ชื่อ-นามสกุล', 'สาขา', 'ชั้นปี', 'ชื่อสถานประกอบการ'];
+//   const tableRows = [];
+
+//   users.value.forEach((user, index) => {
+//     const userData = [
+//       index + 1,
+//       user.studentID,
+//       `${user.firstName} ${user.lastName}`,
+//       user.branch,
+//       user.year,
+//       user.college
+//     ];
+//     tableRows.push(userData);
+//   });
+
+//   doc.autoTable({
+//     head: [tableColumn],
+//     body: tableRows,
+//     startY: 20,
+//     styles: { font: 'THSarabunNew', fontSize: 18 }
+//   });
+
+//   doc.save('students.pdf');
+// };
+
+
+const downloadCSV = () => {
+  const bom = "\uFEFF"; // Byte Order Mark สำหรับรองรับภาษาไทย
+  const tableColumn = ['ลำดับ', 'รหัสนักศึกษา', 'ชื่อ-นามสกุล', 'สาขา', 'ชั้นปี', 'ชื่อสถานศึกษา'];
+  let csvContent = bom + tableColumn.join(",") + "\n";
+
+  sortedUsers.value.forEach((user, index) => {
+    const row = [
+      index + 1,
+      user.studentID,
+      `${user.firstName} ${user.lastName}`,
+      user.branch,
+      user.year,
+      user.college
+    ];
+    csvContent += row.join(",") + "\n";
   });
 
-  // ตรวจสอบว่าผู้ใช้กดยืนยันการลบหรือไม่
-  if (result.isConfirmed) {
-    try {
-      const response = await axios.delete(`${config.api_path}/users/${id}`);
-      users.value = users.value.filter(user => user.id !== id);
-      Swal.fire({
-        title: 'สำเร็จ',
-        text: 'ลบข้อมูลผู้ใช้สำเร็จ',
-        icon: 'success',
-      }).then((result) => {
-        if (result.value) {
-          fetchData(); // รีเฟรชข้อมูลหลังจากการลบ
-        }
-      });
-    } catch (error) {
-      Swal.fire({
-        title: 'error',
-        text: (error.message, 'Cr2 Error DeleteData'),
-        icon: 'error'
-      });
-      console.log(error);
-    }
-  }
+  const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  saveAs(csvBlob, 'students.csv');
 };
 
 
+// const generateCSV = (columns, rows) => {
+//   let csvContent = '';
+
+//   // Header
+//   csvContent += columns.join(',') + '\n';
+
+//   // Rows
+//   rows.forEach(row => {
+//     csvContent += row.join(',') + '\n';
+//   });
+
+// return csvContent;
+// };
+
 const sortedUsers = computed(() => {
-  return users.value.slice().sort((a, b) => a.id - b.id); // เรียงลำดับตาม ID
+  return users.value.slice().sort((a, b) => a.id - b.id);
 });
 
 onMounted(() => {
   fetchData();
 });
 </script>
+
 <template>
   <section class="content mt-4">
     <div class="card">
@@ -121,6 +141,8 @@ onMounted(() => {
             </router-link>
             <router-link :to="`/admin-index/Ec4-notpass`"> <button class="btn btn-danger m-1">ไม่ผ่าน</button>
             </router-link>
+            <!-- <button @click="downloadPDF" class="btn btn-primary">ดาวน์โหลด PDF</button>  -->
+            <button @click="downloadCSV" class="btn btn-primary">ดาวน์โหลด .CSV (excel) 📊</button>
           </div>
         </div>
         <table class="table">
@@ -173,7 +195,7 @@ onMounted(() => {
             <p>เบอร์โทรศัพท์: {{ modalData.phoneNumber }}</p>
             <p v-if="modalData.email">Email: {{ modalData.email }}</p>
             <p v-else></p>
-            <div v-if="modalData.companyDetails">
+            <!-- <div v-if="modalData.companyDetails">
               <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
               <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
               <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
@@ -183,10 +205,10 @@ onMounted(() => {
               <p v-if="modalData.companyDetails.companyEmail">Email: {{ modalData.companyDetails.companyEmail }}</p>
               <p v-else></p>
               <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
-            </div>
-            <div v-else-if="modalData.collegeDetails">
+            </div> -->
+            <div v-if="modalData.collegeDetails">
               <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
-              <p>สถานประกอบการ: {{ modalData.collegeDetails.collegeName }}</p>
+              <p>โรงเรียน/วิทยาลัย: {{ modalData.collegeDetails.collegeName }}</p>
               <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{
                 modalData.collegeDetails.contactLastName }}</p>
               <p>เบอร์โทรศัพท์: {{ modalData.collegeDetails.collegePhone }}</p>

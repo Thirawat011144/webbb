@@ -76,7 +76,7 @@ const authenticateToken = require('../Middleware/Authorization');
 
 router.post('/company', async (req, res) => {
     try {
-        const { companyName, companyDepartment,contactFirstName,contactLastName, companyPhone, companyEmail, companyAddress, studentID, status } = req.body;
+        const { companyName, companyDepartment,contactFirstName,contactLastName, companyPhone, companyEmail, companyAddress, studentID, status, valueStatus } = req.body;
 
         // หา record ที่มี studentID ตรงกับค่าในตาราง Users
         const user = await UsersModel.findOne({ where: { studentID } });
@@ -124,9 +124,13 @@ router.post('/company', async (req, res) => {
                 companyPhone,
                 companyEmail,
                 companyAddress,
-                studentID
+                studentID,
+                valueStatus,
+                // status
             });
             res.status(201).send({ message: "Success", newCompany });
+        }  else if(status === 'ผ่าน'){
+
         } else {
             res.status(400).send({ message: "สถานะไม่ถูกต้อง" });
         }

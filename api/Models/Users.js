@@ -44,6 +44,10 @@ const UsersModel = connect.define("users", {
     role: {
         type: DataTypes.STRING(50),
         defaultValue: 'user'
+    },
+    college: {
+        type: DataTypes.STRING(255),
+        // defaultValue: 'user'
     }
 })
 

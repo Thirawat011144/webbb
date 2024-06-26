@@ -11,8 +11,14 @@ const NewsModel = connect.define("news", {
         type: DataTypes.STRING(255),
     },
     detail: {
-        type: DataTypes.STRING(255)
-    }
+        type: DataTypes.TEXT // ใช้ TEXT แทน STRING เพื่อไม่จำกัดความยาวของข้อความ
+    },
+    pdfFile: {
+        type: DataTypes.STRING, // หรือตามประเภทของไฟล์ที่คุณจะใช้
+    },
+    docFile: {
+        type: DataTypes.STRING, // หรือตามประเภทของไฟล์ที่คุณจะใช้
+    },
 })
 
 // NewsModel.sync({ alter: true })

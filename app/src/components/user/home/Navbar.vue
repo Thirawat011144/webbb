@@ -9,28 +9,42 @@
             </div>
         </div>
         <div class="row bgmenu sticky-top">
-            <div class="col">
-                <ul class="nav-links d-flex justify-content-center align-items-center"
-                    style="list-style-type: none; padding: 0;">
-                    <router-link to="/" style="color: black;" class="text-decoration-none">
-                        <li class="nav-item mt-2 p-2 abb"><i class="fa-solid fa-house"></i></li>
+            <div>
+                <ul class="nav-links d-flex flex-row justify-content-center align-items-center"
+                    style="list-style-type: none;">
+                    <router-link to="/user-index" style="color: black;" class="text-decoration-none">
+                        <li class="nav-item mt-2 p-2 abb" style="position: relative;">
+                            <i class="fa-solid fa-user"></i>
+                            <span class="hover-text">โปรไฟล์</span>
+                        </li>
                     </router-link>
-                    <li class="nav-item p-2">สถานที่ฝึกงาน</li>
-                    <li class="nav-item p-2">ดาวน์โหลด</li>
+                    <router-link to="/internship" class="text-black text-decoration-none">
+                        <li class="nav-item p-2">
+                            สถานที่ฝึกงาน
+                        </li>
+                    </router-link>
+                    <router-link to="/download-user" class="text-black text-decoration-none">
+                        <li class="nav-item p-2">
+                            ดาวน์โหลด
+                           
+                        </li>
+                    </router-link>
                     <router-link to="/news" class="text-black text-decoration-none">
-                        <li class="nav-item p-2 abb">ข่าวสาร</li>
+                        <li class="nav-item p-2 abb">
+                            ข่าวสาร
+                           
+                        </li>
                     </router-link>
-                    <li class="nav-item p-2">ติดต่อเรา</li>
+                    <router-link to="/cooperative" class="text-black text-decoration-none">
+                        <li class="nav-item p-2 abb">
+                            สหกิจศึกษา
+                        </li>
+                    </router-link>
                     <li class="nav-item p-2 abb text-secondary">
                         <button @click="handleSignOut" class="btn text-decoration-none text-black">ออกจากระบบ</button>
                     </li>
-                    <li class="flex-grow-1"></li>
-                    <router-link to="/user-index" class="text-decoration-none text-black">
-                        <li class="p-2 abb"><i class="fa-solid fa-user me-2"></i> {{ getUserName }}</li>
-                    </router-link>
-                    <!-- <router-link to="/login" class="text-decoration-none text-black">
-                        <li class="nav-item p-2 abb">ออกจากระบบ</li>
-                    </router-link> -->
+
+
                 </ul>
             </div>
         </div>
@@ -39,12 +53,20 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import config from '../../../../config';
-import Swal from 'sweetalert2';
 import { useRouter } from 'vue-router';
+import Swal from 'sweetalert2';
+import config from '../../../../config';
 
 const router = useRouter();
+
+const showMessage = (message) => {
+    Swal.fire({
+        title: message,
+        text: `คุณได้คลิกที่ ${message}`,
+        icon: 'info',
+        confirmButtonText: 'ตกลง'
+    });
+};
 
 const handleSignOut = () => {
     Swal.fire({
@@ -63,12 +85,6 @@ const handleSignOut = () => {
         }
     });
 };
-
-const getUserName = computed(() => {
-    const firstName = localStorage.getItem(config.firstName_name);
-    if (!firstName) return 'ผู้ใช้งาน';
-    return firstName.charAt(0).toLocaleUpperCase() + firstName.slice(1);
-});
 </script>
 
 <style scoped>
@@ -81,12 +97,11 @@ const getUserName = computed(() => {
 }
 
 .bgmenu {
-    background-color: rgb(251, 251, 251);
+    background-color: rgb(255, 255, 255);
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
-    /* position: sticky; */
+    position: sticky;
     top: 0;
     z-index: 1000;
-    /* width: 100%; */
 }
 
 .image-container {
@@ -103,10 +118,6 @@ const getUserName = computed(() => {
 }
 
 .nav-links {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
     padding: 0;
     margin: 0;
 }
@@ -128,8 +139,7 @@ const getUserName = computed(() => {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    bottom: -20px;
-    /* Adjust based on your design */
+    bottom: -35px;
     background-color: #fff;
     padding: 5px;
     border: 1px solid #ddd;

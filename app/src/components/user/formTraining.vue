@@ -18,6 +18,7 @@ const companyEmail = ref('');
 const companyAddress = ref('');
 const studentID = ref('')
 const status = ref('');
+const valueStatus = ref('สำเร็จ')
 
 if (userData.studentID) {
     studentID.value = userData.studentID;
@@ -48,7 +49,8 @@ const handleSubmit = async () => {
                 companyEmail: companyEmail.value,
                 companyAddress: companyAddress.value,
                 studentID: studentID.value,
-                status: status.value
+                status: status.value,
+                valueStatus:valueStatus.value
             };
             const response = await axios.post(`${config.api_path}/company`, formData);
             if (response.data.message === 'Success') {

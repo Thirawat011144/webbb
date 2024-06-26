@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router';
 
+
 // const route = useRoute();
 // const router = useRouter();
 
@@ -100,6 +101,28 @@ const removeData = async (id) => {
     }
 };
 
+const downloadCSV = () => {
+  const bom = "\uFEFF"; // Byte Order Mark สำหรับรองรับภาษาไทย
+  const tableColumn = ['ลำดับ', 'รหัสนักศึกษา', 'ชื่อ-นามสกุล', 'สาขา', 'ชั้นปี', 'ชื่อสถานศึกษา'];
+  let csvContent = bom + tableColumn.join(",") + "\n";
+
+  sortedUsers.value.forEach((user, index) => {
+    const row = [
+      index + 1,
+      user.studentID,
+      `${user.firstName} ${user.lastName}`,
+      user.branch,
+      user.year,
+      user.college
+    ];
+    csvContent += row.join(",") + "\n";
+  });
+
+  const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  saveAs(csvBlob, 'students.csv');
+};
+
+
 
 const sortedUsers = computed(() => {
     return users.value.slice().sort((a, b) => a.id - b.id); // เรียงลำดับตาม ID
@@ -125,6 +148,7 @@ onMounted(() => {
                         <router-link :to="`/admin-index/Ec4-notpass`"> <button
                                 class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
+                        <button @click="downloadCSV" class="btn btn-primary">ดาวน์โหลด .CSV (excel) 📊</button>
                     </div>
                 </div>
                 <table class="table">
@@ -178,7 +202,7 @@ onMounted(() => {
                         <p>เบอร์โทรศัพท์: {{ modalData.phoneNumber }}</p>
                         <p v-if="modalData.email">Email: {{ modalData.email }}</p>
                         <p v-else></p>
-                        <div v-if="modalData.companyDetails">
+                        <!-- <div v-if="modalData.companyDetails">
                             <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
                             <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
                             <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
@@ -189,10 +213,10 @@ onMounted(() => {
                                 modalData.companyDetails.companyEmail }}</p>
                             <p v-else></p>
                             <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
-                        </div>
-                        <div v-else-if="modalData.collegeDetails">
+                        </div> -->
+                        <div v-if="modalData.collegeDetails">
                             <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
-                            <p>สถานประกอบการ: {{ modalData.collegeDetails.collegeName }}</p>
+                            <p>โรงเรียน/วิทยาลัย: {{ modalData.collegeDetails.collegeName }}</p>
                             <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{
                                 modalData.collegeDetails.contactLastName }}</p>
                             <p>เบอร์โทรศัพท์: {{ modalData.collegeDetails.collegePhone }}</p>

@@ -151,7 +151,7 @@ onMounted(() => {
               <td>{{ user.firstName }} {{ user.lastName }}</td>
               <td>{{ user.branch }}</td>
               <td>{{ user.year }}</td>
-             
+
               <td class="text-center">
                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
               </td>

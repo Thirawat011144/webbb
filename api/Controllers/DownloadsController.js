@@ -39,6 +39,24 @@ router.post('/downloads', upload.fields([{ name: 'pdfFile' }, { name: 'docFile' 
 });
 
 // API สำหรับการดึงเอกสารทั้งหมด
+// router.get('/downloads', async (req, res) => {
+//     try {
+//         const documents = await DownloadsModel.findAll();
+//         const baseUrl = `${req.protocol}://${req.get('host')}/uploads/`;
+
+//         const documentsWithUrls = documents.map(doc => ({
+//             ...doc.toJSON(),
+//             pdfFile: doc.pdfFile ? baseUrl + doc.pdfFile : null,
+//             docFile: doc.docFile ? baseUrl + doc.docFile : null
+//         }));
+
+//         res.status(200).json(documentsWithUrls);
+//     } catch (error) {
+//         console.error("Error fetching documents:", error);
+//         res.status(500).json({ error: "Error fetching documents" });
+//     }
+// });
+
 router.get('/downloads', async (req, res) => {
     try {
         const documents = await DownloadsModel.findAll();
@@ -56,6 +74,7 @@ router.get('/downloads', async (req, res) => {
         res.status(500).json({ error: "Error fetching documents" });
     }
 });
+
 
 // API สำหรับดึงเอกสารตาม ID
 router.get('/downloads/:id', async (req, res) => {

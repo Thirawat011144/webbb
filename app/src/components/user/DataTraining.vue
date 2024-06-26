@@ -54,8 +54,6 @@ onMounted(() => {
 
 <template>
     <div class="flex-grow-1 p-3">
-
-
         <div class="card" v-if="company">
             <h2>ข้อมูลสถานประกอบการ</h2>
             <div class="card-body">
