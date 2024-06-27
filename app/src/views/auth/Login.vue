@@ -110,6 +110,8 @@ const handleLogin = async () => {
                             <!-- <p>ยังไม่มีบัญชีผู้ใช้ ใช่ไหม</p> -->
                             <router-link to="/register"><small href="#">สมัครสำหรับนักศึกษา</small></router-link>
                             <router-link to="/teacher-register"><small href="#">สมัครสำหรับอาจารย์</small></router-link>
+                            <router-link to="/register-evaluation"><small
+                                    href="#">สมัครสำหรับผู้ประเมิน</small></router-link>
                         </div>
                     </div>
                 </div>
