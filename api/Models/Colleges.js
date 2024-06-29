@@ -28,7 +28,14 @@ const CollegesModel = connect.define("colleges", {
     studentID: {
         type: DataTypes.STRING(50),
         unique: true
+    },
+    department: { 
+        type: DataTypes.STRING(255),
+    },
+    schoolSize:{
+        type:DataTypes.STRING(500)
     }
+
 });
 
 module.exports = CollegesModel;

@@ -5,6 +5,7 @@ import config from "../../../../config";
 import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router';
+import * as XLSX from 'xlsx'; // import library
 
 // const route = useRoute();
 // const router = useRouter();
@@ -31,7 +32,7 @@ const modalData = ref(null);
 const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => user.status === "อนุมัติ" && user.year === "ป.ตรี ปีที่ 4");
+        users.value = response.data.filter(user => user.status === "เข้ารับการฝึก" && user.year === "ป.ตรี ปีที่ 4");
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -106,6 +107,27 @@ const sortedUsers = computed(() => {
     return users.value.slice().sort((a, b) => a.id - b.id); // เรียงลำดับตาม ID
 });
 
+// ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
+const downloadExcel = () => {
+  const data = users.value.map(user => ({
+    'รหัสนักศึกษา': user.studentID,
+    'ชื่อ': user.firstName,
+    'นามสกุล': user.lastName,
+    'สาขา': user.branch,
+    'ชั้นปี': user.year,
+    'สถานะ': user.status,
+    'เบอร์โทรศัพท์': user.phoneNumber,
+    'อีเมล์': user.email,
+    'สถานที่ฝึกประสบการณ์':user.college
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(data);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+  XLSX.writeFile(workbook, 'students.xlsx');
+};
+
+
 onMounted(() => {
     fetchData();
 });
@@ -119,13 +141,16 @@ onMounted(() => {
                     <div>
                         <router-link :to="`/admin-index/Ec4-req`"> <button
                                 class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
+                        <router-link :to="`/admin-index/Ec4-approved`"> <button
+                                class="btn btn-success m-1">อนุมัติ</button></router-link>
                         <router-link :to="`/admin-index/Ec4-active`"> <button
-                                class="btn btn-warning m-1">กำลังฝึก</button></router-link>
+                                class="btn btn-warning m-1">เข้ารับการฝึก</button></router-link>
                         <router-link :to="`/admin-index/Ec4-success`"> <button class="btn btn-success m-1">ผ่าน</button>
                         </router-link>
                         <router-link :to="`/admin-index/Ec4-notpass`"> <button
                                 class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
+                        <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
                     </div>
                 </div>
                 <table class="table">
@@ -149,6 +174,9 @@ onMounted(() => {
                             <td>{{ user.year }}</td>
                             <td class="text-center">
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
+                                <router-link :to="`data-tec4-admin/${user.id}`">
+                                    <button class="btn btn-success m-1">ข้อมูลการประเมิน</button>
+                                </router-link>
                             </td>
                             <td>
                                 <router-link :to="`/edit-ec4/${user.id}`">

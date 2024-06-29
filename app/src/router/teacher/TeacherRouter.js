@@ -14,6 +14,8 @@ import StudentVCRreq from '../../views/teacher/list-student-request/StudentVCRre
 import StudentTEC2req from '../../views/teacher/list-student-request/StudentTEC2req.vue'
 import StudentTEC4req from '../../views/teacher/list-student-request/StudentTEC4req.vue'
 
+import StudentTEC4approved from '../../views/teacher/list-student-approved/StudentTEC4approved.vue'
+
 import StudentVCR2active from '../../views/teacher/list-student-active/StudentVCR2active.vue'
 import StudentTEC2active from '../../views/teacher/list-student-active/StudentTEC2active.vue'
 import StudentTEC4active from '../../views/teacher/list-student-active/StudentTEC4active.vue'
@@ -21,6 +23,8 @@ import StudentTEC4active from '../../views/teacher/list-student-active/StudentTE
 import StudentVCR2success from '../../views/teacher/list-student-success/StudentVCR2success.vue'
 import StudentTEC2success from '../../views/teacher/list-student-success/StudentTEC2success.vue'
 import StudentTEC4success from '../../views/teacher/list-student-success/StudentTEC4success.vue'
+
+import DataTEC4 from '../../views/evaluation/data-evaluation/DataTEC4.vue'
 
 import StudentVCR2notpass from '../../views/teacher/list-student-notpass/StudentVCR2NotPass.vue'
 import StudentTEC2notpass from '../../views/teacher/list-student-notpass/StudentTEC2NotPass.vue'
@@ -33,9 +37,14 @@ const routeTeacher = [
         component: TeacherIndex,
         children: [
             {
-                path:'dashboard',
-                name:'dashboard',
-                component:Dashboard
+                path: 'data-tec4/:id',
+                name: 'data-tec4/:id',
+                component: DataTEC4
+            },
+            {
+                path: 'dashboard',
+                name: 'dashboard',
+                component: Dashboard
             },
             {
                 path: 'college-teacher',
@@ -87,6 +96,11 @@ const routeTeacher = [
                 path: 'student-tec4req',
                 name: 'student-tec4req',
                 component: StudentTEC4req
+            },
+            {
+                path: 'student-tec4approved',
+                name: 'student-tec4approved',
+                component: StudentTEC4approved
             },
             {
                 path: 'student-vcr2active',

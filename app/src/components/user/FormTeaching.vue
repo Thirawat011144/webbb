@@ -15,10 +15,10 @@ const contactLastName = ref('');
 const collegePhone = ref('');
 const collegeEmail = ref('');
 const collegeAddress = ref('');
-const studentID = ref('')
+const studentID = ref('');
+const department = ref('');
+const schoolSize = ref('')
 const status = ref('');
-
-
 
 if (userData.studentID) {
     studentID.value = userData.studentID;
@@ -28,10 +28,7 @@ if (userData.studentID) {
     console.log('No userData found in localStorage');
 }
 
-
-
 const handleSubmit = async () => {
-
     const result = await Swal.fire({
         title: 'เพิ่มข้อมูล',
         text: 'คุณจะไม่สามารถย้อนกลับได้!',
@@ -52,7 +49,9 @@ const handleSubmit = async () => {
                 collegeEmail: collegeEmail.value,
                 collegeAddress: collegeAddress.value,
                 studentID: studentID.value,
-                status: status.value
+                department: department.value,
+                schoolSize: schoolSize.value,
+                status: status.value,
             };
             const response = await axios.post(`${config.api_path}/college`, formData);
             if (response.data.message === 'Success') {
@@ -130,6 +129,46 @@ const handleSubmit = async () => {
                             <label class="form-label" for="studentID">Student ID <span class="text-red">*</span></label>
                             <input type="text" id="studentID" class="form-control" v-model="studentID" disabled />
                         </div>
+
+                        <!-- Department input -->
+                        <div data-mdb-input-init class="form-outline mb-4">
+                            <label class="form-label" for="department">แผนกวิชาที่นักศึกษาเข้ารับการฝึกประสบการณ์วิชาชีพ
+                                <span class="text-red">*</span></label>
+                            <select id="department" class="form-select" v-model="department" required>
+                                <option value="" disabled>กรุณาเลือก</option>
+                                <option value="แผนกวิชาเทคนิคพื้นฐาน">แผนกวิชาเทคนิคพื้นฐาน</option>
+                                <option value="แผนกวิชาเทคโนโลยีคอมพิวเตอร์">แผนกวิชาเทคโนโลยีคอมพิวเตอร์</option>
+                                <option value="แผนกวิชาช่างเทคนิคพื้นฐาน">แผนกวิชาช่างเทคนิคพื้นฐาน</option>
+                                <option value="แผนกวิชาแมคคาทอ닉ส์">แผนกวิชาแมคคาทอนิกส์</option>
+                                <option value="แผนกวิชาช่างกลโรงงาน">แผนกวิชาช่างกลโรงงาน</option>
+                                <option value="แผนกวิชาช่างก่อสร้าง">แผนกวิชาช่างก่อสร้าง</option>
+                                <option value="แผนกวิชาช่างเชื่อมโลหะ">แผนกวิชาช่างเชื่อมโลหะ</option>
+                                <option value="แผนกวิชาช่างเทคนิคอุตสาหกรรม">แผนกวิชาช่างเทคนิคอุตสาหกรรม</option>
+                                <option value="แผนกวิชาช่างไฟฟ้า">แผนกวิชาช่างไฟฟ้า</option>
+                                <option value="แผนกวิชาช่างไฟฟ้ากำลัง">แผนกวิชาช่างไฟฟ้ากำลัง</option>
+                                <option value="แผนกวิชาช่างยนต์">แผนกวิชาช่างยนต์</option>
+                                <option value="แผนกวิชาช่างโยธา">แผนกวิชาช่างโยธา</option>
+                                <option value="แผนกวิชาช่างสถาปัตยกรรม">แผนกวิชาช่างสถาปัตยกรรม</option>
+                                <option value="แผนกวิชาช่างอิเล็กทรอนิกส์">แผนกวิชาช่างอิเล็กทรอนิกส์</option>
+                                <option value="แผนกวิชาเทคโนโลยีคอมพิวเตอร์">แผนกวิชาเทคโนโลยีคอมพิวเตอร์</option>
+                                <option value="แผนกวิชาคอมพิวเตอร์ธุรกิจ">แผนกวิชาคอมพิวเตอร์ธุรกิจ</option>
+                            </select>
+                        </div>
+
+                        <!-- SchoolSize Input -->
+
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="schoolSize">ขนาดสถานศึกษา</label>
+                            <select id="schoolSize" class="form-select" v-model="schoolSize" required>
+                                <option value="" disabled>-</option>
+                                <option value="สถานศึกษาขนาดเล็ก">สถานศึกษาขนาดเล็ก</option>
+                                <option value="สถานศึกษาขนาดกลาง">สถานศึกษาขนาดกลาง</option>
+                                <option value="สถานศึกษาขนาดใหญ่">สถานศึกษาขนาดใหญ่</option>
+                                <option value="สถานศึกษาขนาดใหญ่พิเศษ">สถานศึกษาขนาดใหญ่พิเศษ
+                                </option>
+                            </select>
+                        </div>
+
 
                         <!-- Message input -->
                         <div data-mdb-input-init class="form-outline mb-4">

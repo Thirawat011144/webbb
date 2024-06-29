@@ -33,6 +33,8 @@ import Cr2Req from '../../views/admin/list-student-request/Cr2Req.vue';
 import Ec2Req from '../../views/admin/list-student-request/Ec2Req.vue';
 import Ec4Req from '../../views/admin/list-student-request/Ec4Req.vue';
 
+import Ec4Approved from '../../views/admin/list-student-approved/Ec4Approved.vue'
+
 import Cr2Active from "../../views/admin/list-student-active/Cr2Active.vue";
 import Ec2Active from "../../views/admin/list-student-active/Ec2Active.vue";
 import Ec4Active from "../../views/admin/list-student-active/Ec4Active.vue";
@@ -45,6 +47,8 @@ import Cr2NotPass from '../../views/admin/list-student-notpass/Cr2NotPass.vue'
 import Ec2NotPass from '../../views/admin/list-student-notpass/Ec2NotPass.vue'
 import Ec4NotPass from '../../views/admin/list-student-notpass/Ec4NotPass.vue'
 
+import DataTEC4 from '../../views/evaluation/data-evaluation/DataTEC4.vue'
+
 const routeAdmin = [
   {
     path: '/admin-index',
@@ -52,6 +56,11 @@ const routeAdmin = [
     component: AdminIndex,
     beforeEnter: checkAuth,
     children: [
+      {
+        path: 'data-tec4-admin/:id',
+        name: 'data-tec4-admin/:id',
+        component: DataTEC4
+      },
       {
         path: 'edit-cooperative/:id',
         name: 'edit-cooperative',
@@ -138,6 +147,11 @@ const routeAdmin = [
         path: 'cr2-req',
         name: 'cr2-req',
         component: Cr2Req
+      },
+      {
+        path: 'ec4-approved',
+        name: 'ec4-approved',
+        component: Ec4Approved
       },
       {
         path: 'cr2-active',

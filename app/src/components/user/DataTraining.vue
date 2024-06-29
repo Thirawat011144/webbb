@@ -87,6 +87,14 @@ onMounted(() => {
                     <span>ชื่อวิทยาลัย:</span> {{ college.collegeName }}
                 </h5>
                 <p class="card-text">
+                    <span>แผนกวิชาที่นักศึกษาเข้ารับการฝึกประสบการณ์วิชาชีพ
+                        :</span> {{ college.department }}
+                </p>
+                <p class="card-text">
+                    <span>ขนาดสถานศึกษา
+                        :</span> {{ college.schoolSize }}
+                </p>
+                <p class="card-text">
                     <span>ชื่อ-นามสกุลผู้ประสานงาน:</span> {{ college.contactFirstName }} {{ college.contactLastName }}
                 </p>
                 <p class="card-text">

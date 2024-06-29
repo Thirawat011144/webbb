@@ -55,20 +55,26 @@ import config from '../../../config';
 const router = useRouter();
 const isLoggedIn = ref(false);
 const userRole = ref(null);
+const evaluationRole = ref(null);
 const profileLink = ref('/user-index');
 
 onMounted(() => {
     const token = localStorage.getItem(config.token_name);
     const role = localStorage.getItem(config.role_name);
+    const roleEvaluation = localStorage.getItem('evaluatorStatus'); // เปลี่ยนชื่อให้ตรงกับที่ใช้ใน localStorage
+
     if (token) {
         isLoggedIn.value = true;
     }
     if (role) {
         userRole.value = role;
+        evaluationRole.value = roleEvaluation;
         if (role === 'admin') {
             profileLink.value = '/admin-index';
-        } else if(role === 'teacher'){
+        } else if (role === 'teacher') {
             profileLink.value = '/teacher-index';
+        } else if (role === "evaluator") {
+            profileLink.value = '/home-evaluation';
         } else {
             profileLink.value = '/user-index';
         }

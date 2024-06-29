@@ -1,9 +1,17 @@
 import Register from '../views/auth/Register.vue';
+import LoginEvaluation from '../views/auth/LoginEvaluation.vue'
 import Login from '@/views/auth/Login.vue';
 import RegisterTeacher from '@/views/auth/RegisterTeacher.vue';
 import RegisterEvaluation from '@/views/auth/RegisterEvaluation.vue'
 
+
 const routerAuth = [
+  {
+    path: '/login-evaluation',
+    name: 'login-evaluation',
+    component: LoginEvaluation
+  }
+  ,
   {
     path: '/register-evaluation',
     name: 'register-evaluation',

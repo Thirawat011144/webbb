@@ -4,7 +4,7 @@ const cors = require("cors");
 const jwt = require('jsonwebtoken');
 const path = require('path');
 
-// const DownloadsModel = require('./Models/Downloads')
+// const Evaluation = require('./Models/Evaluation')
 
 // const sequelize = require('./connect') ทดสอบการเชื่อมต่อ Database
 // const CompaniesModel = require('./Models/Companies')
@@ -20,6 +20,8 @@ const CompaniesController = require("./Controllers/CompaniesController")
 const DownloadsController = require("./Controllers/DownloadsController")
 const ContactController = require('./Controllers/ContactController')
 const CollegesController = require('./Controllers/CollegesController')
+const EvaluationController = require('./Controllers/EvaluationController')
+const DataEvaluationController = require('./Controllers/DataEvaluationController')
 
 
 const app = express()
@@ -41,6 +43,8 @@ app.use('/api', PracticeTeachingController)
 app.use('/api', DownloadsController)
 app.use('/api', ContactController)
 app.use('/api', CollegesController)
+app.use('/api', EvaluationController)
+app.use('/api', DataEvaluationController)
 
 app.listen(port, () => {
     console.log(`Example app listening on port`, port);

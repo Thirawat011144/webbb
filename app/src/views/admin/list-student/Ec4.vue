@@ -7,6 +7,7 @@ import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import { saveAs } from 'file-saver';
 import THSarabunNewFont from '../../../../THSarabunNew-normal'; // Base64-encoded font file
+import * as XLSX from 'xlsx'; // import library
 
 const users = ref([]);
 const isModalVisible = ref(false);
@@ -82,26 +83,26 @@ const closeModal = () => {
 // };
 
 
-const downloadCSV = () => {
-  const bom = "\uFEFF"; // Byte Order Mark สำหรับรองรับภาษาไทย
-  const tableColumn = ['ลำดับ', 'รหัสนักศึกษา', 'ชื่อ-นามสกุล', 'สาขา', 'ชั้นปี', 'ชื่อสถานศึกษา'];
-  let csvContent = bom + tableColumn.join(",") + "\n";
+// const downloadCSV = () => {
+//   const bom = "\uFEFF"; // Byte Order Mark สำหรับรองรับภาษาไทย
+//   const tableColumn = ['ลำดับ', 'รหัสนักศึกษา', 'ชื่อ-นามสกุล', 'สาขา', 'ชั้นปี', 'ชื่อสถานศึกษา'];
+//   let csvContent = bom + tableColumn.join(",") + "\n";
 
-  sortedUsers.value.forEach((user, index) => {
-    const row = [
-      index + 1,
-      user.studentID,
-      `${user.firstName} ${user.lastName}`,
-      user.branch,
-      user.year,
-      user.college
-    ];
-    csvContent += row.join(",") + "\n";
-  });
+//   sortedUsers.value.forEach((user, index) => {
+//     const row = [
+//       index + 1,
+//       user.studentID,
+//       `${user.firstName} ${user.lastName}`,
+//       user.branch,
+//       user.year,
+//       user.college
+//     ];
+//     csvContent += row.join(",") + "\n";
+//   });
 
-  const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  saveAs(csvBlob, 'students.csv');
-};
+//   const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+//   saveAs(csvBlob, 'students.csv');
+// };
 
 
 // const generateCSV = (columns, rows) => {
@@ -122,6 +123,27 @@ const sortedUsers = computed(() => {
   return users.value.slice().sort((a, b) => a.id - b.id);
 });
 
+// ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
+const downloadExcel = () => {
+  const data = users.value.map(user => ({
+    'รหัสนักศึกษา': user.studentID,
+    'ชื่อ': user.firstName,
+    'นามสกุล': user.lastName,
+    'สาขา': user.branch,
+    'ชั้นปี': user.year,
+    'สถานะ': user.status,
+    'เบอร์โทรศัพท์': user.phoneNumber,
+    'อีเมล์': user.email,
+    'สถานที่ฝึกประสบการณ์': user.college
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(data);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+  XLSX.writeFile(workbook, 'students.xlsx');
+};
+
+
 onMounted(() => {
   fetchData();
 });
@@ -135,6 +157,8 @@ onMounted(() => {
           <div>
             <router-link :to="`/admin-index/Ec4-req`"> <button
                 class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
+            <router-link :to="`/admin-index/Ec4-approved`"> <button
+                class="btn btn-success m-1">อนุมัติ</button></router-link>
             <router-link :to="`/admin-index/Ec4-active`"> <button
                 class="btn btn-warning m-1">กำลังฝึก</button></router-link>
             <router-link :to="`/admin-index/Ec4-success`"> <button class="btn btn-success m-1">ผ่าน</button>
@@ -142,7 +166,7 @@ onMounted(() => {
             <router-link :to="`/admin-index/Ec4-notpass`"> <button class="btn btn-danger m-1">ไม่ผ่าน</button>
             </router-link>
             <!-- <button @click="downloadPDF" class="btn btn-primary">ดาวน์โหลด PDF</button>  -->
-            <button @click="downloadCSV" class="btn btn-primary">ดาวน์โหลด .CSV (excel) 📊</button>
+            <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
           </div>
         </div>
         <table class="table">
@@ -169,9 +193,10 @@ onMounted(() => {
               </td>
               <td>
                 <router-link :to="`/edit-ec4/${user.id}`">
-                  <button class="btn btn-primary m-1">Edit</button>
+                  <button class="btn btn-primary m-1"><i class="fa-solid fa-pen-to-square"></i></button>
                 </router-link>
-                <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button>
+                <button @click="removeData(user.id)" class="btn btn-danger m-1"><i
+                    class="fa-solid fa-trash-can"></i></button>
               </td>
             </tr>
           </tbody>

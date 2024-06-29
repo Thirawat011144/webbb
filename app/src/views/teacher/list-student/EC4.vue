@@ -4,16 +4,16 @@ import { ref, onMounted, computed } from 'vue';
 import config from "../../../../config";
 import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
+import * as XLSX from 'xlsx'; // import library
 
 const route = useRoute();
 const router = useRouter();
 
-
-const users = ref([]); // เปลี่ยน {} เป็น []
+const users = ref([]);
 const isModalVisible = ref(false);
 const modalData = ref(null);
 const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-let branch = null
+let branch = null;
 
 if (userData.branch) {
   branch = userData.branch;
@@ -33,7 +33,6 @@ const fetchData = async () => {
     });
   }
 };
-
 
 // modal
 const showModal = async (id) => {
@@ -57,7 +56,6 @@ const closeModal = () => {
 // modal
 
 const removeData = async (id) => {
-  // แสดงป๊อปอัพยืนยันการลบ
   const result = await Swal.fire({
     title: 'คุณแน่ใจหรือไม่?',
     text: 'คุณจะไม่สามารถย้อนกลับได้!',
@@ -69,7 +67,6 @@ const removeData = async (id) => {
     cancelButtonText: 'ยกเลิก'
   });
 
-  // ตรวจสอบว่าผู้ใช้กดยืนยันการลบหรือไม่
   if (result.isConfirmed) {
     try {
       const response = await axios.delete(`${config.api_path}/users/${id}`);
@@ -94,10 +91,29 @@ const removeData = async (id) => {
   }
 };
 
-
 const sortedUsers = computed(() => {
-  return users.value.slice().sort((a, b) => a.id - b.id); // เรียงลำดับตาม ID
+  return users.value.slice().sort((a, b) => a.id - b.id);
 });
+
+// ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
+const downloadExcel = () => {
+  const data = users.value.map(user => ({
+    'รหัสนักศึกษา': user.studentID,
+    'ชื่อ': user.firstName,
+    'นามสกุล': user.lastName,
+    'สาขา': user.branch,
+    'ชั้นปี': user.year,
+    'สถานะ': user.status,
+    'เบอร์โทรศัพท์': user.phoneNumber,
+    'อีเมล์': user.email,
+    'สถานที่ฝึกประสบการณ์':user.college
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(data);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+  XLSX.writeFile(workbook, 'students.xlsx');
+};
 
 onMounted(() => {
   fetchData();
@@ -108,16 +124,25 @@ onMounted(() => {
   <section class="content mt-4">
     <div class="card">
       <div class="card-header">
-        <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรี ชั้นปีที่ 4
+        <div class="card-title mb-2">
+          ข้อมูลนักศึกษาชั้นปริญาตรี ชั้นปีที่ 4
           <div>
             <router-link :to="`/teacher-index/student-tec4req`">
-              <button class="btn btn-primary m-1"> ขออนุมัติ</button></router-link>
-            <router-link :to="`/teacher-index/student-tec4active`"> <button
-                class="btn btn-warning m-1">กำลังฝึก</button></router-link>
-            <router-link :to="`/teacher-index/student-tec4success`"> <button class="btn btn-success m-1">ผ่าน</button>
+              <button class="btn btn-primary m-1"> ขออนุมัติ</button>
             </router-link>
-            <router-link :to="`/teacher-index/student-tec4notpass`"> <button class="btn btn-danger m-1">ไม่ผ่าน</button>
+            <router-link :to="`/teacher-index/student-tec4approved`">
+              <button class="btn btn-success m-1"> อนุมัติ</button>
             </router-link>
+            <router-link :to="`/teacher-index/student-tec4active`">
+              <button class="btn btn-warning m-1">เข้ารับการฝึก</button>
+            </router-link>
+            <router-link :to="`/teacher-index/student-tec4success`">
+              <button class="btn btn-success m-1">ผ่าน</button>
+            </router-link>
+            <router-link :to="`/teacher-index/student-tec4notpass`">
+              <button class="btn btn-danger m-1">ไม่ผ่าน</button>
+            </router-link>
+            <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
           </div>
         </div>
         <table class="table">
@@ -129,7 +154,6 @@ onMounted(() => {
               <th>สาขา</th>
               <th>ชั้นปี</th>
               <th class="text-center">ข้อมูลสถานประกอบการ</th>
-              <!-- <th>Tools</th> -->
             </tr>
           </thead>
           <tbody>
@@ -142,12 +166,6 @@ onMounted(() => {
               <td class="text-center">
                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
               </td>
-              <!-- <td>
-                <router-link :to="`/edit-ec4/${user.id}`">
-                  <button class="btn btn-primary m-1">Edit</button>
-                </router-link>
-                <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button>
-              </td> -->
             </tr>
           </tbody>
         </table>
@@ -170,27 +188,17 @@ onMounted(() => {
             <p>เบอร์โทรศัพท์: {{ modalData.phoneNumber }}</p>
             <p v-if="modalData.email">Email: {{ modalData.email }}</p>
             <p v-else></p>
-            <!-- <div v-if="modalData.companyDetails">
-              <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
-              <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
-              <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
-              <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{
-                modalData.companyDetails.contactLastName }}</p>
-              <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
-              <p v-if="modalData.companyDetails.companyEmail">Email: {{ modalData.companyDetails.companyEmail }}</p>
-              <p v-else></p>
-              <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
-            </div> -->
             <div v-if="modalData.collegeDetails">
               <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
-              <p>สถานประกอบการ: {{ modalData.collegeDetails.collegeName }}</p>
+              <p>ชื่อวิทยาลัย: {{ modalData.collegeDetails.collegeName }}</p>
+              <p>แผนกวิชาที่นักเรียนเข้ารับการฝึกประสบการณ์วิชาชีพ: {{ modalData.collegeDetails.department }}</p>
+              <p>ขนาดสถานศึกษา: {{ modalData.collegeDetails.schoolSize }}</p>
               <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{
                 modalData.collegeDetails.contactLastName }}</p>
               <p>เบอร์โทรศัพท์: {{ modalData.collegeDetails.collegePhone }}</p>
               <p v-if="modalData.collegeDetails.collegeEmail">Email: {{ modalData.collegeDetails.collegeEmail }}</p>
               <p v-else></p>
               <p>ที่ตั้งวิทยาลัย: {{ modalData.collegeDetails.collegeAddress }}</p>
-
             </div>
             <div v-else>
               <p>ไม่มีข้อมูลสถานประกอบการ</p>

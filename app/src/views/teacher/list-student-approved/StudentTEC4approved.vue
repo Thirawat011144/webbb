@@ -7,33 +7,26 @@ import { useRoute, useRouter } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router';
 import * as XLSX from 'xlsx'; // import library
 
-
 // const route = useRoute();
 // const router = useRouter();
 
-// const user = ref({
-//   firstName: '',
-//   lastName: '',
-//   userName: '',
-//   password: '',
-//   phoneNumber: '',
-//   gender: '',
-//   year: '',
-//   branch: '',
-//   status: '',
-//   studentID: '',
-//   company: ''
-// });
 
 const users = ref([]); // เปลี่ยน {} เป็น []
 const isModalVisible = ref(false);
 const modalData = ref(null);
+const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+let branch = null
 
+if (userData.branch) {
+    branch = userData.branch;
+} else {
+    console.log('No userData found in localStorage');
+}
 
 const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => user.status === "ขออนุมัติ" && user.year === "ป.ตรี ปีที่ 4");
+        users.value = response.data.filter(user => user.status === "อนุมัติ" && user.year === "ป.ตรี ปีที่ 4" && user.branch === branch);
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -42,6 +35,7 @@ const fetchData = async () => {
         });
     }
 };
+
 
 // modal
 const showModal = async (id) => {
@@ -63,6 +57,28 @@ const closeModal = () => {
     modalData.value = null;
 };
 // modal
+
+
+const handleStatus = async (id, newStatus) => { // ฟังก์ชันเพื่ออัพเดตสถานะ
+    try {
+        const response = await axios.put(`${config.api_path}/user/${id}`, { status: newStatus }); // ส่งข้อมูลไปที่ API
+        if (response.data.message === "Success") {
+            Swal.fire({
+                title: "สำเร็จ",
+                text: "อัปเดตสถานะสำเร็จ",
+                icon: "success",
+            });
+            fetchData(); // รีเฟรชข้อมูลหลังจากอัพเดตสถานะ
+        }
+    } catch (error) {
+        Swal.fire({
+            title: "error",
+            text: (error.message, "Cr2 Error Updating Status"),
+            icon: "error"
+        });
+    }
+};
+
 
 const removeData = async (id) => {
     // แสดงป๊อปอัพยืนยันการลบ
@@ -102,28 +118,6 @@ const removeData = async (id) => {
     }
 };
 
-const downloadCSV = () => {
-    const bom = "\uFEFF"; // Byte Order Mark สำหรับรองรับภาษาไทย
-    const tableColumn = ['ลำดับ', 'รหัสนักศึกษา', 'ชื่อ-นามสกุล', 'สาขา', 'ชั้นปี', 'ชื่อสถานศึกษา'];
-    let csvContent = bom + tableColumn.join(",") + "\n";
-
-    sortedUsers.value.forEach((user, index) => {
-        const row = [
-            index + 1,
-            user.studentID,
-            `${user.firstName} ${user.lastName}`,
-            user.branch,
-            user.year,
-            user.college
-        ];
-        csvContent += row.join(",") + "\n";
-    });
-
-    const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    saveAs(csvBlob, 'students.csv');
-};
-
-
 
 const sortedUsers = computed(() => {
     return users.value.slice().sort((a, b) => a.id - b.id); // เรียงลำดับตาม ID
@@ -149,27 +143,27 @@ const downloadExcel = () => {
     XLSX.writeFile(workbook, 'students.xlsx');
 };
 
-
 onMounted(() => {
     fetchData();
 });
 </script>
 
 <template>
-    <section class="content">
+    <section class="content mt-4">
         <div class="card">
             <div class="card-header">
-                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรีชั้นปีที่ 4 (ผู้ขออนุมัติ)
+                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรีชั้นปีที่ 4 (อนุมัติ)
                     <div>
-                        <router-link :to="`/admin-index/Ec4-req`"> <button
-                                class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
-                        <router-link :to="`/admin-index/Ec4-approved`"> <button
-                                class="btn btn-success m-1">อนุมัติ</button></router-link>
-                        <router-link :to="`/admin-index/Ec4-active`"> <button
+                        <router-link :to="`/teacher-index/student-tec4req`">
+                            <button class="btn btn-primary m-1"> ขออนุมัติ</button></router-link>
+                        <router-link :to="`/teacher-index/student-tec4approved`">
+                            <button class="btn btn-success m-1"> อนุมัติ</button></router-link>
+                        <router-link :to="`/teacher-index/student-tec4active`"> <button
                                 class="btn btn-warning m-1">เข้ารับการฝึก</button></router-link>
-                        <router-link :to="`/admin-index/Ec4-success`"> <button class="btn btn-success m-1">ผ่าน</button>
+                        <router-link :to="`/teacher-index/student-tec4success`"> <button
+                                class="btn btn-success m-1">ผ่าน</button>
                         </router-link>
-                        <router-link :to="`/admin-index/Ec4-notpass`"> <button
+                        <router-link :to="`/teacher-index/student-tec4notpass`"> <button
                                 class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
                         <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
@@ -198,10 +192,15 @@ onMounted(() => {
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
                             </td>
                             <td>
-                                <router-link :to="`/edit-ec4/${user.id}`">
+                                <button class="btn btn-primary"
+                                    @click="handleStatus(user.id, 'เข้ารับการฝึก')">เข้ารับการฝึก</button>
+                                &nbsp;
+                                <!-- <button class="btn btn-danger"
+                                    @click="handleStatus(user.id, 'ไม่ผ่าน')">ไม่ผ่าน</button> -->
+                                <!-- <router-link :to="`/edit-ec4/${user.id}`">
                                     <button class="btn btn-primary m-1">Edit</button>
                                 </router-link>
-                                <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button>
+                                <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button> -->
                             </td>
                         </tr>
                     </tbody>
@@ -240,7 +239,10 @@ onMounted(() => {
                         </div> -->
                         <div v-if="modalData.collegeDetails">
                             <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
-                            <p>โรงเรียน/วิทยาลัย: {{ modalData.collegeDetails.collegeName }}</p>
+                            <p>สถานประกอบการ: {{ modalData.collegeDetails.collegeName }}</p>
+                            <p>แผนกวิชาที่นักเรียนเข้ารับการฝึกประสบการณ์วิชาชีพ: {{ modalData.collegeDetails.department
+                                }}</p>
+                            <p>ขนาดสถานศึกษา: {{ modalData.collegeDetails.schoolSize }}</p>
                             <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{
                                 modalData.collegeDetails.contactLastName }}</p>
                             <p>เบอร์โทรศัพท์: {{ modalData.collegeDetails.collegePhone }}</p>

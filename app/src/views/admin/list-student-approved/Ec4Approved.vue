@@ -7,7 +7,6 @@ import { useRoute, useRouter } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router';
 import * as XLSX from 'xlsx'; // import library
 
-
 // const route = useRoute();
 // const router = useRouter();
 
@@ -33,7 +32,7 @@ const modalData = ref(null);
 const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => user.status === "ขออนุมัติ" && user.year === "ป.ตรี ปีที่ 4");
+        users.value = response.data.filter(user => user.status === "อนุมัติ" && user.year === "ป.ตรี ปีที่ 4");
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -42,6 +41,7 @@ const fetchData = async () => {
         });
     }
 };
+
 
 // modal
 const showModal = async (id) => {
@@ -102,28 +102,6 @@ const removeData = async (id) => {
     }
 };
 
-const downloadCSV = () => {
-    const bom = "\uFEFF"; // Byte Order Mark สำหรับรองรับภาษาไทย
-    const tableColumn = ['ลำดับ', 'รหัสนักศึกษา', 'ชื่อ-นามสกุล', 'สาขา', 'ชั้นปี', 'ชื่อสถานศึกษา'];
-    let csvContent = bom + tableColumn.join(",") + "\n";
-
-    sortedUsers.value.forEach((user, index) => {
-        const row = [
-            index + 1,
-            user.studentID,
-            `${user.firstName} ${user.lastName}`,
-            user.branch,
-            user.year,
-            user.college
-        ];
-        csvContent += row.join(",") + "\n";
-    });
-
-    const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    saveAs(csvBlob, 'students.csv');
-};
-
-
 
 const sortedUsers = computed(() => {
     return users.value.slice().sort((a, b) => a.id - b.id); // เรียงลำดับตาม ID
@@ -131,22 +109,22 @@ const sortedUsers = computed(() => {
 
 // ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
 const downloadExcel = () => {
-    const data = users.value.map(user => ({
-        'รหัสนักศึกษา': user.studentID,
-        'ชื่อ': user.firstName,
-        'นามสกุล': user.lastName,
-        'สาขา': user.branch,
-        'ชั้นปี': user.year,
-        'สถานะ': user.status,
-        'เบอร์โทรศัพท์': user.phoneNumber,
-        'อีเมล์': user.email,
-        'สถานที่ฝึกประสบการณ์': user.college
-    }));
+  const data = users.value.map(user => ({
+    'รหัสนักศึกษา': user.studentID,
+    'ชื่อ': user.firstName,
+    'นามสกุล': user.lastName,
+    'สาขา': user.branch,
+    'ชั้นปี': user.year,
+    'สถานะ': user.status,
+    'เบอร์โทรศัพท์': user.phoneNumber,
+    'อีเมล์': user.email,
+    'สถานที่ฝึกประสบการณ์':user.college
+  }));
 
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
-    XLSX.writeFile(workbook, 'students.xlsx');
+  const worksheet = XLSX.utils.json_to_sheet(data);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+  XLSX.writeFile(workbook, 'students.xlsx');
 };
 
 
@@ -159,7 +137,7 @@ onMounted(() => {
     <section class="content">
         <div class="card">
             <div class="card-header">
-                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรีชั้นปีที่ 4 (ผู้ขออนุมัติ)
+                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรีชั้นปีที่ 4 (อนุมัติ)
                     <div>
                         <router-link :to="`/admin-index/Ec4-req`"> <button
                                 class="btn btn-primary m-1">ขออนุมัติ</button></router-link>

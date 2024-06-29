@@ -11,6 +11,7 @@ import routeEstablishment from './Internship';
 import routePracticeTeaching from './practice-teaching';
 import routeDownloads from './downloads';
 import routeInternshipAndTeaching from './listInternship-teaching/index';
+import routeEvaluation from './evaluation';
 
 const routes = [
   ...routeHome,
@@ -23,7 +24,8 @@ const routes = [
   ...routeEstablishment,
   ...routePracticeTeaching,
   ...routeDownloads,
-  ...routeInternshipAndTeaching
+  ...routeInternshipAndTeaching,
+  ...routeEvaluation
 ];
 
 const router = createRouter({
