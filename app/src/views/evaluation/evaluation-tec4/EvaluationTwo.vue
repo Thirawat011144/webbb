@@ -73,7 +73,7 @@ import config from '../../../../config';
 const route = useRoute();
 const router = useRouter();
 const student = ref(null);
-const time = ref('3')
+const time = ref('2')
 
 const criteria = ref([
     { label: 'สามารถวิเคราะห์ความสอดคล้องของสาระการเรียนรู้กับมาตรฐานการเรียนรู้ของหลักสูตร แกนกลางและหลักสูตรสถานศึกษา', score: null },
@@ -163,7 +163,7 @@ const submitEvaluation = async () => {
                 icon: "success",
                 timer: 2000
             });
-            // router.push('/teacher-index');
+            router.push('/home-evaluation/student-ev-tec4');
         }
     } catch (error) {
         Swal.fire({

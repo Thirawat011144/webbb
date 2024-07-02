@@ -109,22 +109,22 @@ const sortedUsers = computed(() => {
 
 // ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
 const downloadExcel = () => {
-  const data = users.value.map(user => ({
-    'รหัสนักศึกษา': user.studentID,
-    'ชื่อ': user.firstName,
-    'นามสกุล': user.lastName,
-    'สาขา': user.branch,
-    'ชั้นปี': user.year,
-    'สถานะ': user.status,
-    'เบอร์โทรศัพท์': user.phoneNumber,
-    'อีเมล์': user.email,
-    'สถานที่ฝึกประสบการณ์':user.college
-  }));
+    const data = sortedUsers.value.map(user => ({
+        'รหัสนักศึกษา': user.studentID,
+        'ชื่อ': user.firstName,
+        'นามสกุล': user.lastName,
+        'สาขา': user.branch,
+        'ชั้นปี': user.year,
+        'สถานะ': user.status,
+        'เบอร์โทรศัพท์': user.phoneNumber,
+        'อีเมล์': user.email,
+        'สถานที่ฝึกประสบการณ์': user.college
+    }));
 
-  const worksheet = XLSX.utils.json_to_sheet(data);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
-  XLSX.writeFile(workbook, 'students.xlsx');
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+    XLSX.writeFile(workbook, 'students.xlsx');
 };
 
 
@@ -180,9 +180,11 @@ onMounted(() => {
                             </td>
                             <td>
                                 <router-link :to="`/edit-ec4/${user.id}`">
-                                    <button class="btn btn-primary m-1">Edit</button>
+                                    <button class="btn btn-primary m-1"><i
+                                            class="fa-solid fa-pen-to-square"></i></button>
                                 </router-link>
-                                <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button>
+                                <button @click="removeData(user.id)" class="btn btn-danger m-1"><i
+                                        class="fa-solid fa-trash-can"></i></button>
                             </td>
                         </tr>
                     </tbody>

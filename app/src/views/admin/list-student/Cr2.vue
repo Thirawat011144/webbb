@@ -157,9 +157,10 @@ onMounted(() => {
               </td>
               <td>
                 <router-link :to="`/edit-cr2/${user.id}`">
-                  <button class="btn btn-primary m-1">Edit</button>
+                  <button class="btn btn-primary m-1"><i class="fa-solid fa-pen-to-square"></i></button>
                 </router-link>
-                <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button>
+                <button @click="removeData(user.id)" class="btn btn-danger m-1"><i
+                  class="fa-solid fa-trash-can"></i></button>
               </td>
             </tr>
           </tbody>

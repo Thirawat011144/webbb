@@ -1,14 +1,18 @@
 import HomeEvaluation from '../../views/evaluation/HomeEvaluation.vue'
 import InformationEvaluation from '../../views/evaluation/InformationEvaluation.vue'
+
 import ListStudentTEC4 from '../../views/evaluation/list-student/ListStudentTEC4.vue'
+import ListStudentTEC2 from '@/views/evaluation/list-student/ListStudentTEC2.vue'
+import ListStudentVCR2 from '@/views/evaluation/list-student/ListStudentVCR2.vue'
+
 import ListEvaluationOne from '../../views/evaluation/list-student-evaluation-one/ListEvaluationOne.vue'
-import EvaluationOne from '../../views/evaluation/evaluation-one/EvaluationOne.vue'
+import EvaluationOne from '../../views/evaluation/evaluation-tec4/EvaluationOne.vue'
 
 import ListEvaluationTwo from '../../views/evaluation/list-student-evaluation-one/ListEvaluationTwo.vue'
-import EvaluationTwo from '../../views/evaluation/evaluation-one/EvaluationTwo.vue'
+import EvaluationTwo from '../../views/evaluation/evaluation-tec4/EvaluationTwo.vue'
 
 import ListEvaluationThree from '../../views/evaluation/list-student-evaluation-one/ListEvaluationThree.vue'
-import EvaluationThree from '../../views/evaluation/evaluation-one/EvaluationThree.vue'
+import EvaluationThree from '../../views/evaluation/evaluation-tec4/EvaluationThree.vue'
 
 // import DataTEC4 from '../../views/evaluation/data-evaluation/DataTEC4.vue'
 
@@ -53,6 +57,16 @@ const routeEvaluation = [
                 path: 'student-ev-tec4',
                 name: 'student-ev-tec4',
                 component: ListStudentTEC4
+            },
+            {
+                path: 'student-ev-tec2',
+                name: 'student-ev-tec2',
+                component: ListStudentTEC2
+            },
+            {
+                path: 'student-ev-vcr2',
+                name: 'student-ev-vcr2',
+                component: ListStudentVCR2
             },
             {
                 path: 'list-evaluation-one',

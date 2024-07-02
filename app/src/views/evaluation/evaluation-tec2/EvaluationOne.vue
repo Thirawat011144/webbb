@@ -167,7 +167,7 @@ const submitEvaluation = async () => {
                 icon: "success",
                 timer: 2000
             });
-            // router.push('/teacher-index');
+            router.push('/home-evaluation/student-ev-tec4');
         }
     } catch (error) {
         Swal.fire({

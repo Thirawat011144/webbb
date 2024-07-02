@@ -126,7 +126,7 @@ const authenticateToken = require('../Middleware/Authorization');
 
 router.post('/college', async (req, res) => {
     try {
-        const { collegeName, contactFirstName, contactLastName, collegePhone, collegeEmail, collegeAddress, studentID, department,schoolSize, status } = req.body;
+        const { collegeName, contactFirstName, contactLastName, collegePhone, collegeEmail, collegeAddress, studentID, department,schoolSize,academicYear, status } = req.body;
 
         // หา record ที่มี studentID ตรงกับค่าในตาราง Users
         const user = await UsersModel.findOne({ where: { studentID } });
@@ -139,6 +139,7 @@ router.post('/college', async (req, res) => {
         // ตรวจสอบค่า status
         if (status === 'ไม่อนุมัติ') {
             // อัปเดต status ใน Users table
+            user.year = academicYear
             user.status = 'ขออนุมัติ';
             user.college = collegeName;
             await user.save();
@@ -168,6 +169,7 @@ router.post('/college', async (req, res) => {
                 res.status(409).send({ message: "studentID นี้มีอยู่แล้วในตาราง Colleges" });
             } else {
                 // อัปเดต status ใน Users table
+                user.year = academicYear
                 user.status = status;
                 user.college = collegeName;
                 await user.save();

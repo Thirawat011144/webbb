@@ -34,7 +34,7 @@ const handleLogin = async () => {
             localStorage.setItem(config.evaluatorStatus, response.data.data.evaluatorStatus)
             localStorage.setItem(config.currentStudyField, response.data.data.currentStudyField)
             // localStorage.setItem(config.evaluatorName, response.data.data.firstName)
-            localStorage.setItem('userData', JSON.stringify(response.data.data)); 
+            localStorage.setItem('userData', JSON.stringify(response.data.data));
             searchData.setDataResults(response.data.data);
 
             router.push('/')
@@ -105,11 +105,11 @@ const handleLogin = async () => {
                         </form>
                         <div class="input-group mb-3"></div>
                         <div class="row">
-                            <router-link to="/register"><small href="#">สมัครสำหรับนักศึกษา</small></router-link>
-                            <router-link to="/teacher-register"><small href="#">สมัครสำหรับอาจารย์</small></router-link>
-                            <router-link to="/register-evaluation"><small
-                                    href="#">สมัครสำหรับผู้ประเมิน</small></router-link>
-                            <router-link to="/login"><small href="#">เข้าสู่ระบบทั่วไป</small></router-link>
+                            <!-- <router-link to="/register"><small href="#">สมัครสำหรับนักศึกษา</small></router-link>
+                            <router-link to="/teacher-register"><small href="#">สมัครสำหรับอาจารย์</small></router-link> -->
+                            <router-link to="/register-evaluation"><small href="#">Don't have an
+                                    account? Click Register</small></router-link>
+                            <!-- <router-link to="/login"><small href="#">เข้าสู่ระบบทั่วไป</small></router-link> -->
                         </div>
                     </div>
                 </div>

@@ -18,15 +18,16 @@ const collegeAddress = ref('');
 const studentID = ref('');
 const department = ref('');
 const schoolSize = ref('')
+const academicYear = ref('')
 const status = ref('');
 
-if (userData.studentID) {
-    studentID.value = userData.studentID;
-    status.value = userData.status;
-    console.log("sss", status.value)
-} else {
-    console.log('No userData found in localStorage');
-}
+// if (userData.studentID) {
+//     studentID.value = userData.studentID;
+//     status.value = userData.status;
+//     console.log("sss", status.value)
+// } else {
+//     console.log('No userData found in localStorage');
+// }
 
 const handleSubmit = async () => {
     const result = await Swal.fire({
@@ -51,6 +52,7 @@ const handleSubmit = async () => {
                 studentID: studentID.value,
                 department: department.value,
                 schoolSize: schoolSize.value,
+                academicYear: academicYear.value,
                 status: status.value,
             };
             const response = await axios.post(`${config.api_path}/college`, formData);
@@ -94,6 +96,31 @@ const handleSubmit = async () => {
                             </div>
                         </div>
 
+                        <div class="row mb-4">
+                            <div class="col">
+                                <div data-mdb-input-init class="form-outline">
+                                    <label class="form-label" for="academicYear">ชั้นปี <span
+                                            class="text-red">*</span></label>
+                                    <select id="academicYear" class="form-control" v-model="academicYear" required>
+                                        <option value="" disabled selected>เลือกชั้นปี</option>
+                                        <option value="ปี 1">ปี 1</option>
+                                        <option value="ปี 2">ปี 2</option>
+                                        <option value="ปี 3">ปี 3</option>
+                                        <option value="ป.ตรี ปีที่ 4">ป.ตรี ปีที่ 4</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div>
+                                    <label for="">สถานะ</label>
+                                    <select v-model="status" class="form-select" required>
+                                        <option value="" disabled>-</option>
+                                        <option value="ขออนุมัติ">ขออนุมัติ</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
                         <label class="form-label" for="contactInfo">ข้อมูลผู้ประสานงานวิทยาลัย</label>
                         <!-- Text input -->
                         <div data-mdb-input-init class="form-outline row mb-4 ">
@@ -110,6 +137,8 @@ const handleSubmit = async () => {
                                     required />
                             </div>
                         </div>
+
+
 
                         <div data-mdb-input-init class="form-outline mb-4">
                             <label class="form-label" for="collegePhone">เบอร์โทรศัพท์ <span

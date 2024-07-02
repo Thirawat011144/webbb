@@ -17,6 +17,7 @@ const companyPhone = ref('');
 const companyEmail = ref('');
 const companyAddress = ref('');
 const studentID = ref('')
+const academicYear = ref('')
 const status = ref('');
 const valueStatus = ref('สำเร็จ')
 
@@ -49,8 +50,9 @@ const handleSubmit = async () => {
                 companyEmail: companyEmail.value,
                 companyAddress: companyAddress.value,
                 studentID: studentID.value,
+                academicYear: academicYear.value,
                 status: status.value,
-                valueStatus:valueStatus.value
+                valueStatus: valueStatus.value
             };
             const response = await axios.post(`${config.api_path}/company`, formData);
             if (response.data.message === 'Success') {
@@ -91,13 +93,28 @@ const handleSubmit = async () => {
                                         required />
                                 </div>
                             </div>
+                        </div>
 
+                        <div class="row mb-4">
                             <div class="col">
                                 <div data-mdb-input-init class="form-outline">
                                     <label class="form-label" for="companyType">แผนก <span
                                             class="text-red">*</span></label>
                                     <input type="text" id="companyType" class="form-control" v-model="companyDepartment"
                                         required />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div data-mdb-input-init class="form-outline">
+                                    <label class="form-label" for="academicYear">ชั้นปี <span
+                                            class="text-red">*</span></label>
+                                    <select id="academicYear" class="form-control" v-model="academicYear" required>
+                                        <option value="" disabled selected>เลือกชั้นปี</option>
+                                        <option value="ปี 1">ปี 1</option>
+                                        <option value="ปี 2">ปี 2</option>
+                                        <option value="ปี 3">ปี 3</option>
+                                        <option value="ป.ตรี ปีที่ 4">ป.ตรี ปีที่ 4</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>

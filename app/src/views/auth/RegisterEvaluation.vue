@@ -63,7 +63,7 @@ const handleRegister = async () => {
                 icon: "success",
                 timer: 2000,
             });
-            router.push('/login');
+            router.push('/login-evaluation');
         }
     } catch (error) {
         Swal.fire({

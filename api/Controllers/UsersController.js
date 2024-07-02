@@ -51,7 +51,6 @@ router.get("/user/:id", async (req, res) => {
     }
 });
 
-
 router.get("/users/search", async (req, res) => {
     try {
         const { query } = req.query;
@@ -59,8 +58,11 @@ router.get("/users/search", async (req, res) => {
             return res.status(400).send({ message: "Query parameter is required" });
         }
 
+        // แยกคำค้นหา
         const terms = query.split(' ');
+        console.log(terms)
 
+        // กำหนดเงื่อนไขการค้นหาพื้นฐาน
         let whereClause = {
             [Op.or]: [
                 { firstName: { [Op.like]: `%${query}%` } },
@@ -68,10 +70,11 @@ router.get("/users/search", async (req, res) => {
                 { userName: { [Op.like]: `%${query}%` } },
                 { year: { [Op.like]: `%${query}%` } },
                 { studentID: { [Op.like]: `%${query}%` } },
-
-                //สร้างเงื่อนไขยังไม่ครบ
+                { branch: { [Op.like]: `%${query}%` } },
+                // เพิ่มเงื่อนไขที่ต้องการค้นหาอื่น ๆ
             ]
         };
+
         // ถ้ามีสองคำ แสดงว่าเป็นชื่อและนามสกุล
         if (terms.length === 2) {
             const [firstName, lastName] = terms;
@@ -84,6 +87,18 @@ router.get("/users/search", async (req, res) => {
                         ]
                     },
                     { year: { [Op.like]: `%${query}%` } },
+                ]
+            };
+        }
+
+        // ถ้ามี 4 คำ แสดงว่าเป็น year และ branch
+        if (terms.length === 4) {
+            const [term1, term2, term3, term4] = terms;
+            whereClause = {
+                [Op.and]: [
+                    { branch: { [Op.like]: `%${term1}%` } },
+                    { year: { [Op.like]: `%${term2} ${term3} ${term4.trim()}%` } },
+
                 ]
             };
         }
@@ -101,6 +116,100 @@ router.get("/users/search", async (req, res) => {
         res.status(500).send({ message: error.message });
     }
 });
+
+
+
+// router.get("/users/search", async (req, res) => {
+//     try {
+//         const { query } = req.query;
+//         if (!query) {
+//             return res.status(400).send({ message: "Query parameter is required" });
+//         }
+
+//         // แยกคำโดยใช้วิธี split เพื่อให้ได้คำทั้งหมด
+//         const terms = query.split(/\s+/).filter(term => term.trim() !== '');
+
+//         let whereClause = {
+//             [Op.and]: terms.map(term => ({
+//                 [Op.or]: [
+//                     { firstName: { [Op.like]: `%${term}%` } },
+//                     { lastName: { [Op.like]: `%${term}%` } },
+//                     { userName: { [Op.like]: `%${term}%` } },
+//                     { year: { [Op.like]: `%${term}%` } },
+//                     { studentID: { [Op.like]: `%${term}%` } },
+//                     { branch: { [Op.like]: `%${term}%` } },
+//                     // { degree: { [Op.like]: `%${term}%` } },
+//                     // เพิ่มฟิลด์อื่นๆ ที่ต้องการค้นหา
+//                 ]
+//             }))
+//         };
+
+//         // ดึงข้อมูลโดยจำกัดจำนวนผลลัพธ์
+//         const users = await UsersModel.findAll({
+//             where: whereClause,
+//             limit: 100 // จำกัดผลลัพธ์ที่ 100 รายการ
+//         });
+
+//         if (users.length === 0) {
+//             return res.status(404).send({ message: "No users found" });
+//         }
+
+//         res.send(users);
+//     } catch (error) {
+//         res.status(500).send({ message: error.message });
+//     }
+// });
+
+// router.get("/users/search", async (req, res) => {
+//     try {
+//         const { query } = req.query;
+//         if (!query) {
+//             return res.status(400).send({ message: "Query parameter is required" });
+//         }
+
+//         const terms = query.split(' ');
+
+//         let whereClause = {
+//             [Op.or]: [
+//                 { firstName: { [Op.like]: `%${query}%` } },
+//                 { lastName: { [Op.like]: `%${query}%` } },
+//                 { userName: { [Op.like]: `%${query}%` } },
+//                 { year: { [Op.like]: `%${query}%` } },
+//                 { studentID: { [Op.like]: `%${query}%` } },
+//                 { branch: { [Op.like]: `%${query}%` } },
+
+//                 //สร้างเงื่อนไขยังไม่ครบ
+//             ]
+//         };
+//         // ถ้ามีสองคำ แสดงว่าเป็นชื่อและนามสกุล
+//         if (terms.length === 2) {
+//             const [firstName, lastName] = terms;
+//             whereClause = {
+//                 [Op.or]: [
+//                     {
+//                         [Op.and]: [
+//                             { firstName: { [Op.like]: `%${firstName}%` } },
+//                             { lastName: { [Op.like]: `%${lastName}%` } },
+//                         ]
+//                     },
+//                     { year: { [Op.like]: `%${query}%` } },
+//                 ]
+//             };
+//         }
+
+//         const users = await UsersModel.findAll({
+//             where: whereClause
+//         });
+
+//         if (users.length === 0) {
+//             return res.status(404).send({ message: "No users found" });
+//         }
+
+//         res.send(users);
+//     } catch (error) {
+//         res.status(500).send({ message: error.message });
+//     }
+// });
 
 // router.put('/user/:id', async (req, res) => {
 //     try {

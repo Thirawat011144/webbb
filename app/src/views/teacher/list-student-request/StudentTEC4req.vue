@@ -126,7 +126,7 @@ const sortedUsers = computed(() => {
 
 // ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
 const downloadExcel = () => {
-  const data = users.value.map(user => ({
+  const data = sortedUsers.value.map(user => ({
     'รหัสนักศึกษา': user.studentID,
     'ชื่อ': user.firstName,
     'นามสกุล': user.lastName,

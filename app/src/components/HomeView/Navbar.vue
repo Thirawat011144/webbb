@@ -33,7 +33,7 @@
                         <li class="nav-item p-2 abb">สหกิจศึกษา</li>
                     </router-link>
 
-                    <router-link v-if="!isLoggedIn" to="/login" class="text-decoration-none text-black">
+                    <router-link v-if="!isLoggedIn" to="/login-choice" class="text-decoration-none text-black">
                         <li class="nav-item p-2 abb">เข้าสู่ระบบ</li>
                     </router-link>
                     <li v-else class="nav-item p-2 abb text-secondary">
@@ -93,6 +93,9 @@ const handleSignOut = () => {
             localStorage.removeItem(config.role_name);
             localStorage.removeItem(config.token_name);
             localStorage.removeItem(config.firstName_name);
+            localStorage.removeItem(config.token_lastName)
+            localStorage.removeItem(config.evaluatorStatus)
+            localStorage.removeItem(config.currentStudyField)
             localStorage.removeItem('userData');
             isLoggedIn.value = false;
             router.push("/");

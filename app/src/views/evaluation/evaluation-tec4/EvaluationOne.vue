@@ -73,7 +73,7 @@ import config from '../../../../config';
 const route = useRoute();
 const router = useRouter();
 const student = ref(null);
-const time = ref('2')
+const time = ref('1')
 
 const criteria = ref([
     { label: 'สามารถวิเคราะห์ความสอดคล้องของสาระการเรียนรู้กับมาตรฐานการเรียนรู้ของหลักสูตร แกนกลางและหลักสูตรสถานศึกษา', score: null },
@@ -141,10 +141,14 @@ const fetchStudentData = async () => {
 
 const submitEvaluation = async () => {
     try {
-        const evaluatorName = `${localStorage.getItem(config.firstName_name)} ${localStorage.getItem(config.token_lastName)}`; // ดึงชื่อผู้ประเมินจาก localStorage
+        // const firstName = localStorage.getItem(config.firstName_name);
+        // const lastName = localStorage.getItem(config.token_lastName);
+        // const evaluatorName = localStorage.getItem(config.firstName_name);
         const evaluatorStatus = localStorage.getItem(config.evaluatorStatus)
+        // const evaluatorName = `${firstName} ${lastName}`;
+        const evaluatorName = `${localStorage.getItem(config.firstName_name)} ${localStorage.getItem(config.token_lastName)}`;
         const payload = {
-            evaluatorStatus:evaluatorStatus,
+            evaluatorStatus: evaluatorStatus,
             time: time.value,
             evaluatorName: evaluatorName,
             studentId: student.value.studentID,
@@ -163,7 +167,7 @@ const submitEvaluation = async () => {
                 icon: "success",
                 timer: 2000
             });
-            // router.push('/teacher-index');
+            router.push('/home-evaluation/student-ev-tec4');
         }
     } catch (error) {
         Swal.fire({

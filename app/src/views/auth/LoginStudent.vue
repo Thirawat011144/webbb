@@ -108,9 +108,10 @@ const handleLogin = async () => {
                         <div class="input-group mb-3"></div>
                         <div class="row">
                             <!-- <p>ยังไม่มีบัญชีผู้ใช้ ใช่ไหม</p> -->
-                            <!-- <router-link to="/register"><small href="#">สมัครสำหรับนักศึกษา</small></router-link> -->
-                            <router-link to="/teacher-register"><small href="#">Don't have an
+                            <router-link to="/register"><small href="#">Don't have an
                                     account? Click Register</small></router-link>
+                            <!-- <router-link to="/teacher-register"><small href="#">Don't have an
+                                    account? Click Register</small></router-link> -->
                             <!-- <router-link to="/register-evaluation"><small
                                     href="#">สมัครสำหรับผู้ประเมิน</small></router-link>
                             <router-link to="/login-evaluation"><small
