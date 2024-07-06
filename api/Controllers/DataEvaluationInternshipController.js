@@ -1,22 +1,21 @@
 const express = require("express");
-const DataEvaluation = require("../Models/DataEvaluation");
+const DataEvaluationInternship = require("../Models/DataEvaluationInternship");
 
 const router = express.Router();
 
-router.post("/data-evaluation", async (req, res) => {
+router.post("/data-evaluation-internship", async (req, res) => {
     try {
-        const { evaluatorName, studentId, criteria,time,evaluatorStatus } = req.body;
+        const { evaluatorName, studentId, criteria, time, evaluatorStatus } = req.body;
 
         console.log("Criteria Length:", criteria.length); // เพิ่มดีบักเพื่อดูจำนวนข้อ
         console.log("Criteria:", criteria); // เพิ่มดีบักเพื่อดูข้อมูลที่ส่งมา
 
-        const newEvaluation = await DataEvaluation.create({
-         
+        const newEvaluation = await DataEvaluationInternship.create({
             evaluatorName: evaluatorName,
             studentId: studentId,
             criteria: criteria,
-            time:time,
-            evaluatorStatus:evaluatorStatus
+            time: time,
+            evaluatorStatus: evaluatorStatus
         });
 
         await newEvaluation.save();
@@ -27,9 +26,9 @@ router.post("/data-evaluation", async (req, res) => {
 });
 
 // API สำหรับดึงข้อมูลการประเมินทั้งหมด
-router.get("/data-evaluation", async (req, res) => {
+router.get("/data-evaluation-internship", async (req, res) => {
     try {
-        const evaluations = await DataEvaluation.findAll();
+        const evaluations = await DataEvaluationInternship.findAll();
         res.json(evaluations);
     } catch (error) {
         res.status(500).send({ message: error.message });
@@ -37,10 +36,10 @@ router.get("/data-evaluation", async (req, res) => {
 });
 
 // API สำหรับดึงข้อมูลการประเมินของนักเรียนคนเดียวโดยใช้ studentId
-router.get("/data-evaluation/:studentId", async (req, res) => {
+router.get("/data-evaluation-internship/:studentId", async (req, res) => {
     try {
         const { studentId } = req.params;
-        const evaluation = await DataEvaluation.findAll({ where: { studentId: studentId } });
+        const evaluation = await DataEvaluationInternship.findAll({ where: { studentId: studentId } });
 
         if (evaluation) {
             res.json(evaluation);
@@ -53,11 +52,11 @@ router.get("/data-evaluation/:studentId", async (req, res) => {
 });
 
 // API สำหรับลบข้อมูลการประเมินโดยใช้ studentId
-router.delete("/data-evaluation", async (req, res) => {
+router.delete("/data-evaluation-internship", async (req, res) => {
     try {
         const { studentID } = req.body; // ตรวจสอบชื่อฟิลด์ให้ตรงกัน
 
-        const result = await DataEvaluation.destroy({
+        const result = await DataEvaluationInternship.destroy({
             where: { studentId: studentID } // ใช้ studentID
         });
 
@@ -70,6 +69,5 @@ router.delete("/data-evaluation", async (req, res) => {
         res.status(500).send({ message: error.message });
     }
 });
-
 
 module.exports = router;

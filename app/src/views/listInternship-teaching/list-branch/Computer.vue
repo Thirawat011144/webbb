@@ -44,29 +44,36 @@ import Footer from '@/components/HomeView/Footer.vue';
 import config from '../../../../config';
 
 const jobs = ref([]);
-const currentPage = ref(1);
-const perPage = ref(4); // จำนวนสถานที่ฝึกงานต่อหน้า
+const currentPage = ref(1); // ตรวจสอบว่า currentPage ถูกตั้งค่าอย่างถูกต้อง
+const perPage = ref(5); // เปลี่ยนจาก 4 เป็น 5 เพื่อตรวจสอบ
+
 
 const fetchJobs = async () => {
     try {
         const response = await axios.get(`${config.api_path}/companies`);
-        const uniqueAddresses = new Set();
+        // const uniqueAddresses = new Set();
         const uniqueCompanyName = new Set();
 
         jobs.value = response.data
             .filter(job => {
+                console.log('Branch:', job.userDetails.branch); // ตรวจสอบค่า branch
                 if (
                     job.userDetails.branch === 'สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์' &&
-                    !uniqueAddresses.has(job.companyAddress) &&
+                    // !uniqueAddresses.has(job.companyAddress) &&
                     !uniqueCompanyName.has(job.companyName)
                 ) {
-                    uniqueAddresses.add(job.companyAddress);
+                    // uniqueAddresses.add(job.companyAddress);
                     uniqueCompanyName.add(job.companyName);
                     return true;
+                } else {
+                    // พิมพ์ข้อความเมื่อข้อมูลถูกกรองออก
+                    console.log('Filtered out:', job);
                 }
                 return false;
             })
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        console.log('Filtered Jobs:', jobs.value);
     } catch (error) {
         console.error('Error fetching jobs:', error);
     }
@@ -78,11 +85,15 @@ const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('th-TH', options);
 };
 
+
 const paginatedJobs = computed(() => {
     const start = (currentPage.value - 1) * perPage.value;
     const end = start + perPage.value;
-    return jobs.value.slice(start, end);
+    const paginated = jobs.value.slice(start, end);
+    console.log('Paginated Jobs:', paginated); // ตรวจสอบข้อมูลที่ถูกแบ่งหน้า
+    return paginated;
 });
+
 
 const totalPages = computed(() => Math.ceil(jobs.value.length / perPage.value));
 

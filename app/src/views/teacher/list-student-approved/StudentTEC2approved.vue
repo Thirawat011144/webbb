@@ -7,11 +7,15 @@ import { useRoute, useRouter } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router';
 import * as XLSX from 'xlsx'; // import library
 
-const users = ref([]);
+// const route = useRoute();
+// const router = useRouter();
+
+
+const users = ref([]); // เปลี่ยน {} เป็น []
 const isModalVisible = ref(false);
 const modalData = ref(null);
 const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-let branch = null;
+let branch = null
 
 if (userData.branch) {
     branch = userData.branch;
@@ -21,39 +25,8 @@ if (userData.branch) {
 
 const fetchData = async () => {
     try {
-        const usersResponse = await axios.get(`${config.api_path}/users`);
-        const evaluationResponse = await axios.get(`${config.api_path}/data-evaluation`);
-
-        const evaluationCounts = evaluationResponse.data.reduce((counts, evaluation) => {
-            counts[evaluation.studentId] = (counts[evaluation.studentId] || 0) + 1;
-            return counts;
-        }, {});
-
-        // อัปเดตสถานะเป็น 'ผ่าน' หรือ 'ไม่ผ่าน' สำหรับนักศึกษาตามเงื่อนไข
-        const updateStatusPromises = usersResponse.data.map(async user => {
-            if (
-                user.status === "เข้ารับการฝึก" &&
-                user.year === "ป.ตรี ปีที่ 4" &&
-                user.branch === branch
-            ) {
-                if (user.status !== "ไม่ผ่าน" && (evaluationCounts[user.studentID] || 0) >= 3) {
-                    await axios.put(`${config.api_path}/user/${user.id}`, { status: 'ผ่าน' });
-                    user.status = 'ผ่าน';
-                } else if (user.status === "ไม่ผ่าน") {
-                    await axios.put(`${config.api_path}/user/${user.id}`, { status: 'ไม่ผ่าน' });
-                }
-            }
-            return user;
-        });
-
-        const updatedUsers = await Promise.all(updateStatusPromises);
-
-        users.value = updatedUsers.filter(user =>
-            user.status === "เข้ารับการฝึก" &&
-            user.year === "ป.ตรี ปีที่ 4" &&
-            user.branch === branch &&
-            (evaluationCounts[user.studentID] || 0) < 3
-        );
+        const response = await axios.get(`${config.api_path}/users`);
+        users.value = response.data.filter(user => user.status === "อนุมัติ" && user.year === "ป.ตรี ปีที่ 2" && user.branch === branch);
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -85,59 +58,17 @@ const closeModal = () => {
 };
 // modal
 
-const handleStatus = async (id, newStatus) => {
+
+const handleStatus = async (id, newStatus) => { // ฟังก์ชันเพื่ออัพเดตสถานะ
     try {
-        if (newStatus === 'ไม่ผ่าน') {
-            // อัปเดตสถานะเป็น 'ไม่ผ่าน' ทันที
-            const response = await axios.put(`${config.api_path}/user/${id}`, { status: newStatus });
-            if (response.data.message === "Success") {
-                Swal.fire({
-                    title: "สำเร็จ",
-                    text: "อัปเดตสถานะสำเร็จ",
-                    icon: "success",
-                });
-
-                const studentID = response.data.data.studentID; // แก้ไขการเข้าถึง studentID
-                // console.log(studentID);
-
-                // ยิง API ไปที่ data-evaluation เพื่อลบข้อมูลที่มี studentID ตรงกับ id นี้
-                await axios.delete(`${config.api_path}/data-evaluation`, { data: { studentID: studentID } });
-                Swal.fire({
-                    title: "สำเร็จ",
-                    text: "ลบข้อมูลการประเมินสำเร็จ",
-                    icon: "success",
-                });
-                fetchData(); // รีเฟรชข้อมูลหลังจากอัปเดตสถานะและลบข้อมูลการประเมิน
-            }
-            return;
-        }
-        //'เงื่อขของ function นี้คือ ต้องมีชื่อ ผู้ประเมณ 3 ครั้งต่อ 1 ID ถึงจะแอดค่าผ่านได้ ถ้ามีต้องมีผู้ประเมิน 4 คนก็จะเป็น 4 * 3 = 12
-        // ตรวจสอบว่าจำนวนการประเมินของนักศึกษามีครบ 3 ครั้งหรือไม่ก่อนที่จะอนุมัติ 'ผ่าน'
-        const evaluationResponse = await axios.get(`${config.api_path}/data-evaluation`);
-        const evaluationCounts = evaluationResponse.data.reduce((counts, evaluation) => {
-            counts[evaluation.studentId] = (counts[evaluation.studentId] || 0) + 1;
-            return counts;
-        }, {});
-
-        const userEvaluations = evaluationCounts[id] || 0;
-
-        if (userEvaluations < 3 && newStatus === 'ผ่าน') {
-            Swal.fire({
-                title: "ไม่สามารถอนุมัติได้",
-                text: "จำนวนนักศึกษาที่ได้รับการประเมินยังไม่ครบ 3 ครั้ง",
-                icon: "warning"
-            });
-            return;
-        }
-
-        const response = await axios.put(`${config.api_path}/user/${id}`, { status: newStatus });
+        const response = await axios.put(`${config.api_path}/user/${id}`, { status: newStatus }); // ส่งข้อมูลไปที่ API
         if (response.data.message === "Success") {
             Swal.fire({
                 title: "สำเร็จ",
                 text: "อัปเดตสถานะสำเร็จ",
                 icon: "success",
             });
-            fetchData();
+            fetchData(); // รีเฟรชข้อมูลหลังจากอัพเดตสถานะ
         }
     } catch (error) {
         Swal.fire({
@@ -150,6 +81,7 @@ const handleStatus = async (id, newStatus) => {
 
 
 const removeData = async (id) => {
+    // แสดงป๊อปอัพยืนยันการลบ
     const result = await Swal.fire({
         title: 'คุณแน่ใจหรือไม่?',
         text: 'คุณจะไม่สามารถย้อนกลับได้!',
@@ -161,6 +93,7 @@ const removeData = async (id) => {
         cancelButtonText: 'ยกเลิก'
     });
 
+    // ตรวจสอบว่าผู้ใช้กดยืนยันการลบหรือไม่
     if (result.isConfirmed) {
         try {
             const response = await axios.delete(`${config.api_path}/users/${id}`);
@@ -171,7 +104,7 @@ const removeData = async (id) => {
                 icon: 'success',
             }).then((result) => {
                 if (result.value) {
-                    fetchData();
+                    fetchData(); // รีเฟรชข้อมูลหลังจากการลบ
                 }
             });
         } catch (error) {
@@ -185,8 +118,9 @@ const removeData = async (id) => {
     }
 };
 
+
 const sortedUsers = computed(() => {
-    return users.value.slice().sort((a, b) => a.id - b.id);
+    return users.value.slice().sort((a, b) => a.id - b.id); // เรียงลำดับตาม ID
 });
 
 // ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
@@ -200,7 +134,7 @@ const downloadExcel = () => {
         'สถานะ': user.status,
         'เบอร์โทรศัพท์': user.phoneNumber,
         'อีเมล์': user.email,
-        'สถานที่ฝึกประสบการณ์': user.college
+        'สถานที่ฝึกประสบการณ์': user.companyDetails.companyName
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(data);
@@ -219,18 +153,18 @@ onMounted(() => {
     <section class="content mt-4">
         <div class="card">
             <div class="card-header">
-                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรีชั้นปีที่ 4 (กำลังฝึก)
+                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรีชั้นปีที่ 2 (อนุมัติ)
                     <div>
-                        <router-link :to="`/teacher-index/student-tec4req`">
-                            <button class="btn btn-primary m-1"> ขออนุมัติ</button></router-link>
-                        <router-link :to="`/teacher-index/student-tec4approved`">
-                            <button class="btn btn-success m-1"> อนุมัติ</button></router-link>
-                        <router-link :to="`/teacher-index/student-tec4active`"> <button
+                        <router-link :to="`/teacher-index/student-tec2req`"> <button
+                                class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
+                        <router-link :to="`/teacher-index/student-tec2approved`"> <button
+                                class="btn btn-success m-1">อนุมัติ</button></router-link>
+                        <router-link :to="`/teacher-index/student-tec2active`"> <button
                                 class="btn btn-warning m-1">เข้ารับการฝึก</button></router-link>
-                        <router-link :to="`/teacher-index/student-tec4success`"> <button
+                        <router-link :to="`/teacher-index/student-tec2success`"> <button
                                 class="btn btn-success m-1">ผ่าน</button>
                         </router-link>
-                        <router-link :to="`/teacher-index/student-tec4notpass`"> <button
+                        <router-link :to="`/teacher-index/student-tec2notpass`"> <button
                                 class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
                         <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
@@ -239,7 +173,7 @@ onMounted(() => {
                 <table class="table">
                     <thead>
                         <tr>
-                            <!-- <th class="text-center">ลำดับ</th> -->
+                            <th class="text-center">ลำดับ</th>
                             <th>รหัสนักศึกษา</th>
                             <th>ชื่อ-นามสกุล</th>
                             <th>สาขา</th>
@@ -250,7 +184,7 @@ onMounted(() => {
                     </thead>
                     <tbody>
                         <tr v-for="(user, index) in sortedUsers" :key="user.id">
-                            <!-- <td class="text-center">{{ index + 1 }}</td> -->
+                            <td class="text-center">{{ index + 1 }}</td>
                             <td>{{ user.studentID }}</td>
                             <td>{{ user.firstName }} {{ user.lastName }}</td>
                             <td>{{ user.branch }}</td>
@@ -259,13 +193,15 @@ onMounted(() => {
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
                             </td>
                             <td>
-                                <router-link :to="`data-tec4/${user.id}`">
-                                    <button class="btn btn-success m-1">ข้อมูลการประเมิน</button>
-                                </router-link>
-                                <!-- <button class="btn btn-primary" @click="handleStatus(user.id, 'ผ่าน')">ผ่าน</button> -->
+                                <button class="btn btn-primary"
+                                    @click="handleStatus(user.id, 'เข้ารับการฝึก')">เข้ารับการฝึก</button>
                                 &nbsp;
-                                <button class="btn btn-danger"
-                                    @click="handleStatus(user.id, 'ไม่ผ่าน')">ไม่ผ่าน</button>
+                                <!-- <button class="btn btn-danger"
+                                    @click="handleStatus(user.id, 'ไม่ผ่าน')">ไม่ผ่าน</button> -->
+                                <!-- <router-link :to="`/edit-ec4/${user.id}`">
+                                    <button class="btn btn-primary m-1">Edit</button>
+                                </router-link>
+                                <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button> -->
                             </td>
                         </tr>
                     </tbody>
@@ -290,7 +226,19 @@ onMounted(() => {
                         <p>เบอร์โทรศัพท์: {{ modalData.phoneNumber }}</p>
                         <p v-if="modalData.email">Email: {{ modalData.email }}</p>
                         <p v-else></p>
-                        <div v-if="modalData.collegeDetails">
+                        <div v-if="modalData.companyDetails">
+                            <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
+                            <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
+                            <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
+                            <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{
+                                modalData.companyDetails.contactLastName }}</p>
+                            <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
+                            <p v-if="modalData.companyDetails.companyEmail">Email: {{
+                                modalData.companyDetails.companyEmail }}</p>
+                            <p v-else></p>
+                            <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
+                        </div>
+                        <!-- <div v-if="modalData.collegeDetails">
                             <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
                             <p>สถานประกอบการ: {{ modalData.collegeDetails.collegeName }}</p>
                             <p>แผนกวิชาที่นักเรียนเข้ารับการฝึกประสบการณ์วิชาชีพ: {{ modalData.collegeDetails.department
@@ -303,10 +251,11 @@ onMounted(() => {
                                 modalData.collegeDetails.collegeEmail }}</p>
                             <p v-else></p>
                             <p>ที่ตั้งวิทยาลัย: {{ modalData.collegeDetails.collegeAddress }}</p>
+
                         </div>
                         <div v-else>
                             <p>ไม่มีข้อมูลสถานประกอบการ</p>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="closeModal">ปิด</button>

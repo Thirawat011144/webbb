@@ -2,7 +2,15 @@ import HomeEvaluation from '../../views/evaluation/HomeEvaluation.vue'
 import InformationEvaluation from '../../views/evaluation/InformationEvaluation.vue'
 
 import ListStudentTEC4 from '../../views/evaluation/list-student/ListStudentTEC4.vue'
+
 import ListStudentTEC2 from '@/views/evaluation/list-student/ListStudentTEC2.vue'
+import ListEvaluationOneTEC2 from '../../views/evaluation/list-student-evaluation-tec2/ListEvaluationOneTEC2.vue'
+import ListEvaluationTwoTEC2 from '../../views/evaluation/list-student-evaluation-tec2/ListEvaluationTwoTEC2.vue'
+import ListEvaluationThreeTEC2 from '../../views/evaluation/list-student-evaluation-tec2/ListEvaluationThreeTEC2.vue'
+import EvaluationOneTEC2 from '../../views/evaluation/evaluation-tec2/EvaluationOneTEC2.vue'
+import EvaluationTwoTEC2 from '../../views/evaluation/evaluation-tec2/EvaluationTwoTEC2.vue'
+import EvaluationThreeTEC2 from '../../views/evaluation/evaluation-tec2/EvaluationThreeTEC2.vue'
+
 import ListStudentVCR2 from '@/views/evaluation/list-student/ListStudentVCR2.vue'
 
 import ListEvaluationOne from '../../views/evaluation/list-student-evaluation-one/ListEvaluationOne.vue'
@@ -29,9 +37,19 @@ const routeEvaluation = [
             //     component: DataTEC4,
             // },
             {
+                path: 'evaluation-three-tec2/:id',
+                name: 'evaluation-three-tec2/:id',
+                component: EvaluationThreeTEC2,
+            },
+            {
                 path: 'evaluation-three/:id',
                 name: 'evaluation-three/:id',
                 component: EvaluationThree,
+            },
+            {
+                path: 'list-evaluation-three-tec2',
+                name: 'list-evaluation-three-tec2',
+                component: ListEvaluationThreeTEC2,
             },
             {
                 path: 'list-evaluation-three',
@@ -39,9 +57,19 @@ const routeEvaluation = [
                 component: ListEvaluationThree,
             },
             {
+                path: 'evaluation-two-tec2/:id',
+                name: 'evaluation-two-tec2/:id',
+                component: EvaluationTwoTEC2,
+            },
+            {
                 path: 'evaluation-two/:id',
                 name: 'evaluation-two/:id',
                 component: EvaluationTwo,
+            },
+            {
+                path: 'list-evaluation-two-tec2',
+                name: 'list-evaluation-two-tec2',
+                component: ListEvaluationTwoTEC2,
             },
             {
                 path: 'list-evaluation-two',
@@ -68,6 +96,18 @@ const routeEvaluation = [
                 name: 'student-ev-vcr2',
                 component: ListStudentVCR2
             },
+            {
+                path: 'evaluation-one-tec2/:id',
+                name: 'evaluation-one-tec2/:id',
+                component: EvaluationOneTEC2
+            }
+            ,
+            {
+                path: 'list-evaluation-one-tec2',
+                name: 'list-evaluation-one-tec2',
+                component: ListEvaluationOneTEC2
+            }
+            ,
             {
                 path: 'list-evaluation-one',
                 name: 'list-evaluation-one',

@@ -111,7 +111,7 @@ const handleSubmit = async () => {
                                     <select id="academicYear" class="form-control" v-model="academicYear" required>
                                         <option value="" disabled selected>เลือกชั้นปี</option>
                                         <option value="ปี 1">ปี 1</option>
-                                        <option value="ปี 2">ปี 2</option>
+                                        <option value="ป.ตรี ปีที่ 2">ป.ตรี ปีที่ 2</option>
                                         <option value="ปี 3">ปี 3</option>
                                         <option value="ป.ตรี ปีที่ 4">ป.ตรี ปีที่ 4</option>
                                     </select>

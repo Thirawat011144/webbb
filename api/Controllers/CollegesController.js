@@ -166,7 +166,26 @@ router.post('/college', async (req, res) => {
         } else if (status === 'ขออนุมัติ') {
             const existingCollege = await CollegesModel.findOne({ where: { studentID } });
             if (existingCollege) {
-                res.status(409).send({ message: "studentID นี้มีอยู่แล้วในตาราง Colleges" });
+
+                     // อัปเดต status ใน Users table
+                     user.year = academicYear
+                     user.status = status;
+                     user.college = collegeName;
+                     await user.save();
+
+                  // อัปเดตข้อมูลในฐานข้อมูล
+                  existingCollege.collegeName = collegeName;
+                  existingCollege.contactFirstName = contactFirstName;
+                  existingCollege.contactLastName = contactLastName;
+                  existingCollege.collegePhone = collegePhone;
+                  existingCollege.collegeEmail = collegeEmail;
+                  existingCollege.collegeAddress = collegeAddress;
+                  existingCollege.department = department; // อัปเดต department
+                  existingCollege.schoolSize = schoolSize; 
+                  await existingCollege.save();
+  
+                  res.status(200).send({ message: "Success", existingCollege });
+                // res.status(409).send({ message: "studentID นี้มีอยู่แล้วในตาราง Colleges" });
             } else {
                 // อัปเดต status ใน Users table
                 user.year = academicYear

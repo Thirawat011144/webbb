@@ -79,7 +79,7 @@ const getUserName = computed(() => {
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a class="nav-link">
                             <i class="fa-solid fa-user-graduate"></i>
                             <p>
                                 รายชื่อ

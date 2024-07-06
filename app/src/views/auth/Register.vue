@@ -1,9 +1,9 @@
 <script setup>
 import axios from "axios";
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import config from "../../../config";
 import Swal from 'sweetalert2';
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
@@ -19,6 +19,61 @@ const status = ref('');
 const studentID = ref('');
 const email = ref('');
 
+const vocationalBranches = [
+    { value: "สาขาวิชาช่างก่อสร้าง", text: "สาขาวิชาช่างก่อสร้าง" },
+    { value: "สาขาวิชาช่างไฟฟ้ากำลัง", text: "สาขาวิชาช่างไฟฟ้ากำลัง" },
+    { value: "สาขาวิชาช่างยนต์", text: "สาขาวิชาช่างยนต์" },
+    { value: "สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล", text: "สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล" },
+    { value: "สาขาวิชาช่างอิเล็กทรอนิกส์", text: "สาขาวิชาช่างอิเล็กทรอนิกส์" },
+    { value: "สาขาวิชาช่างเทคนิคคอมพิวเตอร์", text: "สาขาวิชาช่างเทคนิคคอมพิวเตอร์" },
+
+    { value: "สาขาวิชาช่างโยธา", text: "สาขาวิชาช่างโยธา" },
+    { value: "สาขาวิชาช่างก่อสร้าง", text: "สาขาวิชาช่างก่อสร้าง" },
+    { value: "สาขาวิชาช่างเครื่องมือกลอัตโนมัติ", text: "สาขาวิชาช่างเครื่องมือกลอัตโนมัติ" },
+    { value: "สาขาวิชาช่างยนต์", text: "สาขาวิชาช่างยนต์" },
+    { value: "สาขาวิชาช่างกลเกษตร", text: "สาขาวิชาช่างกลเกษตร" },
+    { value: "สาขาวิชาช่างกลโรงงาน", text: "สาขาวิชาช่างกลโรงงาน" },
+    { value: "สาขาวิชาช่างท่อและประสาน", text: "สาขาวิชาช่างท่อและประสาน" },
+    { value: "สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล", text: "สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล" },
+    { value: "สาขาวิชาช่างอิเล็กทรอนิกส์", text: "สาขาวิชาช่างอิเล็กทรอนิกส์" },
+    { value: "สาขาวิชาเทคโนโลยีคอมพิวเตอร์", text: "สาขาวิชาเทคโนโลยีคอมพิวเตอร์" },
+];
+
+const highVocationalBranches = [
+    { value: "สาขาวิชาช่างโยธา", text: "สาขาวิชาช่างโยธา" },
+    { value: "สาขาวิชาช่างก่อสร้าง", text: "สาขาวิชาช่างก่อสร้าง" },
+    { value: "สาขาวิชาช่างเครื่องมือกลอัตโนมัติ", text: "สาขาวิชาช่างเครื่องมือกลอัตโนมัติ" },
+    { value: "สาขาวิชาช่างยนต์", text: "สาขาวิชาช่างยนต์" },
+    { value: "สาขาวิชาช่างกลเกษตร", text: "สาขาวิชาช่างกลเกษตร" },
+    { value: "สาขาวิชาช่างกลโรงงาน", text: "สาขาวิชาช่างกลโรงงาน" },
+    { value: "สาขาวิชาช่างท่อและประสาน", text: "สาขาวิชาช่างท่อและประสาน" },
+    { value: "สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล", text: "สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล" },
+    { value: "สาขาวิชาช่างอิเล็กทรอนิกส์", text: "สาขาวิชาช่างอิเล็กทรอนิกส์" },
+    { value: "สาขาวิชาเทคโนโลยีคอมพิวเตอร์", text: "สาขาวิชาเทคโนโลยีคอมพิวเตอร์" },
+]
+
+const bachelorBranches = [
+    { value: "สาขาครุศาสตร์อุตสาหกรรมโยธา", text: "สาขาครุศาสตร์อุตสาหกรรมโยธา" },
+    { value: "สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า", text: "สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า" },
+    { value: "สาขาครุศาสตร์อุตสาหกรรมเครื่องกล", text: "สาขาครุศาสตร์อุตสาหกรรมเครื่องกล" },
+    { value: "สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ", text: "สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ" },
+    { value: "สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม", text: "สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม" },
+    { value: "สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์", text: "สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์" },
+    { value: "สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ", text: "สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ" },
+];
+
+const branches = computed(() => {
+    if (year.value === "ปวช 3") {
+        return vocationalBranches;
+    } else if (year.value === "ปวส 2") {
+        return highVocationalBranches
+    } else if (year.value === "ป.ตรี ปีที่ 2" || year.value === "ป.ตรี ปีที่ 4") {
+        return bachelorBranches;
+    } else {
+        return [];
+    }
+});
+
 const handleRegister = async () => {
     try {
         const payload = {
@@ -32,7 +87,7 @@ const handleRegister = async () => {
             branch: branch.value,
             status: status.value,
             studentID: studentID.value,
-            email:email.value
+            email: email.value
         }
         const response = await axios.post(`${config.api_path}/register`, payload);
         if (response.data.message === "Success") {
@@ -111,7 +166,6 @@ const handleRegister = async () => {
                                                 v-model="email" required placeholder="example@example.com" />
                                         </div>
 
-
                                         <div class="form-outline mb-4">
                                             <label class="form-label" for="form3Example8">Tel</label>
                                             <input type="text" id="form3Example8" class="form-control form-control-lg"
@@ -137,8 +191,13 @@ const handleRegister = async () => {
                                             <h6 class="mb-0 me-4">Year: </h6>
                                             <div class="form-check form-check-inline mb-0 me-4">
                                                 <input class="form-check-input" type="radio" name="yearOptions"
-                                                    id="voc2" value="ปวช 2" v-model="year" required />
-                                                <label class="form-check-label" for="voc2">ปวช 2</label>
+                                                    id="voc2" value="ปวช 3" v-model="year" required />
+                                                <label class="form-check-label" for="voc2">ปวช 3</label>
+                                            </div>
+                                            <div class="form-check form-check-inline mb-0 me-4">
+                                                <input class="form-check-input" type="radio" name="yearOptions"
+                                                    id="voc2" value="ปวช 3" v-model="year" required />
+                                                <label class="form-check-label" for="voc2">ปวส 2</label>
                                             </div>
                                             <div class="form-check form-check-inline mb-0 me-4">
                                                 <input class="form-check-input" type="radio" name="yearOptions"
@@ -158,21 +217,8 @@ const handleRegister = async () => {
                                                     <label for="">สาขา</label>
                                                     <select v-model="branch" class="form-select" required>
                                                         <option value="" disabled>-</option>
-                                                        <option value="สาขาครุศาสตร์อุตสาหกรรมโยธา">
-                                                            สาขาครุศาสตร์อุตสาหกรรมโยธา</option>
-                                                        <option value="สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า">
-                                                            สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า</option>
-                                                        <option value="สาขาครุศาสตร์อุตสาหกรรมเครื่องกล">
-                                                            สาขาครุศาสตร์อุตสาหกรรมเครื่องกล</option>
-                                                        <option value="สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ">
-                                                            สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ</option>
-                                                        <option
-                                                            value="สสาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม">
-                                                            สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม</option>
-                                                        <option value="สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์">
-                                                            สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์</option>
-                                                        <option value="สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ">
-                                                            สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ</option>
+                                                        <option v-for="b in branches" :key="b.value" :value="b.value">{{
+                                                            b.text }}</option>
                                                     </select>
                                                 </div>
                                             </div>

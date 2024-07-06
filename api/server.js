@@ -22,6 +22,7 @@ const ContactController = require('./Controllers/ContactController')
 const CollegesController = require('./Controllers/CollegesController')
 const EvaluationController = require('./Controllers/EvaluationController')
 const DataEvaluationController = require('./Controllers/DataEvaluationController')
+const DataEvaluationInternshipController = require('./Controllers/DataEvaluationInternshipController')
 
 
 const app = express()
@@ -45,6 +46,7 @@ app.use('/api', ContactController)
 app.use('/api', CollegesController)
 app.use('/api', EvaluationController)
 app.use('/api', DataEvaluationController)
+app.use('/api', DataEvaluationInternshipController)
 
 app.listen(port, () => {
     console.log(`Example app listening on port`, port);

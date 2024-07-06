@@ -184,9 +184,8 @@ const submitEvaluation = async () => {
             studentId: student.value.studentID,
             criteria: criteria.value.concat(communityCriteria.value).concat(professionalCriteria.value)
         };
-        console.log("Payload:", payload); // เพิ่มดีบักเพื่อดูข้อมูลที่ส่งไปยังแบ็กเอนด์
-        console.log("Payload Length:", payload.criteria.length); // เพิ่มดีบักเพื่อดูจำนวนข้อ
-        const response = await axios.post(`${config.api_path}/data-evaluation`, payload, {
+        console.log(payload);
+        const response = await axios.post(`${config.api_path}/data-evaluation-internship`, payload, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem(config.token_name)}`
             }
@@ -198,17 +197,7 @@ const submitEvaluation = async () => {
                 icon: "success",
                 timer: 2000
             });
-            // console.log(response.data.user)
-            const userYear = student.value.year;
-            console.log(userYear);
-
-            if (userYear === "ป.ตรี ปีที่ 4") {
-                router.push('/home-evaluation/student-ev-tec4');
-            } else if (userYear === "ป.ตรี ปีที่ 2") {
-                router.push('/home-evaluation/student-ev-tec2');
-            } else {
-                router.push('/home-evaluation/student-ev-vcr2');
-            }
+            router.push('/home-evaluation/student-ev-tec2');
         }
     } catch (error) {
         Swal.fire({
@@ -218,6 +207,7 @@ const submitEvaluation = async () => {
         });
     }
 };
+
 onMounted(() => {
     fetchStudentData();
 });

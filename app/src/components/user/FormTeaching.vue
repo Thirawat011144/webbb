@@ -21,13 +21,13 @@ const schoolSize = ref('')
 const academicYear = ref('')
 const status = ref('');
 
-// if (userData.studentID) {
-//     studentID.value = userData.studentID;
-//     status.value = userData.status;
-//     console.log("sss", status.value)
-// } else {
-//     console.log('No userData found in localStorage');
-// }
+if (userData.studentID) {
+    studentID.value = userData.studentID;
+    // status.value = userData.status;
+    console.log("sss", status.value)
+} else {
+    console.log('No userData found in localStorage');
+}
 
 const handleSubmit = async () => {
     const result = await Swal.fire({

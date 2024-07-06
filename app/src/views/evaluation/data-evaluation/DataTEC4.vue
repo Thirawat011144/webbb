@@ -1,30 +1,31 @@
 <template>
   <div class="content">
-    <div v-if="student">
-      <h2>ข้อมูลนักศึกษา</h2>
-      <p>รหัสนักศึกษา: {{ student.studentID }}</p>
-      <p>ชื่อ-นามสกุล: {{ student.firstName }} {{ student.lastName }}</p>
-      <p>สาขา: {{ student.branch }}</p>
-      <p>ชั้นปี: {{ student.year }}</p>
+    <h2>ข้อมูลนักศึกษา</h2>
+    <div v-if="student" class="student-info college-card">
+
+      <p><span class="label">รหัสนักศึกษา:</span> {{ student.studentID }}</p>
+      <p><span class="label">ชื่อ-นามสกุล:</span> {{ student.firstName }} {{ student.lastName }}</p>
+      <p><span class="label">สาขา:</span> {{ student.branch }}</p>
+      <p><span class="label">ชั้นปี:</span> {{ student.year }}</p>
     </div>
 
-    <div v-if="colleges && colleges.length">
+    <div v-if="colleges && colleges.length" class="college-info">
       <h2>ข้อมูลสถานศึกษาที่ไปฝึกสอน</h2>
-      <div v-for="college in colleges" :key="college.id">
-        <p>ชื่อวิทยาลัย: {{ college.collegeName }}</p>
-        <p>แผนกวิชาที่นักเรียนเข้ารับการฝึกประสบการณ์วิชาชีพ: {{ college.department }}</p>
-        <p>ขนาดสถานศึกษา: {{ college.schoolSize }}</p>
-        <p>ชื่อผู้ประสานงาน: {{ college.contactFirstName }} {{ college.contactLastName }}</p>
-        <p>เบอร์โทรศัพท์: {{ college.collegePhone }}</p>
-        <p>Email: {{ college.collegeEmail }}</p>
-        <p>ที่อยู่: {{ college.collegeAddress }}</p>
+      <div v-for="college in colleges" :key="college.id" class="college-card">
+        <p><span class="label">ชื่อวิทยาลัย:</span> {{ college.collegeName }}</p>
+        <p><span class="label">แผนกวิชาที่นักเรียนเข้ารับการฝึกประสบการณ์วิชาชีพ:</span> {{ college.department }}</p>
+        <p><span class="label">ขนาดสถานศึกษา:</span> {{ college.schoolSize }}</p>
+        <p><span class="label">ชื่อผู้ประสานงาน:</span> {{ college.contactFirstName }} {{ college.contactLastName }}</p>
+        <p><span class="label">เบอร์โทรศัพท์:</span> {{ college.collegePhone }}</p>
+        <p><span class="label">Email:</span> {{ college.collegeEmail }}</p>
+        <p><span class="label">ที่อยู่:</span> {{ college.collegeAddress }}</p>
       </div>
     </div>
 
-    <div v-if="sortedEvaluations.length">
+    <div v-if="sortedEvaluations.length" class="evaluation-info">
       <h2>ข้อมูลการประเมิน</h2>
-      <button @click="downloadExcel">Download Excel</button>
-      <table class="table">
+      <button class="btn" @click="downloadExcel"> Download <i class="fa-solid fa-circle-down"></i></button>
+      <!-- <table class="table">
         <thead>
           <tr>
             <th>ผู้ประเมิน</th>
@@ -40,8 +41,8 @@
             <td>{{ evaluation.evaluatorStatus }}</td>
             <td>{{ evaluation.time }}</td>
             <td>
-              <div v-for="(criterion, index) in evaluation.criteria" :key="criterion.label">
-                <p v-if="criterion.label">ข้อที่ {{ index + 1 }}</p>
+              <div v-for="(criterion, index) in evaluation.criteria" :key="index">
+                <span>ข้อที่ {{ index + 1 }}: {{ criterion.label }}</span>
               </div>
             </td>
             <td>
@@ -51,7 +52,7 @@
             </td>
           </tr>
         </tbody>
-      </table>
+      </table> -->
     </div>
 
     <div v-else>
@@ -72,7 +73,7 @@ import ExcelJS from 'exceljs';
 const route = useRoute();
 const student = ref(null);
 const evaluations = ref([]);
-const colleges = ref([]); // Initialize colleges as an empty array
+const colleges = ref([]);
 
 const fetchStudentData = async () => {
   try {
@@ -169,10 +170,33 @@ const downloadExcel = async () => {
 onMounted(() => {
   fetchStudentData();
 });
-
 </script>
 
 <style scoped>
+.content {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.student-info,
+.college-info,
+.evaluation-info {
+  margin-bottom: 20px;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.college-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -189,8 +213,31 @@ onMounted(() => {
 .table th {
   padding-top: 12px;
   padding-bottom: 12px;
-  text-align: left;
+  text-align: center;
   background-color: #f2f2f2;
   white-space: nowrap;
+}
+
+.table td {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.table td div {
+  text-align: left;
+}
+
+.btn {
+  /* background-color: #28a745; */
+  color: rgb(0, 0, 0);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.btn:hover {
+  background-color: gray
 }
 </style>

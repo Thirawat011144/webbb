@@ -103,15 +103,15 @@ onMounted(() => {
     <section class="content mt-4">
         <div class="card">
             <div class="card-header">
-                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรี ชั้นปีที่ 4
+                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรี ชั้นปีที่ 2
                     <div>
-                        <router-link :to="`/home-evaluation/list-evaluation-one`">
+                        <router-link :to="`/home-evaluation/list-evaluation-one-tec2`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 1 </button>
                         </router-link>
-                        <router-link :to="`/home-evaluation/list-evaluation-two`">
+                        <router-link :to="`/home-evaluation/list-evaluation-two-tec2`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 2 </button>
                         </router-link>
-                        <router-link :to="`/home-evaluation/list-evaluation-three`">
+                        <router-link :to="`/home-evaluation/list-evaluation-three-tec2`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 3 </button>
                         </router-link>
 
@@ -168,18 +168,19 @@ onMounted(() => {
                         <p>เบอร์โทรศัพท์: {{ modalData.phoneNumber }}</p>
                         <p v-if="modalData.email">Email: {{ modalData.email }}</p>
                         <p v-else></p>
-                        <!-- <div v-if="modalData.companyDetails">
-              <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
-              <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
-              <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
-              <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{
-                modalData.companyDetails.contactLastName }}</p>
-              <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
-              <p v-if="modalData.companyDetails.companyEmail">Email: {{ modalData.companyDetails.companyEmail }}</p>
-              <p v-else></p>
-              <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
-            </div> -->
-                        <div v-if="modalData.collegeDetails">
+                        <div v-if="modalData.companyDetails">
+                            <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
+                            <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
+                            <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
+                            <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{
+                                modalData.companyDetails.contactLastName }}</p>
+                            <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
+                            <p v-if="modalData.companyDetails.companyEmail">Email: {{
+                                modalData.companyDetails.companyEmail }}</p>
+                            <!-- <p v-else></p>
+                            <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p> -->
+                        </div>
+                        <!-- <div v-if="modalData.collegeDetails">
                             <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
                             <p>สถานประกอบการ: {{ modalData.collegeDetails.collegeName }}</p>
                             <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{
@@ -190,7 +191,7 @@ onMounted(() => {
                             <p v-else></p>
                             <p>ที่ตั้งวิทยาลัย: {{ modalData.collegeDetails.collegeAddress }}</p>
 
-                        </div>
+                        </div> -->
                         <div v-else>
                             <p>ไม่มีข้อมูลสถานประกอบการ</p>
                         </div>

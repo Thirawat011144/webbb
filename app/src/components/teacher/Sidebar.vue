@@ -52,13 +52,13 @@ const getUserName = computed(() => {
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link to="#" class="nav-link">
+                        <a class="nav-link">
                             <i class="fa-solid fa-user-graduate"></i>
                             <p>
                                 รายชื่อ
                                 <i class="right fas fa-angle-left"></i>
                             </p>
-                        </router-link>
+                        </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
                                 <router-link to="/teacher-index/list-cr2" class="nav-link ms-4">

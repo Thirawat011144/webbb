@@ -13,47 +13,80 @@
             <h4>ข้อมูลนักศึกษาที่ทำการประเมิน</h4>
             <p>ชื่อ: {{ student.firstName }} {{ student.lastName }}</p>
             <p>รหัสนักศึกษา: {{ student.studentID }}</p>
-            <div>
-                <h5>ด้านการจัดการเรียนรู้</h5>
-            </div>
+            <!-- <p>รหัสนักศึกษา: {{ student.year }}</p> -->
             <form @submit.prevent="submitEvaluation">
-                <div v-for="(criterion, index) in criteria" :key="index" class="form-group">
-                    <label :for="'criterion' + index">{{ criterion.label }}</label>
-                    <select :id="'criterion' + index" v-model="criterion.score" class="form-control" required>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
+                <div>
+                    <h5>ด้านการจัดการเรียนรู้</h5>
                 </div>
+                <table class="evaluation-table">
+                    <thead>
+                        <tr>
+                            <th class="text-center">เกณฑ์การประเมิน</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>4</th>
+                            <th>5</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(criterion, index) in criteria" :key="index">
+                            <td>{{ criterion.label }}</td>
+                            <td v-for="score in [1, 2, 3, 4, 5]" :key="score">
+                                <input type="radio" :id="'criterion' + index + '-' + score" :name="'criterion' + index"
+                                    v-model="criterion.score" :value="score" required>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div>
                     <h5>ด้านความสัมพันธ์กับชุมชนและผู้ปกครอง</h5>
                 </div>
-                <div v-for="(criterion, index) in communityCriteria" :key="'community' + index" class="form-group">
-                    <label :for="'community' + index">{{ criterion.label }}</label>
-                    <select :id="'community' + index" v-model="criterion.score" class="form-control" required>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
+                <table class="evaluation-table">
+                    <thead>
+                        <tr>
+                            <th class="text-center">เกณฑ์การประเมิน</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>4</th>
+                            <th>5</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(criterion, index) in communityCriteria" :key="'community' + index">
+                            <td>{{ criterion.label }}</td>
+                            <td v-for="score in [1, 2, 3, 4, 5]" :key="score">
+                                <input type="radio" :id="'community' + index + '-' + score" :name="'community' + index"
+                                    v-model="criterion.score" :value="score" required>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div>
                     <h5>ด้านการปฏิบัติหน้าที่ครูและจรรยาบรรณของวิชาชีพ</h5>
                 </div>
-                <div v-for="(criterion, index) in professionalCriteria" :key="'professional' + index"
-                    class="form-group">
-                    <label :for="'professional' + index">{{ criterion.label }}</label>
-                    <select :id="'professional' + index" v-model="criterion.score" class="form-control" required>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
+                <table class="evaluation-table">
+                    <thead>
+                        <tr>
+                            <th class="text-center">เกณฑ์การประเมิน</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>4</th>
+                            <th>5</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(criterion, index) in professionalCriteria" :key="'professional' + index">
+                            <td>{{ criterion.label }}</td>
+                            <td v-for="score in [1, 2, 3, 4, 5]" :key="score">
+                                <input type="radio" :id="'professional' + index + '-' + score"
+                                    :name="'professional' + index" v-model="criterion.score" :value="score" required>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
                 <button type="submit" class="btn btn-primary">ส่งการประเมิน</button>
             </form>
         </div>
@@ -73,7 +106,8 @@ import config from '../../../../config';
 const route = useRoute();
 const router = useRouter();
 const student = ref(null);
-const time = ref('1')
+const time = ref('3')
+// let userYear = '';
 
 const criteria = ref([
     { label: 'สามารถวิเคราะห์ความสอดคล้องของสาระการเรียนรู้กับมาตรฐานการเรียนรู้ของหลักสูตร แกนกลางและหลักสูตรสถานศึกษา', score: null },
@@ -97,8 +131,8 @@ const communityCriteria = ref([
     // { label: 'สามารถสร้างเครือข่ายความร่วมมือกับชุมชน เข่น ปราชญ์ชาวบ้าน หน่วยงานปกครองของท้องถิ่น เพื่อสนับสนุนการเรียนรู้ที่มีคุณภาพของผู้เรียน', score: null },
     // { label: 'สามารถรายงานการศึกษาบริบทของชุมชนโดยเลือกประเด็นศึกษา  ได้แก่  วิทยากรในชุมชน  ปราชญ์ชาวบ้านในชุมชน  แหล่งเรียนรู้ในชุมชน  วัฒนธรรมของชุมชน  เศรษฐกิจของชุมชน  เป็นต้น', score: null },
     // { label: 'สามารถปฏิบัติตนในการอยู่ร่วมกับชุมชนได้อย่างเหมาะสม', score: null },
-    // { label: 'สามารถรายงานการศึกษาวัฒนธรรมของชุมชนและภูมิปัญญาในท้องถิ่นโดยเลือกศึกษาตามประเด็น  ได้แก่ วิทยากรด้านวัฒนธรรมของชุมชนและภูมิปัญญาในท้องถิ่น  ปราชญ์ชาวบ้านด้านวัฒนธรรมของชุมชนและภูมิปัญญาในท้องถิ่น   แหล่งเรียนรู้ในชุมชนด้านวัฒนธรรมของชุมชนและภูมิปัญญาในท้องถิ่น          การอนุรักษ์วัฒนธรรมและภูมิปัญญาท้องถิ่น  เป็นต้น', score: null },
-    // { label: 'สามารถนำวัฒนธรรมชุมชนและภูมิปัญญาในท้องถิ่นมาบูรณาการในการจัดการเรียนรู้ในซั้นเรียนตามประเด็น  ได้แก่ 	องค์ความรู้ของวิทยากรด้านวัฒนธรรมของชุมชนและภูมิปัญญาในท้องถิ่น  องค์ความรู้ของปราชญ์ซาวบ้านด้านวัฒนธรรมของชุมชนและภูมิปัญญาในท้องถิ่น  องค์ความรู้จากแหล่งเรียนรู้ในชุมชนด้านวัฒนธรรมของชุมชนและภูมิปัญญาในท้องถิ่น เป็นต้น', score: null },
+    // { label: 'สามารถรายงานการศึกษาวัฒนธรรมของชุมชนและภูมิปัญญาในท้องถิ่นโดยเลือกศึกษาตามประเด็น  ได้แก่ วิทยากรด้านวัฒนธรรมของชุมชนและภูมิปัญญาในท้องถิ่น  ปราชญ์ชาวบ้านด้านวัฒนธรรมของชุมชนและภูมิปัญญาในท้องถิ่น   แหล่งเรียนรู้ในชุมชนด้านวัฒนธรรมของชุมชนและภูมิปัญญาในท้องถิ่น การอนุรักษ์วัฒนธรรมและภูมิปัญญาท้องถิ่น  เป็นต้น', score: null },
+    // { label: 'สามารถนำวัฒนธรรมชุมชนและภูมิปัญญาในท้องถิ่นมาบูรณาการในการจัดการเรียนรู้ในชั้นเรียนตามประเด็น ได้แก่ องค์ความรู้ของวิทยากรด้านวัฒนธรรมของชุมชนและภูมิปัญญาในท้องถิ่น องค์ความรู้ของปราชญ์ซาวบ้านด้านวัฒนธรรมของชุมชนและภูมิปัญญาในท้องถิ่น องค์ความรู้จากแหล่งเรียนรู้ในชุมชนด้านวัฒนธรรมของชุมชนและภูมิปัญญาในท้องถิ่น เป็นต้น', score: null },
 ]);
 
 const professionalCriteria = ref([
@@ -113,18 +147,16 @@ const professionalCriteria = ref([
     // { label: 'ประพฤติตนเป็นแบบอย่างที่ดีทั้งทางกาย วาจา และจิตใจ มีคุณธรรมจริยธรรม', score: null },
     // { label: 'ปฏิบัติตนโดยยึดหลักความเป็นธรรมเท่าเทียม และมีส่วนช่วยให้คนในองค์กรอยู่ร่วมกันอย่างสันติ', score: null },
     // { label: 'ปฏิบัติตนตามข้อตกลง กฎกติกาของโรงเรียนด้วยความสมัครใจ ทั้งในด้านการปฏิบัติการสอนและการปฏิบัติหน้าที่อื่นในโรงเรียน', score: null },
-    // { label: 'ติดตามข้อมูลและปรับเปลี่ยนตนเองให้สอดคล้องการเปลี่ยนแปลง          ทางวิชาชีพ วิทยาการ เศรษฐกิจ สังคม และการเมือง', score: null },
+    // { label: 'ติดตามข้อมูลและปรับเปลี่ยนตนเองให้สอดคล้องการเปลี่ยนแปลงทางวิชาชีพ วิทยาการ เศรษฐกิจ สังคม และการเมือง', score: null },
     // { label: 'ศรัทธา ชื่อสัตย์ สุจริต และรับผิดชอบต่อวิชาชีพครู', score: null },
     // { label: 'เป็นสมาชิกที่ดีขององค์กรวิชาชีพ', score: null },
     // { label: 'ให้บริการด้วยความจริงใจและเสมอภาค', score: null },
     // { label: 'ไม่เรียกรับหรือรับผลประโยชน์จากการใช้ตำแหน่งหน้าที่โดยมิชอบ', score: null },
     // { label: 'อุทิศตนเพื่อช่วยเหลือเพื่อนผู้ร่วมประกอบวิชาชีพภายใต้หลักการที่ถูกต้อง', score: null },
-    // { label: 'อุทิศตนเพื่อช่วยเหลือเพื่อนผู้ร่วมประกอบวิชาชีพภายใต้หลักการที่ถูกต้อง', score: null },
     // { label: 'สร้างความสามัคคีในหมู่คณะ', score: null },
-    // { label: 'ริเริ่ม วางแผน หรือ เป็นผู้น่าในการทำกิจกรรมเกี่ยวกับอนุรักษ์และพัฒนา เศรษฐกิจ สังคม ศาสนา ศิลปวัฒนธรรม ภูมิปัญญา หรือ สิ่งแวดล้อมโดยคำนึงถึงผลประโยชน์ของส่วนรวมเป็นสำคัญ', score: null },
+    // { label: 'ริเริ่ม วางแผน หรือ เป็นผู้นำในการทำกิจกรรมเกี่ยวกับอนุรักษ์และพัฒนา เศรษฐกิจ สังคม ศาสนา ศิลปวัฒนธรรม ภูมิปัญญา หรือ สิ่งแวดล้อมโดยคำนึงถึงผลประโยชน์ของส่วนรวมเป็นสำคัญ', score: null },
     // { label: 'ปฏิบัติตนตามกฎระเบียบของสังคมภายใต้ระบอบประชาธิปไตยอันมีพระมหากษัตริย์ทรงเป็นประมุขอย่างเคร่งครัด', score: null },
 ]);
-
 
 const fetchStudentData = async () => {
     try {
@@ -133,19 +165,17 @@ const fetchStudentData = async () => {
                 Authorization: `Bearer ${localStorage.getItem(config.token_name)}`
             }
         });
+
         student.value = response.data;
     } catch (error) {
         console.error('Error fetching student data:', error);
     }
 };
 
+
 const submitEvaluation = async () => {
     try {
-        // const firstName = localStorage.getItem(config.firstName_name);
-        // const lastName = localStorage.getItem(config.token_lastName);
-        // const evaluatorName = localStorage.getItem(config.firstName_name);
         const evaluatorStatus = localStorage.getItem(config.evaluatorStatus)
-        // const evaluatorName = `${firstName} ${lastName}`;
         const evaluatorName = `${localStorage.getItem(config.firstName_name)} ${localStorage.getItem(config.token_lastName)}`;
         const payload = {
             evaluatorStatus: evaluatorStatus,
@@ -155,7 +185,7 @@ const submitEvaluation = async () => {
             criteria: criteria.value.concat(communityCriteria.value).concat(professionalCriteria.value)
         };
         console.log(payload);
-        const response = await axios.post(`${config.api_path}/data-evaluation`, payload, {
+        const response = await axios.post(`${config.api_path}/data-evaluation-internship`, payload, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem(config.token_name)}`
             }
@@ -167,7 +197,7 @@ const submitEvaluation = async () => {
                 icon: "success",
                 timer: 2000
             });
-            router.push('/home-evaluation/student-ev-tec4');
+            router.push('/home-evaluation/student-ev-tec2');
         }
     } catch (error) {
         Swal.fire({
@@ -177,6 +207,7 @@ const submitEvaluation = async () => {
         });
     }
 };
+
 onMounted(() => {
     fetchStudentData();
 });
@@ -187,8 +218,41 @@ onMounted(() => {
     padding: 20px;
 }
 
+.evaluation-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.evaluation-table th,
+.evaluation-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    /* text-align: center; */
+}
+
+.evaluation-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.form-check-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+}
+
+.form-check-label {
+    margin-left: 5px;
 }
 
 .btn {

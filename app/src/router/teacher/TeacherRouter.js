@@ -15,6 +15,7 @@ import StudentTEC2req from '../../views/teacher/list-student-request/StudentTEC2
 import StudentTEC4req from '../../views/teacher/list-student-request/StudentTEC4req.vue'
 
 import StudentTEC4approved from '../../views/teacher/list-student-approved/StudentTEC4approved.vue'
+import StudentTEC2approved from '../../views/teacher/list-student-approved/StudentTEC2approved.vue'
 
 import StudentVCR2active from '../../views/teacher/list-student-active/StudentVCR2active.vue'
 import StudentTEC2active from '../../views/teacher/list-student-active/StudentTEC2active.vue'
@@ -24,6 +25,7 @@ import StudentVCR2success from '../../views/teacher/list-student-success/Student
 import StudentTEC2success from '../../views/teacher/list-student-success/StudentTEC2success.vue'
 import StudentTEC4success from '../../views/teacher/list-student-success/StudentTEC4success.vue'
 
+import DataTEC2 from '../../views/evaluation/data-evaluation/DataTEC2.vue'
 import DataTEC4 from '../../views/evaluation/data-evaluation/DataTEC4.vue'
 
 import StudentVCR2notpass from '../../views/teacher/list-student-notpass/StudentVCR2NotPass.vue'
@@ -36,6 +38,11 @@ const routeTeacher = [
         name: 'teacher-home',
         component: TeacherIndex,
         children: [
+            {
+                path: 'data-tec2/:id',
+                name: 'data-tec2/:id',
+                component: DataTEC2
+            },
             {
                 path: 'data-tec4/:id',
                 name: 'data-tec4/:id',
@@ -96,6 +103,11 @@ const routeTeacher = [
                 path: 'student-tec4req',
                 name: 'student-tec4req',
                 component: StudentTEC4req
+            },
+            {
+                path: 'student-tec2approved',
+                name: 'student-tec2approved',
+                component: StudentTEC2approved
             },
             {
                 path: 'student-tec4approved',
