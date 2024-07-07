@@ -7,7 +7,6 @@ import { useRoute, useRouter } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router';
 import * as XLSX from 'xlsx'; // import library
 
-
 // const route = useRoute();
 // const router = useRouter();
 
@@ -29,10 +28,11 @@ const users = ref([]); // เปลี่ยน {} เป็น []
 const isModalVisible = ref(false);
 const modalData = ref(null);
 
+
 const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => user.status === "ขออนุมัติ" && user.year === "ป.ตรี ปีที่ 2");
+        users.value = response.data.filter(user => user.status === "อนุมัติ" && user.year === "ปวช 3");
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -63,7 +63,6 @@ const closeModal = () => {
     modalData.value = null;
 };
 // modal
-
 
 const removeData = async (id) => {
     // แสดงป๊อปอัพยืนยันการลบ
@@ -110,23 +109,24 @@ const sortedUsers = computed(() => {
 
 // ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
 const downloadExcel = () => {
-  const data = sortedUsers.value.map(user => ({
-    'รหัสนักศึกษา': user.studentID,
-    'ชื่อ': user.firstName,
-    'นามสกุล': user.lastName,
-    'สาขา': user.branch,
-    'ชั้นปี': user.year,
-    'สถานะ': user.status,
-    'เบอร์โทรศัพท์': user.phoneNumber,
-    'อีเมล์': user.email,
-    'สถานที่ฝึกประสบการณ์': user.companyDetails?.companyName || 'ไม่มีข้อมมูล'
-  }));
+    const data = sortedUsers.value.map(user => ({
+        'รหัสนักศึกษา': user.studentID,
+        'ชื่อ': user.firstName,
+        'นามสกุล': user.lastName,
+        'สาขา': user.branch,
+        'ชั้นปี': user.year,
+        'สถานะ': user.status,
+        'เบอร์โทรศัพท์': user.phoneNumber,
+        'อีเมล์': user.email,
+        'สถานที่ฝึกประสบการณ์': user.companyDetails?.companyName || 'ไม่มีข้อมมูล'
+    }));
 
-  const worksheet = XLSX.utils.json_to_sheet(data);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
-  XLSX.writeFile(workbook, 'students.xlsx');
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+    XLSX.writeFile(workbook, 'students.xlsx');
 };
+
 
 onMounted(() => {
     fetchData();
@@ -137,17 +137,17 @@ onMounted(() => {
     <section class="content">
         <div class="card">
             <div class="card-header">
-                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรีชั้นปีที่ 2 (ผู้ขออนุมัติ)
+                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นประกาศนียบัตรวิชาชีพ ชั้นปีที่ 3 (อนุมัติ)
                     <div>
-                        <router-link :to="`/admin-index/Ec2-req`"> <button
+                        <router-link :to="`/admin-index/cr2-req`"> <button
                                 class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
-                        <router-link :to="`/admin-index/Ec2-approved`"> <button
+                        <router-link :to="`/admin-index/vcr2-approved`"> <button
                                 class="btn btn-success m-1">อนุมัติ</button></router-link>
-                        <router-link :to="`/admin-index/Ec2-active`"> <button
+                        <router-link :to="`/admin-index/cr2-active`"> <button
                                 class="btn btn-warning m-1">กำลังฝึก</button></router-link>
-                        <router-link :to="`/admin-index/Ec2-success`"> <button class="btn btn-success m-1">ผ่าน</button>
+                        <router-link :to="`/admin-index/cr2-success`"> <button class="btn btn-success m-1">ผ่าน</button>
                         </router-link>
-                        <router-link :to="`/admin-index/Ec2-notpass`"> <button
+                        <router-link :to="`/admin-index/cr2-notpass`"> <button
                                 class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
                         <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
@@ -176,10 +176,12 @@ onMounted(() => {
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
                             </td>
                             <td>
-                                <router-link :to="`/edit-ec2/${user.id}`">
-                                    <button class="btn btn-primary m-1">Edit</button>
+                                <router-link :to="`/edit-ec4/${user.id}`">
+                                    <button class="btn btn-primary m-1"><i
+                                            class="fa-solid fa-pen-to-square"></i></button>
                                 </router-link>
-                                <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button>
+                                <button @click="removeData(user.id)" class="btn btn-danger m-1"><i
+                                        class="fa-solid fa-trash-can"></i></button>
                             </td>
                         </tr>
                     </tbody>
@@ -216,9 +218,9 @@ onMounted(() => {
                             <p v-else></p>
                             <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
                         </div>
-                        <div v-else-if="modalData.collegeDetails">
+                        <div v-if="modalData.collegeDetails">
                             <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
-                            <p>สถานประกอบการ: {{ modalData.collegeDetails.collegeName }}</p>
+                            <p>โรงเรียน/วิทยาลัย: {{ modalData.collegeDetails.collegeName }}</p>
                             <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{
                                 modalData.collegeDetails.contactLastName }}</p>
                             <p>เบอร์โทรศัพท์: {{ modalData.collegeDetails.collegePhone }}</p>

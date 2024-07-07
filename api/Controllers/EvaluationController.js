@@ -101,5 +101,21 @@ router.get("/evaluation/:id", async (req, res) => {
     }
 });
 
+// Update current study field
+router.put("/evaluation/:id", async (req, res) => {
+    try {
+        const user = await Evaluation.findByPk(req.params.id);
+        if (!user) {
+            return res.status(404).send({ message: "User not found" });
+        }
+        
+        user.currentStudyField = req.body.currentStudyField;
+        await user.save();
+
+        res.json({ message: "Current study field updated successfully", user });
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+});
 
 module.exports = router;

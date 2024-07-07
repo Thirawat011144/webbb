@@ -4,6 +4,8 @@ import { ref, onMounted, computed } from 'vue';
 import config from "../../../../config";
 import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
+import * as XLSX from 'xlsx'; // import library
+
 
 const route = useRoute();
 const router = useRouter();
@@ -96,6 +98,27 @@ const sortedUsers = computed(() => {
   return users.value.slice().sort((a, b) => a.id - b.id); // เรียงลำดับตาม ID
 });
 
+
+// ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
+const downloadExcel = () => {
+  const data = sortedUsers.value.map(user => ({
+    'รหัสนักศึกษา': user.studentID,
+    'ชื่อ': user.firstName,
+    'นามสกุล': user.lastName,
+    'สาขา': user.branch,
+    'ชั้นปี': user.year,
+    'สถานะ': user.status,
+    'เบอร์โทรศัพท์': user.phoneNumber,
+    'อีเมล์': user.email,
+    'สถานที่ฝึกประสบการณ์': user.companyDetails?.companyName || 'ไม่มีข้อมมูล'
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(data);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+  XLSX.writeFile(workbook, 'students.xlsx');
+};
+
 onMounted(() => {
   fetchData();
 });
@@ -109,12 +132,15 @@ onMounted(() => {
           <div>
             <router-link :to="`/admin-index/Ec2-req`"> <button
                 class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
+            <router-link :to="`/admin-index/Ec2-approved`"> <button
+                class="btn btn-success m-1">อนุมัติ</button></router-link>
             <router-link :to="`/admin-index/Ec2-active`"> <button
                 class="btn btn-warning m-1">กำลังฝึก</button></router-link>
             <router-link :to="`/admin-index/Ec2-success`"> <button class="btn btn-success m-1">ผ่าน</button>
             </router-link>
             <router-link :to="`/admin-index/Ec2-notpass`"> <button class="btn btn-danger m-1">ไม่ผ่าน</button>
             </router-link>
+            <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
           </div>
         </div>
         <table class="table">
@@ -144,7 +170,7 @@ onMounted(() => {
                   <button class="btn btn-primary m-1"><i class="fa-solid fa-pen-to-square"></i></button>
                 </router-link>
                 <button @click="removeData(user.id)" class="btn btn-danger m-1"><i
-                  class="fa-solid fa-trash-can"></i></button>
+                    class="fa-solid fa-trash-can"></i></button>
               </td>
             </tr>
           </tbody>
@@ -179,7 +205,7 @@ onMounted(() => {
               <p v-else></p>
               <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
             </div>
-            <div v-else-if="modalData.collegeDetails">
+            <!-- <div v-else-if="modalData.collegeDetails">
               <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
               <p>สถานประกอบการ: {{ modalData.collegeDetails.collegeName }}</p>
               <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{
@@ -189,7 +215,7 @@ onMounted(() => {
               <p v-else></p>
               <p>ที่ตั้งวิทยาลัย: {{ modalData.collegeDetails.collegeAddress }}</p>
 
-            </div>
+            </div> -->
             <div v-else>
               <p>ไม่มีข้อมูลสถานประกอบการ</p>
             </div>

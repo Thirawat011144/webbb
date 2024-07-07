@@ -16,6 +16,7 @@ import StudentTEC4req from '../../views/teacher/list-student-request/StudentTEC4
 
 import StudentTEC4approved from '../../views/teacher/list-student-approved/StudentTEC4approved.vue'
 import StudentTEC2approved from '../../views/teacher/list-student-approved/StudentTEC2approved.vue'
+import StudentVCRapproved from '../../views/teacher/list-student-approved/StudentVCRapproved.vue'
 
 import StudentVCR2active from '../../views/teacher/list-student-active/StudentVCR2active.vue'
 import StudentTEC2active from '../../views/teacher/list-student-active/StudentTEC2active.vue'
@@ -103,6 +104,11 @@ const routeTeacher = [
                 path: 'student-tec4req',
                 name: 'student-tec4req',
                 component: StudentTEC4req
+            },
+            {
+                path: 'student-vcr-approved',
+                name: 'student-vcr-approved',
+                component: StudentVCRapproved
             },
             {
                 path: 'student-tec2approved',

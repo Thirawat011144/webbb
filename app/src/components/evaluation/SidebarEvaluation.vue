@@ -62,7 +62,7 @@ const getUserName = computed(() => {
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
                                 <router-link to="/home-evaluation/student-ev-vcr2" class="nav-link ms-4">
-                                    <p>ปวช ชั้นปีที่ 2</p>
+                                    <p>ปวช ชั้นปีที่ 3</p>
                                 </router-link>
                             </li>
                             <li class="nav-item">

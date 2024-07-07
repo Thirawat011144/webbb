@@ -5,10 +5,25 @@ import config from "../../../../config";
 import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router';
+import * as XLSX from 'xlsx'; // import library
+
 
 // const route = useRoute();
 // const router = useRouter();
 
+// const user = ref({
+//   firstName: '',
+//   lastName: '',
+//   userName: '',
+//   password: '',
+//   phoneNumber: '',
+//   gender: '',
+//   year: '',
+//   branch: '',
+//   status: '',
+//   studentID: '',
+//   company: ''
+// });
 
 const users = ref([]); // เปลี่ยน {} เป็น []
 const isModalVisible = ref(false);
@@ -17,7 +32,7 @@ const modalData = ref(null);
 const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => user.status === "ขออนุมัติ" && user.year === "ปวช 2");
+        users.value = response.data.filter(user => user.status === "ขออนุมัติ" && user.year === "ปวช 3");
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -93,6 +108,26 @@ const sortedUsers = computed(() => {
     return users.value.slice().sort((a, b) => a.id - b.id); // เรียงลำดับตาม ID
 });
 
+// ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
+const downloadExcel = () => {
+    const data = sortedUsers.value.map(user => ({
+        'รหัสนักศึกษา': user.studentID,
+        'ชื่อ': user.firstName,
+        'นามสกุล': user.lastName,
+        'สาขา': user.branch,
+        'ชั้นปี': user.year,
+        'สถานะ': user.status,
+        'เบอร์โทรศัพท์': user.phoneNumber,
+        'อีเมล์': user.email,
+        'สถานที่ฝึกประสบการณ์': user.companyDetails?.companyName || 'ไม่มีข้อมมูล'
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+    XLSX.writeFile(workbook, 'students.xlsx');
+};
+
 onMounted(() => {
     fetchData();
 });
@@ -102,10 +137,12 @@ onMounted(() => {
     <section class="content">
         <div class="card">
             <div class="card-header">
-                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นประกาศนียบัตรวิชาชีพ ชั้นปีที่ 2 (ผู้ขออนุมัติ)
+                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นประกาศนียบัตรวิชาชีพ ชั้นปีที่ 3 (ผู้ขออนุมัติ)
                     <div>
                         <router-link :to="`/admin-index/cr2-req`"> <button
                                 class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
+                        <router-link :to="`/admin-index/vcr2-approved`"> <button
+                                class="btn btn-success m-1">อนุมัติ</button></router-link>
                         <router-link :to="`/admin-index/cr2-active`"> <button
                                 class="btn btn-warning m-1">กำลังฝึก</button></router-link>
                         <router-link :to="`/admin-index/cr2-success`"> <button class="btn btn-success m-1">ผ่าน</button>
@@ -113,6 +150,7 @@ onMounted(() => {
                         <router-link :to="`/admin-index/cr2-notpass`"> <button
                                 class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
+                        <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
                     </div>
                 </div>
                 <table class="table">
@@ -138,7 +176,7 @@ onMounted(() => {
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
                             </td>
                             <td>
-                                <router-link :to="`/edit-cr2/${user.id}`">
+                                <router-link :to="`/edit-ec2/${user.id}`">
                                     <button class="btn btn-primary m-1">Edit</button>
                                 </router-link>
                                 <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button>

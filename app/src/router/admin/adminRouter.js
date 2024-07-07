@@ -34,6 +34,8 @@ import Ec2Req from '../../views/admin/list-student-request/Ec2Req.vue';
 import Ec4Req from '../../views/admin/list-student-request/Ec4Req.vue';
 
 import Ec4Approved from '../../views/admin/list-student-approved/Ec4Approved.vue'
+import Ec2Approved from '../../views/admin/list-student-approved/Ec2Approved.vue'
+import VCRApproved from '../../views/admin/list-student-approved/VCRApproved.vue'
 
 import Cr2Active from "../../views/admin/list-student-active/Cr2Active.vue";
 import Ec2Active from "../../views/admin/list-student-active/Ec2Active.vue";
@@ -147,6 +149,16 @@ const routeAdmin = [
         path: 'cr2-req',
         name: 'cr2-req',
         component: Cr2Req
+      },
+      {
+        path: 'vcr2-approved',
+        name: 'vcr2-approved',
+        component: VCRApproved
+      },
+      {
+        path: 'ec2-approved',
+        name: 'ec2-approved',
+        component: Ec2Approved
       },
       {
         path: 'ec4-approved',

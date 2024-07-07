@@ -5,6 +5,8 @@ import config from "../../../../config";
 import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router';
+import * as XLSX from 'xlsx'; // import library
+
 
 // const route = useRoute();
 // const router = useRouter();
@@ -25,7 +27,7 @@ if (userData.branch) {
 const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => user.status === "ขออนุมัติ" && user.year === "ปวช 2" && user.branch === branch);
+        users.value = response.data.filter(user => user.status === "ขออนุมัติ" && user.year === "ปวช 3" && user.branch === branch);
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -121,6 +123,27 @@ const sortedUsers = computed(() => {
     return users.value.slice().sort((a, b) => a.id - b.id); // เรียงลำดับตาม ID
 });
 
+// ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
+const downloadExcel = () => {
+    const data = sortedUsers.value.map(user => ({
+        'รหัสนักศึกษา': user.studentID,
+        'ชื่อ': user.firstName,
+        'นามสกุล': user.lastName,
+        'สาขา': user.branch,
+        'ชั้นปี': user.year,
+        'สถานะ': user.status,
+        'เบอร์โทรศัพท์': user.phoneNumber,
+        'อีเมล์': user.email,
+        'สถานที่ฝึกประสบการณ์': user.companyDetails.companyName
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+    XLSX.writeFile(workbook, 'students.xlsx');
+};
+
+
 onMounted(() => {
     fetchData();
 });
@@ -130,10 +153,12 @@ onMounted(() => {
     <section class="content mt-4">
         <div class="card">
             <div class="card-header">
-                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นประกาศนียบัตรวิชาชีพ ชั้นปีที่ 2 (ผู้ขออนุมัติ)
+                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นประกาศนียบัตรวิชาชีพ ชั้นปีที่ 3 (ผู้ขออนุมัติ)
                     <div>
                         <router-link :to="`/teacher-index/student-vcr2req`"> <button
                                 class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
+                        <router-link :to="`/teacher-index/student-vcr-approved`"> <button
+                                class="btn btn-success m-1">อนุมัติ</button></router-link>
                         <router-link :to="`/teacher-index/student-vcr2active`"> <button
                                 class="btn btn-warning m-1">กำลังฝึก</button></router-link>
                         <router-link :to="`/teacher-index/student-vcr2success`"> <button
@@ -142,6 +167,7 @@ onMounted(() => {
                         <router-link :to="`/teacher-index/student-vcr2notpass`"> <button
                                 class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
+                        <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
                     </div>
                 </div>
                 <table class="table">
@@ -181,55 +207,58 @@ onMounted(() => {
                 </table>
             </div>
         </div>
-     <!-- Modal -->
-     <div v-if="isModalVisible" class="modal fade show" tabindex="-1" style="display: block;">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="infoModalLabel">ข้อมูลผู้ใช้</h5>
-            <button type="button" class="btn-close" @click="isModalVisible = false" aria-label="Close"></button>
-          </div>
-          <div class="modal-body" v-if="modalData">
-            <p>รหัสนักศึกษา: {{ modalData.studentID }}</p>
-            <p>ชื่อ-นามสกุล: {{ modalData.firstName }} {{ modalData.lastName }}</p>
-            <p>สาขา: {{ modalData.branch }}</p>
-            <p>ชั้นปี: {{ modalData.year }}</p>
-            <p>สถานะ: {{ modalData.status }}</p>
-            <p>เบอร์โทรศัพท์: {{ modalData.phoneNumber }}</p>
-            <p v-if="modalData.email">Email: {{ modalData.email }}</p>
-            <p v-else></p>
-            <div v-if="modalData.companyDetails">
-              <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
-              <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
-              <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
-              <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{
-                modalData.companyDetails.contactLastName }}</p>
-              <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
-              <p v-if="modalData.companyDetails.companyEmail">Email: {{ modalData.companyDetails.companyEmail }}</p>
-              <p v-else></p>
-              <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
-            </div>
-            <div v-else-if="modalData.collegeDetails">
-              <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
-              <p>สถานประกอบการ: {{ modalData.collegeDetails.collegeName }}</p>
-              <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{
-                modalData.collegeDetails.contactLastName }}</p>
-              <p>เบอร์โทรศัพท์: {{ modalData.collegeDetails.collegePhone }}</p>
-              <p v-if="modalData.collegeDetails.collegeEmail">Email: {{ modalData.collegeDetails.collegeEmail }}</p>
-              <p v-else></p>
-              <p>ที่ตั้งวิทยาลัย: {{ modalData.collegeDetails.collegeAddress }}</p>
+        <!-- Modal -->
+        <div v-if="isModalVisible" class="modal fade show" tabindex="-1" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="infoModalLabel">ข้อมูลผู้ใช้</h5>
+                        <button type="button" class="btn-close" @click="isModalVisible = false"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" v-if="modalData">
+                        <p>รหัสนักศึกษา: {{ modalData.studentID }}</p>
+                        <p>ชื่อ-นามสกุล: {{ modalData.firstName }} {{ modalData.lastName }}</p>
+                        <p>สาขา: {{ modalData.branch }}</p>
+                        <p>ชั้นปี: {{ modalData.year }}</p>
+                        <p>สถานะ: {{ modalData.status }}</p>
+                        <p>เบอร์โทรศัพท์: {{ modalData.phoneNumber }}</p>
+                        <p v-if="modalData.email">Email: {{ modalData.email }}</p>
+                        <p v-else></p>
+                        <div v-if="modalData.companyDetails">
+                            <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
+                            <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
+                            <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
+                            <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{
+                                modalData.companyDetails.contactLastName }}</p>
+                            <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
+                            <p v-if="modalData.companyDetails.companyEmail">Email: {{
+                                modalData.companyDetails.companyEmail }}</p>
+                            <p v-else></p>
+                            <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
+                        </div>
+                        <div v-else-if="modalData.collegeDetails">
+                            <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
+                            <p>สถานประกอบการ: {{ modalData.collegeDetails.collegeName }}</p>
+                            <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{
+                                modalData.collegeDetails.contactLastName }}</p>
+                            <p>เบอร์โทรศัพท์: {{ modalData.collegeDetails.collegePhone }}</p>
+                            <p v-if="modalData.collegeDetails.collegeEmail">Email: {{
+                                modalData.collegeDetails.collegeEmail }}</p>
+                            <p v-else></p>
+                            <p>ที่ตั้งวิทยาลัย: {{ modalData.collegeDetails.collegeAddress }}</p>
 
+                        </div>
+                        <div v-else>
+                            <p>ไม่มีข้อมูลสถานประกอบการ</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="closeModal">ปิด</button>
+                    </div>
+                </div>
             </div>
-            <div v-else>
-              <p>ไม่มีข้อมูลสถานประกอบการ</p>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="closeModal">ปิด</button>
-          </div>
         </div>
-      </div>
-    </div>
     </section>
 </template>
 

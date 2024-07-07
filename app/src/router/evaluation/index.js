@@ -12,6 +12,9 @@ import EvaluationTwoTEC2 from '../../views/evaluation/evaluation-tec2/Evaluation
 import EvaluationThreeTEC2 from '../../views/evaluation/evaluation-tec2/EvaluationThreeTEC2.vue'
 
 import ListStudentVCR2 from '@/views/evaluation/list-student/ListStudentVCR2.vue'
+import ListEvaluationOneVCR from '../../views/evaluation/list-student-evaluation-vcr/ListEvaluationOneVCR.vue'
+import ListEvaluationTwoVCR from '../../views/evaluation/list-student-evaluation-vcr/ListEvaluationTwoVCR.vue'
+import ListEvaluationThreeVCR from '../../views/evaluation/list-student-evaluation-vcr/ListEvaluationThreeVCR.vue'
 
 import ListEvaluationOne from '../../views/evaluation/list-student-evaluation-one/ListEvaluationOne.vue'
 import EvaluationOne from '../../views/evaluation/evaluation-tec4/EvaluationOne.vue'
@@ -47,6 +50,11 @@ const routeEvaluation = [
                 component: EvaluationThree,
             },
             {
+                path: 'list-evaluation-three-vcr',
+                name: 'list-evaluation-three-vcr',
+                component: ListEvaluationThreeVCR,
+            },
+            {
                 path: 'list-evaluation-three-tec2',
                 name: 'list-evaluation-three-tec2',
                 component: ListEvaluationThreeTEC2,
@@ -65,6 +73,11 @@ const routeEvaluation = [
                 path: 'evaluation-two/:id',
                 name: 'evaluation-two/:id',
                 component: EvaluationTwo,
+            },
+            {
+                path: 'list-evaluation-two-vcr',
+                name: 'list-evaluation-two-vcr',
+                component: ListEvaluationTwoVCR,
             },
             {
                 path: 'list-evaluation-two-tec2',
@@ -100,6 +113,12 @@ const routeEvaluation = [
                 path: 'evaluation-one-tec2/:id',
                 name: 'evaluation-one-tec2/:id',
                 component: EvaluationOneTEC2
+            }
+            ,
+            {
+                path: 'list-evaluation-one-vcr',
+                name: 'list-evaluation-one-vcr',
+                component: ListEvaluationOneVCR
             }
             ,
             {

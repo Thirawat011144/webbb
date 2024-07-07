@@ -1,12 +1,11 @@
 <template>
-    <div class="flex-grow-1 p-3 ">
+    <div class="flex-grow-1 p-3">
         <h2>ข้อมูลส่วนตัว</h2>
         <div class="card" v-if="dataResult">
             <div class="card-body">
                 <h5 class="card-title">
                     <span>ชื่อ:</span> {{ dataResult.firstName }} <span>นามสกุล:</span> {{ dataResult.lastName }}
                 </h5>
-
                 <p class="card-text">
                     <span>ชื่อผู้ใช้:</span> {{ dataResult.userName }}
                 </p>
@@ -19,37 +18,38 @@
                 <p class="card-text">
                     <span>สถานะผู้ประเมินสมรรถนะวิชาชีพครู:</span> {{ dataResult.evaluatorStatus }}
                 </p>
-                <p class="card-text">
-                    <span>สาขาวิชาที่นักศึกษากำลังศึกษา:</span> {{ dataResult.currentStudyField }}
+                <p class="card-text branch-container">
+                    <span>สาขาวิชาที่นักศึกษากำลังศึกษา:</span>
+                    <select class="branch-select col-md-5 form-select" v-model="dataResult.currentStudyField"
+                        @change="updateCurrentStudyField">
+                        <option value="สาขาครุศาสตร์อุตสาหกรรมโยธา">สาขาครุศาสตร์อุตสาหกรรมโยธา</option>
+                        <option value="สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า">สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า</option>
+                        <option value="สาขาครุศาสตร์อุตสาหกรรมเครื่องกล">สาขาครุศาสตร์อุตสาหกรรมเครื่องกล</option>
+                        <option value="สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ">สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ</option>
+                        <option value="สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม">
+                            สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม</option>
+                        <option value="สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์">สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์</option>
+                        <option value="สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ">สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ</option>
+                        <option value="สาขาวิชาช่างเทคนิคคอมพิวเตอร์">สาขาวิชาช่างเทคนิคคอมพิวเตอร์</option>
+                    </select>
                 </p>
-                <!-- <p class="card-text">
-                    <span>ชื่อสถานศึกษาที่นักศึกษาเข้ารับการปฏิบัติการสอน:</span> {{ dataResult.schoolName }}
-                </p> -->
-                <!-- <p class="card-text">
-                    <span>แผนกวิชาที่นักศึกษาเข้ารับการปฏิบัติการสอน:</span> {{ dataResult.department }}
-                </p> -->
-                <!-- <p class="card-text">
-                    <span>ขนาดสถานศึกษา:</span> {{ dataResult.schoolSize }}
-                </p> -->
-                <!-- <p class="card-text">
-                    <span>ความสัมพันธ์ของรายวิชาปฏิบัติการสอน:</span> {{ dataResult.courseRelation }}
-                </p> -->
-
+                <button @click="saveChanges" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
             </div>
         </div>
         <div v-else>
             <p>Loading...</p>
         </div>
-        <router-view></router-view>
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 import config from '../../../config';
 
 const dataResult = ref(null);
+const loading = ref(true);
 
 const fetchData = async () => {
     const token = localStorage.getItem(config.token_name);
@@ -67,9 +67,58 @@ const fetchData = async () => {
             }
         } catch (error) {
             console.error('Error fetching data:', error);
+        } finally {
+            loading.value = false;
         }
     }
-}
+};
+
+const updateCurrentStudyField = () => {
+    console.log('Current study field updated to:', dataResult.value.currentStudyField);
+};
+
+const saveChanges = async () => {
+    const result = await Swal.fire({
+        title: 'คุณแน่ใจหรือไม่?',
+        text: 'คุณต้องการบันทึกการเปลี่ยนแปลงหรือไม่?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, บันทึกเลย!',
+        cancelButtonText: 'ยกเลิก'
+    });
+
+    if (result.isConfirmed) {
+        try {
+            const token = localStorage.getItem(config.token_name);
+            await axios.put(`${config.api_path}/evaluation/${dataResult.value.id}`,
+                { currentStudyField: dataResult.value.currentStudyField },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+            Swal.fire({
+                title: 'สำเร็จ',
+                text: 'บันทึกการเปลี่ยนแปลงสำเร็จ',
+                icon: 'success',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetchData(); // รีเฟรชข้อมูลหลังจากการบันทึก
+                }
+            });
+        } catch (error) {
+            Swal.fire({
+                title: 'เกิดข้อผิดพลาด',
+                text: 'ไม่สามารถบันทึกการเปลี่ยนแปลงได้',
+                icon: 'error',
+            });
+            console.error('Error saving changes:', error);
+        }
+    }
+};
 
 onMounted(() => {
     fetchData();
@@ -79,5 +128,25 @@ onMounted(() => {
 <style scoped>
 span {
     font-weight: bold;
+}
+
+.card-text {
+    display: flex;
+    align-items: center;
+}
+
+.branch-container {
+    display: flex;
+    align-items: center;
+}
+
+.branch-container span {
+    vertical-align: middle;
+}
+
+.branch-select {
+    margin-left: 10px;
+    flex-grow: 1;
+    height: auto;
 }
 </style>
