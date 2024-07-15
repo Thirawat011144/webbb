@@ -245,7 +245,8 @@ const handleRegister = async () => {
                                             <div class="col-md-6 mb-4">
                                                 <div class="form-outline">
                                                     <label class="form-label"
-                                                        for="currentStudyField">สาขาวิชาที่นักศึกษากำลังศึกษา</label>
+                                                        for="currentStudyField">สาขาวิชาที่นักศึกษากำลังศึกษา
+                                                        (สามารถเปลี่ยนแปลงได้)</label>
                                                     <select id="currentStudyField" class="form-control form-control-lg"
                                                         v-model="currentStudyField" required>
                                                         <option value="" disabled>-</option>
@@ -264,6 +265,35 @@ const handleRegister = async () => {
                                                             สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์</option>
                                                         <option value="สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ">
                                                             สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ</option>
+
+                                                        <option value="สาขาวิชาช่างโยธา">สาขาวิชาช่างโยธา</option>
+                                                        <option value="สาขาวิชาช่างก่อสร้าง">สาขาวิชาช่างก่อสร้าง
+                                                        </option>
+                                                        <option value="สาขาวิชาช่างเครื่องมือกลอัตโนมัติ">
+                                                            สาขาวิชาช่างเครื่องมือกลอัตโนมัติ</option>
+                                                        <option value="สาขาวิชาช่างยนต์">สาขาวิชาช่างยนต์</option>
+                                                        <option value="สาขาวิชาช่างกลเกษตร">สาขาวิชาช่างกลเกษตร</option>
+                                                        <option value="สาขาวิชาช่างกลโรงงาน">สาขาวิชาช่างกลโรงงาน
+                                                        </option>
+                                                        <option value="สาขาวิชาช่างท่อและประสาน">
+                                                            สาขาวิชาช่างท่อและประสาน</option>
+                                                        <option value="สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล">
+                                                            สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล
+                                                        </option>
+                                                        <option value="สาขาวิชาช่างอิเล็กทรอนิกส์">
+                                                            สาขาวิชาช่างอิเล็กทรอนิกส์</option>
+                                                        <option value="สาขาวิชาเทคโนโลยีคอมพิวเตอร์">
+                                                            สาขาวิชาเทคโนโลยีคอมพิวเตอร์</option>
+
+                                                        <!-- สาขาวิชาช่างก่อสร้าง (ซ้ำ) -->
+                                                        <option value="สาขาวิชาช่างไฟฟ้ากำลัง">สาขาวิชาช่างไฟฟ้ากำลัง
+                                                        </option>
+                                                        <!-- สาขาวิชาช่างยนต์ (ซ้ำ) -->
+                                                        <option value="สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล">
+                                                            สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล</option>
+                                                        <!-- สาขาวิชาช่างอิเล็กทรอนิกส์ (ซ้ำ) -->
+                                                        <option value="สาขาวิชาช่างเทคนิคคอมพิวเตอร์">
+                                                            สาขาวิชาช่างเทคนิคคอมพิวเตอร์</option>
                                                     </select>
                                                 </div>
                                             </div>

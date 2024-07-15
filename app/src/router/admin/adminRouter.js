@@ -3,6 +3,8 @@ import Search from '../../views/admin/Search.vue';
 import config from '../../../config';
 import { checkAuth } from "./authRouteFunction"
 
+import informationAdmin from '../../components/admin/informationAdmin.vue'
+
 import CreateContact from '../../views/cooperative/CreateContact.vue'
 import ListCooperative from '../../views/cooperative/ListCooperative.vue'
 import EditCooperative from '../../views/cooperative/EditCooperative.vue'
@@ -26,30 +28,37 @@ import EditDownload from '../../views/downloads/EditDownload.vue'
 import listTeachers from '../../views/admin/list-teacher/listTeachers.vue'
 
 import Cr2 from '../../views/admin/list-student/Cr2.vue'
+import DCR from '../../views/admin/list-student/DCR.vue'
 import Ec2 from '../../views/admin/list-student/Ec2.vue'
 import Ec4 from '../../views/admin/list-student/Ec4.vue'
 
 import Cr2Req from '../../views/admin/list-student-request/Cr2Req.vue';
+import DcrReq from '../../views/admin/list-student-request/DcrReq.vue';
 import Ec2Req from '../../views/admin/list-student-request/Ec2Req.vue';
 import Ec4Req from '../../views/admin/list-student-request/Ec4Req.vue';
 
 import Ec4Approved from '../../views/admin/list-student-approved/Ec4Approved.vue'
 import Ec2Approved from '../../views/admin/list-student-approved/Ec2Approved.vue'
+import DcrApproved from '../../views/admin/list-student-approved/DcrApproved.vue'
 import VCRApproved from '../../views/admin/list-student-approved/VCRApproved.vue'
 
 import Cr2Active from "../../views/admin/list-student-active/Cr2Active.vue";
+import DcrActive from "../../views/admin/list-student-active/DcrActive.vue";
 import Ec2Active from "../../views/admin/list-student-active/Ec2Active.vue";
 import Ec4Active from "../../views/admin/list-student-active/Ec4Active.vue";
 
 import Cr2Success from "../../views/admin/list-student-success/Cr2Success.vue";
+import DcrSuccess from "../../views/admin/list-student-success/DcrSuccess.vue";
 import Ec2Success from "../../views/admin/list-student-success/Ec2Success.vue";
 import Ec4Success from "../../views/admin/list-student-success/Ec4Success.vue";
 
 import Cr2NotPass from '../../views/admin/list-student-notpass/Cr2NotPass.vue'
+import DcrNotPass from '../../views/admin/list-student-notpass/DcrNotPass.vue'
 import Ec2NotPass from '../../views/admin/list-student-notpass/Ec2NotPass.vue'
 import Ec4NotPass from '../../views/admin/list-student-notpass/Ec4NotPass.vue'
 
 import DataTEC4 from '../../views/evaluation/data-evaluation/DataTEC4.vue'
+import DataTEC2 from '../../views/evaluation/data-evaluation/DataTEC2.vue'
 
 const routeAdmin = [
   {
@@ -58,6 +67,16 @@ const routeAdmin = [
     component: AdminIndex,
     beforeEnter: checkAuth,
     children: [
+      {
+        path: 'information-admin',
+        name: 'information-admin',
+        component: informationAdmin
+      },
+      {
+        path: 'data-tec2-admin/:id',
+        name: 'data-tec2-admin/:id',
+        component: DataTEC2
+      },
       {
         path: 'data-tec4-admin/:id',
         name: 'data-tec4-admin/:id',
@@ -136,6 +155,11 @@ const routeAdmin = [
         component: Cr2,
       },
       {
+        path: 'list-dcr',
+        name: 'list-dcr',
+        component: DCR,
+      },
+      {
         path: 'list-ec2',
         name: 'list-ec2',
         component: Ec2
@@ -151,9 +175,19 @@ const routeAdmin = [
         component: Cr2Req
       },
       {
+        path: 'dcr-req',
+        name: 'dcr-req',
+        component: DcrReq
+      },
+      {
         path: 'vcr2-approved',
         name: 'vcr2-approved',
         component: VCRApproved
+      },
+      {
+        path: 'dcr-approved',
+        name: 'dcr-approved',
+        component: DcrApproved
       },
       {
         path: 'ec2-approved',
@@ -171,9 +205,19 @@ const routeAdmin = [
         component: Cr2Active
       },
       {
+        path: 'dcr-active',
+        name: 'dcr-active',
+        component: DcrActive
+      },
+      {
         path: 'cr2-success',
         name: 'cr2-success',
         component: Cr2Success
+      },
+      {
+        path: 'dcr-success',
+        name: 'dcr-success',
+        component: DcrSuccess
       },
       {
         path: 'Ec2-req',
@@ -229,6 +273,11 @@ const routeAdmin = [
         path: 'cr2-notpass',
         name: 'cr2-notpass',
         component: Cr2NotPass
+      },
+      {
+        path: 'dcr-notpass',
+        name: 'dcr-notpass',
+        component: DcrNotPass
       },
       {
         path: 'Ec2-notpass',

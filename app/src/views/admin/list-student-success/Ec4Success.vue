@@ -4,35 +4,23 @@ import { ref, onMounted, computed } from 'vue';
 import config from "../../../../config";
 import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
-import { RouterLink, RouterView } from 'vue-router';
 import * as XLSX from 'xlsx'; // import library
+import jsPDF from 'jspdf'; // import jsPDF
+import autoTable from 'jspdf-autotable'; // import autoTable
 
-// const route = useRoute();
-// const router = useRouter();
-
-// const user = ref({
-//   firstName: '',
-//   lastName: '',
-//   userName: '',
-//   password: '',
-//   phoneNumber: '',
-//   gender: '',
-//   year: '',
-//   branch: '',
-//   status: '',
-//   studentID: '',
-//   company: ''
-// });
-
-const users = ref([]); // เปลี่ยน {} เป็น []
+const users = ref([]);
 const isModalVisible = ref(false);
 const modalData = ref(null);
-
+const evaluationData = ref([]); // เพิ่มการประกาศตัวแปร evaluationData
 
 const fetchData = async () => {
     try {
-        const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => user.status === "ผ่าน" && user.year === "ป.ตรี ปีที่ 4");
+        const [userResponse, evaluationResponse] = await Promise.all([
+            axios.get(`${config.api_path}/users`),
+            axios.get(`${config.api_path}/data-evaluation`)
+        ]);
+        users.value = userResponse.data.filter(user => user.status === "ผ่าน" && user.year === "ป.ตรี ปีที่ 4");
+        evaluationData.value = evaluationResponse.data;
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -47,7 +35,11 @@ const showModal = async (id) => {
     isModalVisible.value = true;
     try {
         const response = await axios.get(`${config.api_path}/user/${id}`);
-        modalData.value = response.data;
+        const user = response.data;
+
+        // หาข้อมูลการประเมินที่เกี่ยวข้องกับ studentID
+        const evaluation = evaluationData.value.find(e => e.studentId === user.studentID);
+        modalData.value = { ...user, evaluation };
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -61,10 +53,38 @@ const closeModal = () => {
     isModalVisible.value = false;
     modalData.value = null;
 };
-// modal
 
+// ฟังก์ชันสำหรับการพิมพ์ข้อมูลเป็น PDF
+const printPDF = (user) => {
+    const doc = new jsPDF();
+    doc.text(`รหัสนักศึกษา: ${user.studentID}`, 10, 10);
+    doc.text(`ชื่อ-นามสกุล: ${user.firstName} ${user.lastName}`, 10, 20);
+    doc.text(`สาขา: ${user.branch}`, 10, 30);
+    doc.text(`ชั้นปี: ${user.year}`, 10, 40);
+    doc.text(`สถานะ: ${user.status}`, 10, 50);
+    doc.text(`เบอร์โทรศัพท์: ${user.phoneNumber}`, 10, 60);
+    doc.text(`Email: ${user.email}`, 10, 70);
+
+    if (user.evaluation) {
+        doc.text(`ข้อมูลการประเมิน`, 10, 80);
+        doc.text(`ชื่อผู้ประเมิน: ${user.evaluation.evaluatorName}`, 10, 90);
+        doc.text(`สถานะผู้ประเมิน: ${user.evaluation.evaluatorStatus}`, 10, 100);
+        doc.text(`เวลา: ${user.evaluation.time}`, 10, 110);
+
+        // เพิ่มข้อมูล criteria ที่เป็น JSON เข้าไปในตาราง
+        const criteria = Object.entries(user.evaluation.criteria).map(([key, value]) => [key, value]);
+        autoTable(doc, {
+            startY: 120,
+            head: [['Criteria', 'Score']],
+            body: criteria,
+        });
+    }
+
+    doc.save(`${user.studentID}.pdf`);
+};
+
+// ฟังก์ชันสำหรับการลบข้อมูล
 const removeData = async (id) => {
-    // แสดงป๊อปอัพยืนยันการลบ
     const result = await Swal.fire({
         title: 'คุณแน่ใจหรือไม่?',
         text: 'คุณจะไม่สามารถย้อนกลับได้!',
@@ -76,7 +96,6 @@ const removeData = async (id) => {
         cancelButtonText: 'ยกเลิก'
     });
 
-    // ตรวจสอบว่าผู้ใช้กดยืนยันการลบหรือไม่
     if (result.isConfirmed) {
         try {
             const response = await axios.delete(`${config.api_path}/users/${id}`);
@@ -101,31 +120,36 @@ const removeData = async (id) => {
     }
 };
 
-
 const sortedUsers = computed(() => {
     return users.value.slice().sort((a, b) => a.id - b.id); // เรียงลำดับตาม ID
 });
 
 // ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
 const downloadExcel = () => {
-    const data = sortedUsers.value.map(user => ({
-        'รหัสนักศึกษา': user.studentID,
-        'ชื่อ': user.firstName,
-        'นามสกุล': user.lastName,
-        'สาขา': user.branch,
-        'ชั้นปี': user.year,
-        'สถานะ': user.status,
-        'เบอร์โทรศัพท์': user.phoneNumber,
-        'อีเมล์': user.email,
-        'สถานที่ฝึกประสบการณ์': user.college
-    }));
+    const data = sortedUsers.value.map(user => {
+        const evaluation = evaluationData.value.find(e => e.studentId === user.studentID) || {};
+        return {
+            'รหัสนักศึกษา': user.studentID,
+            'ชื่อ': user.firstName,
+            'นามสกุล': user.lastName,
+            'สาขา': user.branch,
+            'ชั้นปี': user.year,
+            'สถานะ': user.status,
+            'เบอร์โทรศัพท์': user.phoneNumber,
+            'อีเมล์': user.email,
+            'สถานที่ฝึกประสบการณ์': user.college,
+            'ชื่อผู้ประเมิน': evaluation.evaluatorName || '',
+            'สถานะผู้ประเมิน': evaluation.evaluatorStatus || '',
+            'เวลา': evaluation.time || '',
+            'การประเมิน': evaluation.criteria ? JSON.stringify(evaluation.criteria) : ''
+        };
+    });
 
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
     XLSX.writeFile(workbook, 'students.xlsx');
 };
-
 
 onMounted(() => {
     fetchData();
@@ -144,11 +168,10 @@ onMounted(() => {
                                 class="btn btn-success m-1">อนุมัติ</button></router-link>
                         <router-link :to="`/admin-index/Ec4-active`"> <button
                                 class="btn btn-warning m-1">เข้ารับการฝึก</button></router-link>
-                        <router-link :to="`/admin-index/Ec4-success`"> <button class="btn btn-success m-1">ผ่าน</button>
-                        </router-link>
+                        <router-link :to="`/admin-index/Ec4-success`"> <button
+                                class="btn btn-success m-1">ผ่าน</button></router-link>
                         <router-link :to="`/admin-index/Ec4-notpass`"> <button
-                                class="btn btn-danger m-1">ไม่ผ่าน</button>
-                        </router-link>
+                                class="btn btn-danger m-1">ไม่ผ่าน</button></router-link>
                         <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
                     </div>
                 </div>
@@ -208,18 +231,14 @@ onMounted(() => {
                         <p>เบอร์โทรศัพท์: {{ modalData.phoneNumber }}</p>
                         <p v-if="modalData.email">Email: {{ modalData.email }}</p>
                         <p v-else></p>
-                        <!-- <div v-if="modalData.companyDetails">
-                            <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
-                            <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
-                            <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
-                            <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{
-                                modalData.companyDetails.contactLastName }}</p>
-                            <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
-                            <p v-if="modalData.companyDetails.companyEmail">Email: {{
-                                modalData.companyDetails.companyEmail }}</p>
-                            <p v-else></p>
-                            <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
-                        </div> -->
+                        <div v-if="modalData.evaluation">
+                            <p class="text-bold">ข้อมูลการประเมิน</p>
+                            <p>ชื่อผู้ประเมิน: {{ modalData.evaluation.evaluatorName }}</p>
+                            <p>สถานะผู้ประเมิน: {{ modalData.evaluation.evaluatorStatus }}</p>
+                            <p>เวลา: {{ modalData.evaluation.time }}</p>
+                            <p>การประเมิน: {{ modalData.evaluation.criteria ?
+                                JSON.stringify(modalData.evaluation.criteria) : '' }}</p>
+                        </div>
                         <div v-if="modalData.collegeDetails">
                             <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
                             <p>โรงเรียน/วิทยาลัย: {{ modalData.collegeDetails.collegeName }}</p>

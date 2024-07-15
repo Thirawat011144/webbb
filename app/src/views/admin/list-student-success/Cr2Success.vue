@@ -7,25 +7,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router';
 import * as XLSX from 'xlsx'; // import library
 
-
-// const route = useRoute();
-// const router = useRouter();
-
-// const user = ref({
-//   firstName: '',
-//   lastName: '',
-//   userName: '',
-//   password: '',
-//   phoneNumber: '',
-//   gender: '',
-//   year: '',
-//   branch: '',
-//   status: '',
-//   studentID: '',
-//   company: ''
-// });
-
-const users = ref([]); // เปลี่ยน {} เป็น []
+const users = ref([]);
 const isModalVisible = ref(false);
 const modalData = ref(null);
 
@@ -42,7 +24,6 @@ const fetchData = async () => {
     }
 };
 
-// modal
 const showModal = async (id) => {
     isModalVisible.value = true;
     try {
@@ -61,10 +42,8 @@ const closeModal = () => {
     isModalVisible.value = false;
     modalData.value = null;
 };
-// modal
 
 const removeData = async (id) => {
-    // แสดงป๊อปอัพยืนยันการลบ
     const result = await Swal.fire({
         title: 'คุณแน่ใจหรือไม่?',
         text: 'คุณจะไม่สามารถย้อนกลับได้!',
@@ -76,7 +55,6 @@ const removeData = async (id) => {
         cancelButtonText: 'ยกเลิก'
     });
 
-    // ตรวจสอบว่าผู้ใช้กดยืนยันการลบหรือไม่
     if (result.isConfirmed) {
         try {
             const response = await axios.delete(`${config.api_path}/users/${id}`);
@@ -87,7 +65,7 @@ const removeData = async (id) => {
                 icon: 'success',
             }).then((result) => {
                 if (result.value) {
-                    fetchData(); // รีเฟรชข้อมูลหลังจากการลบ
+                    fetchData();
                 }
             });
         } catch (error) {
@@ -101,12 +79,33 @@ const removeData = async (id) => {
     }
 };
 
+const updateAllStatusToCompleted = async () => {
+    const newStatus = "เสร็จสิ้น";
+    try {
+        const promises = users.value.map(user =>
+            axios.put(`${config.api_path}/user/${user.id}`, { status: newStatus })
+        );
+        await Promise.all(promises);
+        Swal.fire({
+            title: "สำเร็จ",
+            text: "อัปเดตสถานะสำเร็จสำหรับทุกคน",
+            icon: "success",
+        }).then(() => {
+            fetchData();
+        });
+    } catch (error) {
+        Swal.fire({
+            title: "error",
+            text: (error.message, "Cr2 Error Updating Status for All Users"),
+            icon: "error"
+        });
+    }
+};
 
 const sortedUsers = computed(() => {
-    return users.value.slice().sort((a, b) => a.id - b.id); // เรียงลำดับตาม ID
+    return users.value.slice().sort((a, b) => a.id - b.id);
 });
 
-// ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
 const downloadExcel = () => {
     const data = sortedUsers.value.map(user => ({
         'รหัสนักศึกษา': user.studentID,
@@ -136,20 +135,22 @@ onMounted(() => {
         <div class="card">
             <div class="card-header">
                 <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นประกาศนียบัตรวิชาชีพ ชั้นปีที่ 3 (ผ่าน)
-          <div>
-            <router-link :to="`/admin-index/cr2-req`"> <button
-                class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
-            <router-link :to="`/admin-index/vcr2-approved`"> <button
-                class="btn btn-success m-1">อนุมัติ</button></router-link>
-            <router-link :to="`/admin-index/cr2-active`"> <button
-                class="btn btn-warning m-1">กำลังฝึก</button></router-link>
-            <router-link :to="`/admin-index/cr2-success`"> <button class="btn btn-success m-1">ผ่าน</button>
-            </router-link>
-            <router-link :to="`/admin-index/cr2-notpass`"> <button class="btn btn-danger m-1">ไม่ผ่าน</button>
-            </router-link>
-            <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
-          </div>
-        </div>
+                    <div>
+                        <router-link :to="`/admin-index/cr2-req`"> <button
+                                class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
+                        <router-link :to="`/admin-index/vcr2-approved`"> <button
+                                class="btn btn-success m-1">อนุมัติ</button></router-link>
+                        <router-link :to="`/admin-index/cr2-active`"> <button
+                                class="btn btn-warning m-1">กำลังฝึก</button></router-link>
+                        <router-link :to="`/admin-index/cr2-success`"> <button class="btn btn-success m-1">ผ่าน</button>
+                        </router-link>
+                        <router-link :to="`/admin-index/cr2-notpass`"> <button
+                                class="btn btn-danger m-1">ไม่ผ่าน</button>
+                        </router-link>
+                        <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
+                        <button class="btn btn-info m-1" @click="updateAllStatusToCompleted">เสร็จสิ้นทั้งหมด</button>
+                    </div>
+                </div>
                 <table class="table">
                     <thead>
                         <tr>
@@ -171,6 +172,9 @@ onMounted(() => {
                             <td>{{ user.year }}</td>
                             <td class="text-center">
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
+                                <router-link :to="`data-tec2-admin/${user.id}`">
+                                    <button class="btn btn-success m-1">ข้อมูลการประเมิน</button>
+                                </router-link>
                             </td>
                             <td>
                                 <router-link :to="`/edit-ec2/${user.id}`">

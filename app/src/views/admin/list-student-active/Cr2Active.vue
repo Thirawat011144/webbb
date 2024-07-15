@@ -14,11 +14,12 @@ import * as XLSX from 'xlsx'; // import library
 const users = ref([]);
 const isModalVisible = ref(false);
 const modalData = ref(null);
+const branch = localStorage.getItem(config.branch)
 
 const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => user.status === "เข้ารับการฝึก" && user.year === "ปวช 3");
+        users.value = response.data.filter(user => user.status === "เข้ารับการฝึก" && user.year === "ปวช 3" && user.branch === branch);
     } catch (error) {
         Swal.fire({
             title: "error",

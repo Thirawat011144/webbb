@@ -197,7 +197,16 @@ const submitEvaluation = async () => {
                 icon: "success",
                 timer: 2000
             });
-            router.push('/home-evaluation/student-ev-tec2');
+            const userYear = student.value.year;
+            console.log(userYear);
+
+            if (userYear === "ป.ตรี ปีที่ 2") {
+                router.push('/home-evaluation/student-ev-tec2');
+            } else if (userYear === "ปวส 2") {
+                router.push('/home-evaluation/student-ev-uvcr');
+            } else {
+                router.push('/home-evaluation/student-ev-vcr2');
+            }
         }
     } catch (error) {
         Swal.fire({

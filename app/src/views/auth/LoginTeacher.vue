@@ -31,6 +31,8 @@ const handleLogin = async () => {
             localStorage.setItem(config.token_name, response.data.token);
             localStorage.setItem(config.role_name, response.data.data.role)
             localStorage.setItem(config.firstName_name, response.data.data.firstName)
+            localStorage.setItem(config.token_lastName, response.data.data.lastName)
+            localStorage.setItem(config.currentStudyField, response.data.data.branch)
             localStorage.setItem('userData', JSON.stringify(response.data.data)); // เก็บข้อมูลใน localStorage
             searchData.setDataResults(response.data.data);
 

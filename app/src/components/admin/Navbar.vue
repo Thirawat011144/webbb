@@ -23,6 +23,7 @@ const handleSignOut = () => {
             localStorage.removeItem(config.role_name);
             localStorage.removeItem(config.token_name);
             localStorage.removeItem(config.firstName_name);
+            localStorage.removeItem(config.branch)
             localStorage.removeItem('userData');
             router.push("/");
         }

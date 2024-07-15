@@ -66,6 +66,11 @@ const getUserName = computed(() => {
                                 </router-link>
                             </li>
                             <li class="nav-item">
+                                <router-link to="/teacher-index/list-dcr2" class="nav-link ms-4">
+                                    <p>ปวส ชั้นปีที่ 2</p>
+                                </router-link>
+                            </li>
+                            <li class="nav-item">
                                 <router-link to="/teacher-index/list-ec2" class="nav-link ms-4">
                                     <p>ป.ตรี ชั้นปีที่ 2</p>
                                 </router-link>
@@ -93,6 +98,12 @@ const getUserName = computed(() => {
                         <router-link to="/teacher-index/dashboard" class="nav-link">
                             <i class="fa-solid fa-dashboard"></i> &nbsp;
                             <p>DashBoard</p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link to="/home-evaluation" class="nav-link">
+                            <i class="fa-solid fa-dashboard"></i> &nbsp;
+                            <p>ประเมิน</p>
                         </router-link>
                     </li>
                     <!-- <li class="nav-item">

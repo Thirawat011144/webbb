@@ -9,14 +9,18 @@ import { saveAs } from 'file-saver';
 import THSarabunNewFont from '../../../../THSarabunNew-normal'; // Base64-encoded font file
 import * as XLSX from 'xlsx'; // import library
 
+
 const users = ref([]);
 const isModalVisible = ref(false);
 const modalData = ref(null);
+const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+const branch = localStorage.getItem(config.branch)
 
 const fetchData = async () => {
   try {
     const response = await axios.get(`${config.api_path}/users`);
-    users.value = response.data.filter(user => user.year === "ป.ตรี ปีที่ 4");
+    // users.value = response.data.filter(user => user.year === "ป.ตรี ปีที่ 4");
+    users.value = response.data.filter(user => user.year === "ป.ตรี ปีที่ 4" && user.branch === branch);
   } catch (error) {
     Swal.fire({
       title: "Error",

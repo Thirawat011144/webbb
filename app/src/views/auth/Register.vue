@@ -54,7 +54,7 @@ const bachelorBranches = [
 const branches = computed(() => {
     if (year.value === "ปวช 3") {
         return vocationalBranches;
-    } else if (year.value === "ปวส 2") {
+    } else if (year.value === "ปวส 1" || year.value === "ปวส 2") {
         return highVocationalBranches;
     } else if (year.value === "ป.ตรี ปีที่ 2" || year.value === "ป.ตรี ปีที่ 4") {
         return bachelorBranches;
@@ -218,7 +218,8 @@ const handleRegister = async () => {
                                         </div>
 
                                         <div class="form-outline mb-4">
-                                            <label class="form-label" for="form3Example9">รหัสนักศึกษา</label>
+                                            <label class="form-label" for="form3Example9">รหัสนักศึกษา (กรุณาใส่ -
+                                                )</label>
                                             <input v-model="studentID" type="text" id="form3Example9"
                                                 class="form-control form-control-lg" required maxlength="13"
                                                 minlength="13" placeholder="Ex. 64322110094-5" />

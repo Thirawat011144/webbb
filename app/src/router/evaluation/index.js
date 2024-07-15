@@ -11,10 +11,17 @@ import EvaluationOneTEC2 from '../../views/evaluation/evaluation-tec2/Evaluation
 import EvaluationTwoTEC2 from '../../views/evaluation/evaluation-tec2/EvaluationTwoTEC2.vue'
 import EvaluationThreeTEC2 from '../../views/evaluation/evaluation-tec2/EvaluationThreeTEC2.vue'
 
+import ListStudentUVCR from '../../views/evaluation/list-student/ListStudentUVCR.vue'
+import ListEvaluationOneUVCR from '../../views/evaluation/list-student-evaluation-uvcr/ListEvaluationOneUVCR.vue'
+import ListEvaluationTwoUVCR from '../../views/evaluation/list-student-evaluation-uvcr/ListEvaluationTwoUVCR.vue'
+import ListEvaluationThreeUVCR from '../../views/evaluation/list-student-evaluation-uvcr/ListEvaluationThreeUVCR.vue'
+
+
 import ListStudentVCR2 from '@/views/evaluation/list-student/ListStudentVCR2.vue'
 import ListEvaluationOneVCR from '../../views/evaluation/list-student-evaluation-vcr/ListEvaluationOneVCR.vue'
 import ListEvaluationTwoVCR from '../../views/evaluation/list-student-evaluation-vcr/ListEvaluationTwoVCR.vue'
 import ListEvaluationThreeVCR from '../../views/evaluation/list-student-evaluation-vcr/ListEvaluationThreeVCR.vue'
+import EvaluationOneVCR from '../../views/evaluation/evaluation-vcr/EvaluationOneVCR.vue'
 
 import ListEvaluationOne from '../../views/evaluation/list-student-evaluation-one/ListEvaluationOne.vue'
 import EvaluationOne from '../../views/evaluation/evaluation-tec4/EvaluationOne.vue'
@@ -55,6 +62,11 @@ const routeEvaluation = [
                 component: ListEvaluationThreeVCR,
             },
             {
+                path: 'list-evaluation-three-uvcr',
+                name: 'list-evaluation-three-uvcr',
+                component: ListEvaluationThreeUVCR,
+            },
+            {
                 path: 'list-evaluation-three-tec2',
                 name: 'list-evaluation-three-tec2',
                 component: ListEvaluationThreeTEC2,
@@ -78,6 +90,11 @@ const routeEvaluation = [
                 path: 'list-evaluation-two-vcr',
                 name: 'list-evaluation-two-vcr',
                 component: ListEvaluationTwoVCR,
+            },
+            {
+                path: 'list-evaluation-two-uvcr',
+                name: 'list-evaluation-two-uvcr',
+                component: ListEvaluationTwoUVCR,
             },
             {
                 path: 'list-evaluation-two-tec2',
@@ -105,10 +122,21 @@ const routeEvaluation = [
                 component: ListStudentTEC2
             },
             {
+                path: 'student-ev-uvcr',
+                name: 'student-ev-uvcr',
+                component: ListStudentUVCR
+            },
+            {
                 path: 'student-ev-vcr2',
                 name: 'student-ev-vcr2',
                 component: ListStudentVCR2
             },
+            {
+                path: 'evaluation-one-vcr/:id',
+                name: 'evaluation-one-vcr/:id',
+                component: EvaluationOneVCR
+            }
+            ,
             {
                 path: 'evaluation-one-tec2/:id',
                 name: 'evaluation-one-tec2/:id',
@@ -119,6 +147,12 @@ const routeEvaluation = [
                 path: 'list-evaluation-one-vcr',
                 name: 'list-evaluation-one-vcr',
                 component: ListEvaluationOneVCR
+            }
+            ,
+            {
+                path: 'list-evaluation-one-uvcr',
+                name: 'list-evaluation-one-uvcr',
+                component: ListEvaluationOneUVCR
             }
             ,
             {

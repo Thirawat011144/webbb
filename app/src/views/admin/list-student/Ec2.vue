@@ -20,11 +20,12 @@ const navigate = (status) => {
 const users = ref([]); // เปลี่ยน {} เป็น []
 const isModalVisible = ref(false);
 const modalData = ref(null);
+const branch = localStorage.getItem(config.branch)
 
 const fetchData = async () => {
   try {
     const response = await axios.get(`${config.api_path}/users`);
-    users.value = response.data.filter(user => user.year === "ป.ตรี ปีที่ 2");
+    users.value = response.data.filter(user => user.year === "ป.ตรี ปีที่ 2" && user.branch === branch);
   } catch (error) {
     Swal.fire({
       title: "error",

@@ -45,6 +45,7 @@ const showModal = async (id) => {
   try {
     const response = await axios.get(`${config.api_path}/user/${id}`);
     modalData.value = response.data;
+    makeModalDraggable(); // Call function to make the modal draggable
   } catch (error) {
     Swal.fire({
       title: "error",
@@ -105,28 +106,54 @@ const sortedUsers = computed(() => {
 
 // ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
 const downloadExcel = () => {
-    const data = sortedUsers.value.map(user => ({
-        'รหัสนักศึกษา': user.studentID,
-        'ชื่อ': user.firstName,
-        'นามสกุล': user.lastName,
-        'สาขา': user.branch,
-        'ชั้นปี': user.year,
-        'สถานะ': user.status,
-        'เบอร์โทรศัพท์': user.phoneNumber,
-        'อีเมล์': user.email,
-        'สถานที่ฝึกประสบการณ์': user.companyDetails.companyName
-    }));
+  const data = sortedUsers.value.map(user => ({
+    'รหัสนักศึกษา': user.studentID,
+    'ชื่อ': user.firstName,
+    'นามสกุล': user.lastName,
+    'สาขา': user.branch,
+    'ชั้นปี': user.year,
+    'สถานะ': user.status,
+    'เบอร์โทรศัพท์': user.phoneNumber,
+    'อีเมล์': user.email,
+    'สถานที่ฝึกประสบการณ์': user.companyDetails.companyName
+  }));
 
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
-    XLSX.writeFile(workbook, 'students.xlsx');
+  const worksheet = XLSX.utils.json_to_sheet(data);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+  XLSX.writeFile(workbook, 'students.xlsx');
 };
 
 
 onMounted(() => {
   fetchData();
 });
+
+// Function to make the modal draggable
+const makeModalDraggable = () => {
+  const modal = document.querySelector('.modal-dialog');
+  let isMouseDown = false;
+  let offsetX, offsetY;
+
+  modal.addEventListener('mousedown', (event) => {
+    isMouseDown = true;
+    const rect = modal.getBoundingClientRect();
+    offsetX = event.clientX - rect.left;
+    offsetY = event.clientY - rect.top;
+  });
+
+  document.addEventListener('mousemove', (event) => {
+    if (isMouseDown) {
+      modal.style.position = 'absolute';
+      modal.style.left = `${event.clientX - offsetX}px`;
+      modal.style.top = `${event.clientY - offsetY}px`;
+    }
+  });
+
+  document.addEventListener('mouseup', () => {
+    isMouseDown = false;
+  });
+};
 </script>
 
 <template>

@@ -172,6 +172,9 @@ onMounted(() => {
                             <td>{{ user.year }}</td>
                             <td class="text-center">
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
+                                <router-link :to="`data-tec2-admin/${user.id}`">
+                                    <button class="btn btn-success m-1">ข้อมูลการประเมิน</button>
+                                </router-link>
                             </td>
                             <td>
                                 <router-link :to="`/edit-ec2/${user.id}`">

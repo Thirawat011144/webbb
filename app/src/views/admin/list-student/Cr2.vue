@@ -27,7 +27,7 @@ import * as XLSX from 'xlsx'; // import library
 const users = ref([]); // เปลี่ยน {} เป็น []
 const isModalVisible = ref(false);
 const modalData = ref(null);
-
+const branch = localStorage.getItem(config.branch)
 
 
 
@@ -36,7 +36,7 @@ const fetchData = async () => {
     const response = await axios.get(`${config.api_path}/users`, {
       // headers: { 'Authorization': `Bearer ${localStorage.getItem(config.token_name)}` }
     });
-    users.value = response.data.filter(user => user.year === "ปวช 3");
+    users.value = response.data.filter(user => user.year === "ปวช 3" && user.branch === branch);
   } catch (error) {
     Swal.fire({
       title: "error",

@@ -7,22 +7,27 @@ import CollegeTeacher from '../../views/teacher/College.vue'
 import Dashboard from '../../views/teacher/Dashboard.vue'
 
 import Cr2 from '../../views/teacher/list-student/Cr2.vue';
+import Dcr2 from '../../views/teacher/list-student/Dcr2.vue'
 import Ec2 from '../../views/teacher/list-student/Ec2.vue';
 import EC4 from '../../views/teacher/list-student/EC4.vue';
 
 import StudentVCRreq from '../../views/teacher/list-student-request/StudentVCRreq.vue'
+import StudentUCRreq from '../../views/teacher/list-student-request/StudentUCRreq.vue'
 import StudentTEC2req from '../../views/teacher/list-student-request/StudentTEC2req.vue'
 import StudentTEC4req from '../../views/teacher/list-student-request/StudentTEC4req.vue'
 
 import StudentTEC4approved from '../../views/teacher/list-student-approved/StudentTEC4approved.vue'
 import StudentTEC2approved from '../../views/teacher/list-student-approved/StudentTEC2approved.vue'
+import StudentUVCRapproved from '../../views/teacher/list-student-approved/StudentUVCRapproved.vue'
 import StudentVCRapproved from '../../views/teacher/list-student-approved/StudentVCRapproved.vue'
 
 import StudentVCR2active from '../../views/teacher/list-student-active/StudentVCR2active.vue'
+import StudentUVCRactive from '../../views/teacher/list-student-active/StudentUVCRactive.vue'
 import StudentTEC2active from '../../views/teacher/list-student-active/StudentTEC2active.vue'
 import StudentTEC4active from '../../views/teacher/list-student-active/StudentTEC4active.vue'
 
 import StudentVCR2success from '../../views/teacher/list-student-success/StudentVCR2success.vue'
+import StudentUVCRsuccess from '../../views/teacher/list-student-success/StudentUVCRsuccess.vue'
 import StudentTEC2success from '../../views/teacher/list-student-success/StudentTEC2success.vue'
 import StudentTEC4success from '../../views/teacher/list-student-success/StudentTEC4success.vue'
 
@@ -30,6 +35,7 @@ import DataTEC2 from '../../views/evaluation/data-evaluation/DataTEC2.vue'
 import DataTEC4 from '../../views/evaluation/data-evaluation/DataTEC4.vue'
 
 import StudentVCR2notpass from '../../views/teacher/list-student-notpass/StudentVCR2NotPass.vue'
+import StudentUVCRnotpass from '../../views/teacher/list-student-notpass/StudentUVCRNotPass.vue'
 import StudentTEC2notpass from '../../views/teacher/list-student-notpass/StudentTEC2NotPass.vue'
 import StudentTEC4notpass from '../../views/teacher/list-student-notpass/StudentTEC4NotPass.vue'
 
@@ -77,8 +83,13 @@ const routeTeacher = [
             },
             {
                 path: 'list-cr2',
-                name: 'list-listcr2',
+                name: 'list-list-cr2',
                 component: Cr2
+            },
+            {
+                path: 'list-dcr2',
+                name: 'list-list-dcr2',
+                component: Dcr2
             },
             {
                 path: 'list-ec2',
@@ -96,6 +107,11 @@ const routeTeacher = [
                 component: StudentVCRreq
             },
             {
+                path: 'student-uvcr2req',
+                name: 'student-uvcr2req',
+                component: StudentUCRreq
+            },
+            {
                 path: 'student-tec2req',
                 name: 'student-tec2req',
                 component: StudentTEC2req
@@ -109,6 +125,11 @@ const routeTeacher = [
                 path: 'student-vcr-approved',
                 name: 'student-vcr-approved',
                 component: StudentVCRapproved
+            },
+            {
+                path: 'student-uvcr-approved',
+                name: 'student-uvcr-approved',
+                component: StudentUVCRapproved
             },
             {
                 path: 'student-tec2approved',
@@ -126,6 +147,11 @@ const routeTeacher = [
                 component: StudentVCR2active
             },
             {
+                path: 'student-uvcractive',
+                name: 'student-uvcr2active',
+                component: StudentUVCRactive
+            },
+            {
                 path: 'student-tec2active',
                 name: 'student-tec2active',
                 component: StudentTEC2active
@@ -141,6 +167,11 @@ const routeTeacher = [
                 component: StudentVCR2success
             },
             {
+                path: 'student-uvcrsuccess',
+                name: 'student-uvcrsuccess',
+                component: StudentUVCRsuccess
+            },
+            {
                 path: 'student-tec2success',
                 name: 'student-tec2success',
                 component: StudentTEC2success
@@ -154,6 +185,11 @@ const routeTeacher = [
                 path: 'student-vcr2notpass',
                 name: 'student-vcr2notpass',
                 component: StudentVCR2notpass
+            },
+            {
+                path: 'student-uvcrnotpass',
+                name: 'student-uvcrnotpass',
+                component: StudentUVCRnotpass
             },
             {
                 path: 'student-tec2notpass',
