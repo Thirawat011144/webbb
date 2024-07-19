@@ -33,6 +33,7 @@ const handleLogin = async () => {
             localStorage.setItem(config.token_lastName, response.data.data.lastName);
             localStorage.setItem(config.evaluatorStatus, response.data.data.evaluatorStatus)
             localStorage.setItem(config.currentStudyField, response.data.data.currentStudyField)
+            localStorage.setItem(config.phoneNumber, response.data.data.phoneNumber)
             
             // localStorage.setItem(config.evaluatorName, response.data.data.firstName)
             localStorage.setItem('userData', JSON.stringify(response.data.data));

@@ -51,14 +51,8 @@ const handleEvaluation = (userId) => {
     // ตรวจสอบและจัดการกับค่า null และค่าที่เป็นสตริง "null"
     if (role === null || role === 'null') {
         role = 'อาจารย์นิเทศ';
-    } else {
-        // Add new role to existing roles if needed
-        const roles = role.split(','); // Assuming roles are comma-separated
-        if (!roles.includes('อาจารย์นิเทศ')) {
-            roles.push('อาจารย์นิเทศ');
-            role = roles.join(',');
-        }
-    }
+    } 
+    
 
     localStorage.setItem(config.evaluatorStatus, role);
     const roleTeacher = localStorage.getItem(config.role_name);
@@ -69,12 +63,12 @@ const handleEvaluation = (userId) => {
     console.log("Role Teacher:", roleTeacher);
     console.log("Role:", roleStatus);
 
-    if (role.includes('อาจารย์นิเทศ') || roleTeacher === 'teacher') {
+    if (roleStatus === 'อาจารย์นิเทศ') {
         console.log("Navigating to: /home-evaluation/evaluation-one-vcr/" + userId);
         router.push(`/home-evaluation/evaluation-one-vcr/${userId}`);
-    } else if (role.includes('evaluation')) {
+    } else if (roleStatus === 'ผู้ดูแล') {
         console.log("Navigating to: /page-evaluation/" + userId);
-        router.push(`/page-evaluation/${userId}`);
+        router.push(`/home-evaluation/evaluation-one-mentor/${userId}`);
     } else {
         console.log("Invalid role");
         Swal.fire({

@@ -1,3 +1,4 @@
+StudentVCR2active
 <script setup>
 import axios from "axios";
 import { ref, onMounted, computed } from 'vue';
@@ -36,7 +37,15 @@ const fetchData = async () => {
                 user.year === "ปวช 3" &&
                 user.branch === branch
             ) {
-                if (user.status !== "ไม่ผ่าน" && (evaluationCounts[user.studentID] || 0) >= 3) {
+                const userEvaluations = evaluationResponse.data.filter(
+                    evaluation => evaluation.studentId === user.studentID
+                );
+
+                const hasHighAverageScore = userEvaluations.some(
+                    evaluation => evaluation.averageScore >= 80
+                );
+
+                if (user.status !== "ไม่ผ่าน" && hasHighAverageScore) {
                     await axios.put(`${config.api_path}/user/${user.id}`, { status: 'ผ่าน' });
                     user.status = 'ผ่าน';
                 } else if (user.status === "ไม่ผ่าน") {
@@ -52,16 +61,20 @@ const fetchData = async () => {
             user.status === "เข้ารับการฝึก" &&
             user.year === "ปวช 3" &&
             user.branch === branch &&
-            (evaluationCounts[user.studentID] || 0) < 3
+            !(evaluationResponse.data.some(
+                evaluation => evaluation.studentId === user.studentID && evaluation.averageScore >= 80
+            ))
         );
     } catch (error) {
         Swal.fire({
             title: "error",
-            text: (error.message, "Cr2 Error"),
+            text: error.message,
             icon: "error"
         });
     }
 };
+
+
 
 
 // modal

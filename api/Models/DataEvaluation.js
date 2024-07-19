@@ -16,7 +16,7 @@ const DataEvaluation = connect.define("dataevaluation", {
         allowNull: false,
     },
     criteria: {
-        type: DataTypes.JSON,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     time: {
@@ -26,7 +26,59 @@ const DataEvaluation = connect.define("dataevaluation", {
     evaluatorStatus: {
         type: DataTypes.STRING(255),
         allowNull: false,
-    }
+    },
+    phoneNumber: {
+        type: DataTypes.STRING(255),
+        // allowNull: false,
+    },
+    additionalComments: {
+        type: DataTypes.STRING(255),
+        // allowNull: false,
+    },
+    innovationAlignment: {
+        type: DataTypes.STRING(255),
+        // allowNull: false,
+    },
+    learningPlan: {
+        type: DataTypes.STRING(255),
+        // allowNull: false,
+    },
+    innovativeLearningPlan: {
+        type: DataTypes.STRING(255),
+        // allowNull: false,
+    },
+    joyfulLearningActivities: {
+        type: DataTypes.STRING(255),
+        // allowNull: false,
+    },
+    learnerWellbeingActivities: {
+        type: DataTypes.STRING(255),
+        // allowNull: false,
+    },
+    individualStudentDevelopment: {
+        type: DataTypes.STRING(255),
+        // allowNull: false,
+    },
+    systematicQualityReporting: {
+        type: DataTypes.STRING(255),
+        // allowNull: false,
+    },
+    studentProblemResearch: {
+        type: DataTypes.STRING(255),
+        // allowNull: false,
+    },
+    digitalLearningTools: {
+        type: DataTypes.STRING(255),
+        // allowNull: false,
+    },
+    collaborativeCreativity: {
+        type: DataTypes.STRING(255),
+        // allowNull: false,
+    },
+    professionalGrowthActivities: {
+        type: DataTypes.STRING(255),
+        // allowNull: false,
+    },
 },);
 
 // DataEvaluation.sync({ alter: true })

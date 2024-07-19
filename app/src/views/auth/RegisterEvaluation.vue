@@ -239,6 +239,9 @@ const handleRegister = async () => {
                                                         <option value="ผู้บริหารสถานศึกษา/ผู้ได้รับมอบหมาย">
                                                             ผู้บริหารสถานศึกษา/ผู้ได้รับมอบหมาย
                                                         </option>
+                                                        <option value="ผู้ดูแล">
+                                                            ผู้ดูแล
+                                                        </option>
                                                     </select>
                                                 </div>
                                             </div>

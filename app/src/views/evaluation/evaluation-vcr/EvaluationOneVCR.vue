@@ -15,7 +15,8 @@
 
             <div>
                 <h2>คำชี้แจง</h2>
-                โปรดบันทึกหมายเลข 5, 4, 3, 2, 1, หรือ -1 ตามความคิดเห็นของแต่ละหัวข้อการประเมิน โดยใช้เกณฑ์การประเมินค่าสำหรับระดับความคิดเห็นดังนี้ <br>
+                โปรดบันทึกหมายเลข 5, 4, 3, 2, 1, หรือ -1 ตามความคิดเห็นของแต่ละหัวข้อการประเมิน
+                โดยใช้เกณฑ์การประเมินค่าสำหรับระดับความคิดเห็นดังนี้ <br>
                 ระดับ 5 ผลการประเมิน เห็นด้วยกับข้อความนั้นมากที่สุด <br>
                 ระดับ 4 ผลการประเมิน เห็นด้วยกับข้อความนั้นมาก หรือเหมาะสมมาก <br>
                 ระดับ 3 ผลการประเมิน เห็นด้วยกับข้อความนั้นมากปานกลาง หรือเหมาะสมมากปานกลาง <br>
@@ -42,225 +43,35 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(criterion, index) in criteria" :key="index">
-                            <td>{{ criterion.label }}</td>
-                            <td v-for="score in [5, 4, 3, 2, 1, -1]" :key="score">
-                                <input type="radio" :id="'criterion' + index + '-' + score" :name="'criterion' + index"
-                                    v-model="criterion.score" :value="score" required>
-                            </td>
+                        <tr>
+                            <td>การประสานงานด้านการจัดการดูแลนักศึกษาในสถานประกอบการ ระหว่างบุคคล และผู้นิเทศงานในสถานประกอบการ</td>
+                            <td><input type="radio" :value="5" v-model.number="criteria" required></td>
+                            <td><input type="radio" :value="4" v-model.number="criteria"></td>
+                            <td><input type="radio" :value="3" v-model.number="criteria"></td>
+                            <td><input type="radio" :value="2" v-model.number="criteria"></td>
+                            <td><input type="radio" :value="1" v-model.number="criteria"></td>
+                            <td><input type="radio" :value="-1" v-model.number="criteria"></td>
+                        </tr>
+                        <tr>
+                            <td>การให้คำแนะนำดูแลนักศึกษาของฝ่ายบุคคล (การปฐมนิเทศ การแนะนำระเบียบวินัย การลางาน สวัสดิการ การจ่ายค่าตอบแทน)</td>
+                            <td><input type="radio" :value="5" v-model.number="hrGuidance" required></td>
+                            <td><input type="radio" :value="4" v-model.number="hrGuidance"></td>
+                            <td><input type="radio" :value="3" v-model.number="hrGuidance"></td>
+                            <td><input type="radio" :value="2" v-model.number="hrGuidance"></td>
+                            <td><input type="radio" :value="1" v-model.number="hrGuidance"></td>
+                            <td><input type="radio" :value="-1" v-model.number="hrGuidance"></td>
+                        </tr>
+                        <tr>
+                            <td>บุคลากรในสถานประกอบการ ให้ความสนใจสนับสนุนและให้ความเป็นกันเองกับนักศึกษา</td>
+                            <td><input type="radio" :value="5" v-model.number="employeeSupport" required></td>
+                            <td><input type="radio" :value="4" v-model.number="employeeSupport"></td>
+                            <td><input type="radio" :value="3" v-model.number="employeeSupport"></td>
+                            <td><input type="radio" :value="2" v-model.number="employeeSupport"></td>
+                            <td><input type="radio" :value="1" v-model.number="employeeSupport"></td>
+                            <td><input type="radio" :value="-1" v-model.number="employeeSupport"></td>
                         </tr>
                     </tbody>
                 </table>
-
-                <div>
-                    <h5>ปริมาณงานและคุณภาพงานที่นักศึกษาได้รับมอบหมาย</h5>
-                </div>
-                <table class="evaluation-table">
-                    <thead>
-                        <tr>
-                            <th class="text-center">เกณฑ์การประเมิน</th>
-                            <th>5</th>
-                            <th>4</th>
-                            <th>3</th>
-                            <th>2</th>
-                            <th>1</th>
-                            <th>-1</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(criterion, index) in communityCriteria" :key="'community' + index">
-                            <td>{{ criterion.label }}</td>
-                            <td v-for="score in [5, 4, 3, 2, 1, -1]" :key="score">
-                                <input type="radio" :id="'community' + index + '-' + score" :name="'community' + index"
-                                    v-model="criterion.score" :value="score" required>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div>
-                    <h5>การมอบหมายงานและนิเทศงานของผู้นิเทศงานในสถานประกอบการ</h5>
-                </div>
-                <table class="evaluation-table">
-                    <thead>
-                        <tr>
-                            <th class="text-center">เกณฑ์การประเมิน</th>
-                            <th>5</th>
-                            <th>4</th>
-                            <th>3</th>
-                            <th>2</th>
-                            <th>1</th>
-                            <th>-1</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(criterion, index) in professionalCriteria" :key="'professional' + index">
-                            <td>{{ criterion.label }}</td>
-                            <td v-for="score in [5, 4, 3, 2, 1, -1]" :key="score">
-                                <input type="radio" :id="'professional' + index + '-' + score"
-                                    :name="'professional' + index" v-model="criterion.score" :value="score" required>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <h2>ส่วนที่ 2 สำหรับประเมินนักศึกษา</h2>
-                <div>
-                    <h5>การพัฒนาตนเอง</h5>
-                </div>
-                <table class="evaluation-table">
-                    <thead>
-                        <tr>
-                            <th class="text-center">เกณฑ์การประเมิน</th>
-                            <th>5</th>
-                            <th>4</th>
-                            <th>3</th>
-                            <th>2</th>
-                            <th>1</th>
-                            <th>-1</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(criterion, index) in selfDevelopmentCriteria" :key="'selfDevelopment' + index">
-                            <td>{{ criterion.label }}</td>
-                            <td v-for="score in [5, 4, 3, 2, 1, -1]" :key="score">
-                                <input type="radio" :id="'selfDevelopment' + index + '-' + score" :name="'selfDevelopment' + index"
-                                    v-model="criterion.score" :value="score" required>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div>
-                    <h5>การมีส่วนร่วมกับองค์กร</h5>
-                </div>
-                <table class="evaluation-table">
-                    <thead>
-                        <tr>
-                            <th class="text-center">เกณฑ์การประเมิน</th>
-                            <th>5</th>
-                            <th>4</th>
-                            <th>3</th>
-                            <th>2</th>
-                            <th>1</th>
-                            <th>-1</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(criterion, index) in organizationParticipationCriteria" :key="'organizationParticipation' + index">
-                            <td>{{ criterion.label }}</td>
-                            <td v-for="score in [5, 4, 3, 2, 1, -1]" :key="score">
-                                <input type="radio" :id="'organizationParticipation' + index + '-' + score" :name="'organizationParticipation' + index"
-                                    v-model="criterion.score" :value="score" required>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div>
-                    <h5>ความประพฤติ คุณธรรม จริยธรรม และการปฏิบัติตามระเบียบวินัยขององค์กร</h5>
-                </div>
-                <table class="evaluation-table">
-                    <thead>
-                        <tr>
-                            <th class="text-center">เกณฑ์การประเมิน</th>
-                            <th>5</th>
-                            <th>4</th>
-                            <th>3</th>
-                            <th>2</th>
-                            <th>1</th>
-                            <th>-1</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(criterion, index) in ethicsCriteria" :key="'ethics' + index">
-                            <td>{{ criterion.label }}</td>
-                            <td v-for="score in [5, 4, 3, 2, 1, -1]" :key="score">
-                                <input type="radio" :id="'ethics' + index + '-' + score" :name="'ethics' + index"
-                                    v-model="criterion.score" :value="score" required>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div>
-                    <h5>ความรู้ความสามารถพื้นฐานที่จำเป็นต่อการปฏิบัติงานที่ได้รับมอบหมายให้สำเร็จ</h5>
-                </div>
-                <table class="evaluation-table">
-                    <thead>
-                        <tr>
-                            <th class="text-center">เกณฑ์การประเมิน</th>
-                            <th>5</th>
-                            <th>4</th>
-                            <th>3</th>
-                            <th>2</th>
-                            <th>1</th>
-                            <th>-1</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(criterion, index) in basicSkillsCriteria" :key="'basicSkills' + index">
-                            <td>{{ criterion.label }}</td>
-                            <td v-for="score in [5, 4, 3, 2, 1, -1]" :key="score">
-                                <input type="radio" :id="'basicSkills' + index + '-' + score" :name="'basicSkills' + index"
-                                    v-model="criterion.score" :value="score" required>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div>
-                    <h5>ความก้าวหน้าของการจัดทำรายงาน</h5>
-                </div>
-                <table class="evaluation-table">
-                    <thead>
-                        <tr>
-                            <th class="text-center">เกณฑ์การประเมิน</th>
-                            <th>5</th>
-                            <th>4</th>
-                            <th>3</th>
-                            <th>2</th>
-                            <th>1</th>
-                            <th>-1</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(criterion, index) in reportProgressCriteria" :key="'reportProgress' + index">
-                            <td>{{ criterion.label }}</td>
-                            <td v-for="score in [5, 4, 3, 2, 1, -1]" :key="score">
-                                <input type="radio" :id="'reportProgress' + index + '-' + score" :name="'reportProgress' + index"
-                                    v-model="criterion.score" :value="score" required>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <!-- <div>
-                    <h5>สรุปโดยรวมของนักศึกษา</h5>
-                </div>
-                <table class="evaluation-table">
-                    <thead>
-                        <tr>
-                            <th class="text-center">เกณฑ์การประเมิน</th>
-                            <th>5</th>
-                            <th>4</th>
-                            <th>3</th>
-                            <th>2</th>
-                            <th>1</th>
-                            <th>-1</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(criterion, index) in overallCriteria" :key="'overall' + index">
-                            <td>{{ criterion.label }}</td>
-                            <td v-for="score in [5, 4, 3, 2, 1, -1]" :key="score">
-                                <input type="radio" :id="'overall' + index + '-' + score" :name="'overall' + index"
-                                    v-model="criterion.score" :value="score" required>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table> -->
-
                 <button type="submit" class="btn btn-primary">ส่งการประเมิน</button>
             </form>
         </div>
@@ -282,73 +93,9 @@ const router = useRouter();
 const student = ref(null);
 const time = ref('1');
 
-const criteria = ref([
-    { label: 'การประสานงานด้านการจัดการดูแลนักศึกษาในสถานประกอบการ ระหว่างบุคคล และผู้นิเทศงานในสถานประกอบการ', score: null },
-    { label: 'การให้คำแนะนำดูแลนักศึกษาของฝ่ายบุคคล (การปฐมนิเทศ การแนะนำระเบียบวินัย การลางาน สวัสดิการ การจ่ายค่าตอบแทน)', score: null },
-    { label: 'บุคลากรในสถานประกอบการ ให้ความสนใจสนับสนุนและให้ความเป็นกันเองกับนักศึกษา', score: null },
-    // เพิ่มหัวข้อการประเมินเพิ่มเติมได้ที่นี่
-]);
-
-const communityCriteria = ref([
-    { label: 'ปริมาณงานที่ได้รับมอบหมาย', score: null },
-    { label: 'คุณลักษณะงานที่ได้รับมอบหมายตรงกับสาขาวิชาเอกของนักศึกษา', score: null },
-    { label: 'งานที่ได้รับมอบหมายตรงกับที่สถานประกอบการเสนอไว้', score: null },
-    { label: 'งานที่ได้รับมอบหมายตรงกับความสนใจของนักศึกษา', score: null },
-    { label: 'ความเหมาะสมของหัวข้อรายงานที่นักศึกษาได้รับ', score: null },
-    // เพิ่มหัวข้อการประเมินเพิ่มเติมได้ที่นี่
-]);
-
-const professionalCriteria = ref([
-    { label: 'มีผู้นิเทศงานในสถานประกอบการดูแลนักศึกษาตั้งแต่วันแรกที่ทำงาน', score: null },
-    { label: 'ความรู้และประสบการณ์วิชาชีพของผู้นิเทศงานในสถานประกอบการ', score: null },
-    { label: 'เวลาผู้นิเทศงานในสถานประกอบการให้แก่นักศึกษาด้านการปฏิบัติงาน', score: null },
-    { label: 'เวลาผู้นิเทศงานในสถานประกอบการให้แก่นักศึกษาด้านการเขียนรายงาน', score: null },
-    { label: 'ความสนใจของผู้นิเทศงานในสถานประกอบการต่อการสอนงานและสั่งงาน', score: null },
-    { label: 'การให้ความสำคัญต่อการประเมินผลการปฏิบัติงานและเขียนรายงานของผู้นิเทศงานในสถานประกอบการ', score: null },
-    { label: 'การจัดทำแผนปฏิบัติงานตลอดระยะเวลาของการปฏิบัติงานให้กับนักศึกษา', score: null },
-    // เพิ่มหัวข้อการประเมินเพิ่มเติมได้ที่นี่
-]);
-
-const selfDevelopmentCriteria = ref([
-    { label: 'บุคลิกภาพ', score: null },
-    { label: 'วุฒิภาวะ', score: null },
-    { label: 'การปรับตัว', score: null },
-    { label: 'การเรียนรู้', score: null },
-    { label: 'การแสดงความคิดเห็น', score: null },
-    { label: 'มนุษย์สัมพันธ์', score: null },
-    { label: 'ทัศนคติ', score: null },
-    // เพิ่มหัวข้อการประเมินเพิ่มเติมได้ที่นี่
-]);
-
-const organizationParticipationCriteria = ref([
-    { label: 'การมีส่วนร่วมกับองค์กร', score: null },
-    // { label: 'การแสดงออกทางความคิดและข้อเสนอแนะในที่ประชุม', score: null },
-    // เพิ่มหัวข้อการประเมินเพิ่มเติมได้ที่นี่
-]);
-
-const ethicsCriteria = ref([
-    { label: 'ความประพฤติ คุณธรรม จริยธรรม และการปฏิบัติตามระเบียบวินัยขององค์กร', score: null },
-    // { label: 'การปฏิบัติตนเป็นตัวอย่างที่ดีในด้านความซื่อสัตย์และความรับผิดชอบ', score: null },
-    // เพิ่มหัวข้อการประเมินเพิ่มเติมได้ที่นี่
-]);
-
-const basicSkillsCriteria = ref([
-    { label: 'ความรู้และทักษะพื้นฐานที่จำเป็นต่อการปฏิบัติงาน มอบหมายงานให้สำเร็จ', score: null },
-    // { label: 'การนำความรู้และทักษะไปประยุกต์ใช้ในงานที่ได้รับมอบหมาย', score: null },
-    // เพิ่มหัวข้อการประเมินเพิ่มเติมได้ที่นี่
-]);
-
-const reportProgressCriteria = ref([
-    { label: 'ความก้าวหน้าและความสมบูรณ์ของการจัดทำรายงาน', score: null },
-    // { label: 'การสื่อสารข้อมูลในรายงานอย่างชัดเจนและเป็นระบบ', score: null },
-    // เพิ่มหัวข้อการประเมินเพิ่มเติมได้ที่นี่
-]);
-
-// const overallCriteria = ref([
-    // { label: 'การประเมินโดยรวมของนักศึกษา', score: null },
-    // { label: 'ข้อเสนอแนะในการปรับปรุงและพัฒนานักศึกษา', score: null },
-    // เพิ่มหัวข้อการประเมินเพิ่มเติมได้ที่นี่
-// ]);
+const criteria = ref('');
+const hrGuidance = ref('');
+const employeeSupport = ref('');
 
 const fetchStudentData = async () => {
     try {
@@ -373,13 +120,12 @@ const submitEvaluation = async () => {
             time: time.value,
             evaluatorName: evaluatorName,
             studentId: student.value.studentID,
-            criteria: criteria.value.concat(communityCriteria.value).concat(professionalCriteria.value)
-                       .concat(selfDevelopmentCriteria.value).concat(organizationParticipationCriteria.value)
-                       .concat(ethicsCriteria.value).concat(basicSkillsCriteria.value).concat(reportProgressCriteria.value)
-                    //    .concat(overallCriteria.value)
+            criteria: criteria.value,
+            hrGuidance: hrGuidance.value,   
+            employeeSupport: employeeSupport.value,   
         };
 
-        const response = await axios.post(`${config.api_path}/data-evaluation-internship`, payload, {
+        const response = await axios.post(`${config.api_path}/data-evaluation-internship-university`, payload, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem(config.token_name)}`
             }

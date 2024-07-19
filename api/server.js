@@ -9,6 +9,7 @@ const path = require('path');
 // const sequelize = require('./connect') ทดสอบการเชื่อมต่อ Database
 // const CompaniesModel = require('./Models/Companies')
 // const ContactModel =  require('./Models/Contact')
+// const DataEvaluationInternshipForUniversityController = require('./Models/DataEvaluationInternshipForUniversity')
 
 const RegisterController = require("./Controllers/RegisterController")
 const LoginController = require("./Controllers/LoginController")
@@ -23,6 +24,7 @@ const CollegesController = require('./Controllers/CollegesController')
 const EvaluationController = require('./Controllers/EvaluationController')
 const DataEvaluationController = require('./Controllers/DataEvaluationController')
 const DataEvaluationInternshipController = require('./Controllers/DataEvaluationInternshipController')
+const DataEvaluationInternshipForUniversityController = require('./Controllers/DataEvaluationInternshipForUniversityController')
 
 
 const app = express()
@@ -47,6 +49,7 @@ app.use('/api', CollegesController)
 app.use('/api', EvaluationController)
 app.use('/api', DataEvaluationController)
 app.use('/api', DataEvaluationInternshipController)
+app.use('/api', DataEvaluationInternshipForUniversityController)
 
 app.listen(port, () => {
     console.log(`Example app listening on port`, port);

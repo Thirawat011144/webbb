@@ -111,8 +111,6 @@ const downloadExcel = async () => {
         worksheet.addRow(['ข้อมูลสถานศึกษาที่ไปฝึกประสบการณ์']).font = { bold: true };
         worksheet.addRow(['ฟิลด์', 'ข้อมูล']);
         worksheet.addRow(['ชื่อสถานประกอบการ', company.companyName]);
-        // worksheet.addRow(['แผนกวิชาที่นักเรียนเข้ารับการฝึกประสบการณ์วิชาชีพ', company.companyDepartment]);
-        // worksheet.addRow(['ขนาดสถานศึกษา', company.schoolSize]);
         worksheet.addRow(['ชื่อผู้ประสานงาน', `${company.contactFirstName} ${company.contactLastName}`]);
         worksheet.addRow(['เบอร์โทรศัพท์', company.companyPhone]);
         worksheet.addRow(['Email', company.companyEmail]);
@@ -135,6 +133,17 @@ const downloadExcel = async () => {
         });
     });
 
+    // Adding comments information
+    worksheet.addRow([]);
+    worksheet.addRow(['ความคิดเห็นเกี่ยวกับนักศึกษา']).font = { bold: true };
+    sortedEvaluations.value.forEach(evaluation => {
+        worksheet.addRow(['จุดเด่นของนักศึกษา', evaluation.comments?.strength || '']);
+        worksheet.addRow(['ข้อควรปรับปรุงของนักศึกษา', evaluation.comments?.improvement || '']);
+        worksheet.addRow(['ข้อเสนอการรับงานหลังจากสำเร็จการศึกษา', evaluation.comments?.jobOffer || '']);
+        worksheet.addRow(['ความคิดเห็นอื่นๆ', evaluation.comments?.other || '']);
+        worksheet.addRow([]); // Empty row for separation
+    });
+
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
     saveAs(blob, 'evaluations.xlsx');
@@ -144,7 +153,6 @@ onMounted(() => {
     fetchStudentData();
 });
 </script>
-
 <style scoped>
 .content {
     padding: 20px;

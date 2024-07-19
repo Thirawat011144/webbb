@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post("/data-evaluation-internship", async (req, res) => {
     try {
-        const { evaluatorName, studentId, criteria, time, evaluatorStatus } = req.body;
+        const { evaluatorName, studentId, criteria, time, evaluatorStatus,qualityOfWork,generalKnowledge,specificKnowledge,responsibility,teamResponsibility,conduct,problemSolving, strength,improvement,jobOffer,other,averageScore,totalScore,phoneNumber } = req.body;
 
         console.log("Criteria Length:", criteria.length); // เพิ่มดีบักเพื่อดูจำนวนข้อ
         console.log("Criteria:", criteria); // เพิ่มดีบักเพื่อดูข้อมูลที่ส่งมา
@@ -13,9 +13,27 @@ router.post("/data-evaluation-internship", async (req, res) => {
         const newEvaluation = await DataEvaluationInternship.create({
             evaluatorName: evaluatorName,
             studentId: studentId,
+            phoneNumber: phoneNumber,
+
             criteria: criteria,
+            qualityOfWork:qualityOfWork,
+            generalKnowledge:generalKnowledge,
+            specificKnowledge:specificKnowledge,
+            responsibility:responsibility,
+            teamResponsibility:teamResponsibility,
+            conduct:conduct,
+            problemSolving:problemSolving,
+
+            totalScore:totalScore,
+            averageScore:averageScore,
+
             time: time,
-            evaluatorStatus: evaluatorStatus
+            evaluatorStatus: evaluatorStatus,
+            strength: strength,
+            improvement: improvement,
+            jobOffer: jobOffer,
+            other: other,
+           // เพิ่มฟิลด์นี้ใน DataEvaluationInternship model
         });
 
         await newEvaluation.save();
@@ -46,6 +64,30 @@ router.get("/data-evaluation-internship/:studentId", async (req, res) => {
         } else {
             res.status(404).send({ message: "Evaluation not found" });
         }
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+});
+
+// API สำหรับอัปเดต totalScore และ averageScore
+router.put("/data-evaluation-internship/:studentId", async (req, res) => {
+    try {
+        const { studentId } = req.params;
+        const { totalScore, averageScore } = req.body;
+
+        const evaluations = await DataEvaluationInternship.findAll({ where: { studentId } });
+
+        if (evaluations.length === 0) {
+            return res.status(404).send({ message: "Evaluations not found" });
+        }
+
+        for (let evaluation of evaluations) {
+            evaluation.totalScore = totalScore;
+            evaluation.averageScore = averageScore;
+            await evaluation.save();
+        }
+
+        res.json({ message: "Success", data: evaluations });
     } catch (error) {
         res.status(500).send({ message: error.message });
     }

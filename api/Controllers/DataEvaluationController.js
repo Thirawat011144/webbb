@@ -5,18 +5,30 @@ const router = express.Router();
 
 router.post("/data-evaluation", async (req, res) => {
     try {
-        const { evaluatorName, studentId, criteria,time,evaluatorStatus } = req.body;
+        const { evaluatorName, studentId, criteria, time, evaluatorStatus, phoneNumber, additionalComments, innovationAlignment, learningPlan, innovativeLearningPlan, joyfulLearningActivities, learnerWellbeingActivities, individualStudentDevelopment, systematicQualityReporting, studentProblemResearch, digitalLearningTools, collaborativeCreativity, professionalGrowthActivities } = req.body;
 
-        console.log("Criteria Length:", criteria.length); // เพิ่มดีบักเพื่อดูจำนวนข้อ
-        console.log("Criteria:", criteria); // เพิ่มดีบักเพื่อดูข้อมูลที่ส่งมา
+
 
         const newEvaluation = await DataEvaluation.create({
-         
+
             evaluatorName: evaluatorName,
             studentId: studentId,
             criteria: criteria,
-            time:time,
-            evaluatorStatus:evaluatorStatus
+            time: time,
+            evaluatorStatus: evaluatorStatus,
+            phoneNumber: phoneNumber,
+            additionalComments: additionalComments,
+            innovationAlignment:innovationAlignment,
+            learningPlan:learningPlan,
+            innovativeLearningPlan:innovativeLearningPlan,
+            joyfulLearningActivities:joyfulLearningActivities,
+            learnerWellbeingActivities:learnerWellbeingActivities,
+            individualStudentDevelopment:individualStudentDevelopment,
+            systematicQualityReporting:systematicQualityReporting,
+            studentProblemResearch:studentProblemResearch,
+            digitalLearningTools:digitalLearningTools,
+            collaborativeCreativity:collaborativeCreativity,
+            professionalGrowthActivities:professionalGrowthActivities,
         });
 
         await newEvaluation.save();

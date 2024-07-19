@@ -4,9 +4,10 @@ import { ref, onMounted, computed } from 'vue';
 import config from "../../../../config";
 import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
-import * as XLSX from 'xlsx'; // import library
-import jsPDF from 'jspdf'; // import jsPDF
-import autoTable from 'jspdf-autotable'; // import autoTable
+// import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
+// ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
+import { format } from 'date-fns';
 
 const users = ref([]);
 const isModalVisible = ref(false);
@@ -54,35 +55,6 @@ const closeModal = () => {
     modalData.value = null;
 };
 
-// ฟังก์ชันสำหรับการพิมพ์ข้อมูลเป็น PDF
-const printPDF = (user) => {
-    const doc = new jsPDF();
-    doc.text(`รหัสนักศึกษา: ${user.studentID}`, 10, 10);
-    doc.text(`ชื่อ-นามสกุล: ${user.firstName} ${user.lastName}`, 10, 20);
-    doc.text(`สาขา: ${user.branch}`, 10, 30);
-    doc.text(`ชั้นปี: ${user.year}`, 10, 40);
-    doc.text(`สถานะ: ${user.status}`, 10, 50);
-    doc.text(`เบอร์โทรศัพท์: ${user.phoneNumber}`, 10, 60);
-    doc.text(`Email: ${user.email}`, 10, 70);
-
-    if (user.evaluation) {
-        doc.text(`ข้อมูลการประเมิน`, 10, 80);
-        doc.text(`ชื่อผู้ประเมิน: ${user.evaluation.evaluatorName}`, 10, 90);
-        doc.text(`สถานะผู้ประเมิน: ${user.evaluation.evaluatorStatus}`, 10, 100);
-        doc.text(`เวลา: ${user.evaluation.time}`, 10, 110);
-
-        // เพิ่มข้อมูล criteria ที่เป็น JSON เข้าไปในตาราง
-        const criteria = Object.entries(user.evaluation.criteria).map(([key, value]) => [key, value]);
-        autoTable(doc, {
-            startY: 120,
-            head: [['Criteria', 'Score']],
-            body: criteria,
-        });
-    }
-
-    doc.save(`${user.studentID}.pdf`);
-};
-
 // ฟังก์ชันสำหรับการลบข้อมูล
 const removeData = async (id) => {
     const result = await Swal.fire({
@@ -124,37 +96,108 @@ const sortedUsers = computed(() => {
     return users.value.slice().sort((a, b) => a.id - b.id); // เรียงลำดับตาม ID
 });
 
-// ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
+
+
 const downloadExcel = () => {
-    const data = sortedUsers.value.map(user => {
-        const evaluation = evaluationData.value.find(e => e.studentId === user.studentID) || {};
-        return {
-            'รหัสนักศึกษา': user.studentID,
-            'ชื่อ': user.firstName,
-            'นามสกุล': user.lastName,
-            'สาขา': user.branch,
-            'ชั้นปี': user.year,
-            'สถานะ': user.status,
-            'เบอร์โทรศัพท์': user.phoneNumber,
-            'อีเมล์': user.email,
-            'สถานที่ฝึกประสบการณ์': user.college,
-            'ชื่อผู้ประเมิน': evaluation.evaluatorName || '',
-            'สถานะผู้ประเมิน': evaluation.evaluatorStatus || '',
-            'เวลา': evaluation.time || '',
-            'การประเมิน': evaluation.criteria ? JSON.stringify(evaluation.criteria) : ''
-        };
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Students');
+
+    worksheet.columns = [
+        { header: 'ประทับเวลา', key: 'timestamp', width: 30 },
+        { header: 'ชื่อ - สกุล(ผู้ประเมิน)', key: 'evaluatorName', width: 30 },
+        { header: 'เบอร์โทรศัพท์', key: 'phoneNumber', width: 15 },
+        { header: 'ชื่อสถานศึกษาที่นักศึกษาเข้ารับการฝึก', key: 'collegeName', width: 50 },
+        { header: 'แผนกสาขาวิชาที่นักศึกษาเข้ารับการฝึก', key: 'department', width: 50 },
+        { header: 'ขนาดสถานศึกษา', key: 'schoolSize', width: 20 },
+        { header: 'สถานะผู้ประเมินสมรรถวิชาชีพ', key: 'evaluatorStatus', width: 30 },
+        { header: 'รอบการประเมิน', key: 'time', width: 20 },
+        { header: 'สาขาวิชาที่นักศึกษากำลังศึกษา', key: 'branch', width: 30 },
+        { header: 'รายชื่อนักศึกษา', key: 'studentName', width: 30 },
+        { header: 'รหัสนักศึกษา', key: 'studentID', width: 20 },
+        { header: 'สามารถวิเคราะห์ความสอดคล้องของสาระการเรียนรู้กับมาตรฐานการเรียนรู้ของหลักสูตร แกนกลางและหลักสูตรสถานศึกษา', key: 'criteria', width: 50 },
+        { header: 'สามารถวิเคราะห์ความสอดคล้องของสาระการเรียนรู้เพื่อพัฒนาผู้เรียนให้มีปัญญารู้คิดและมีความเป็นนวัตกร', key: 'innovationAlignment', width: 50 },
+        { header: 'สามารถเขียนแผนการจัดการเรียนรู้เพื่อพัฒนาผู้เรียนให้มีปัญญารู้คิดและมีความเป็นนวัตกร', key: 'learningPlan', width: 50 },
+        { header: 'สามารถจัดการเรียนรู้ให้เป็นไปตามแผนการจัดการเรียนรู้เพื่อพัฒนาผู้เรียนให้มีปัญญารู้คิดและมีความเป็นนวัตกร', key: 'innovativeLearningPlan', width: 50 },
+        { header: 'สามารถจัดกิจกรรมและสร้างบรรยากาศการเรียนรู้ให้ผู้เรียนมีความสุขในการเรียน', key: 'joyfulLearningActivities', width: 50 },
+        { header: 'จัดกิจกรรมและสร้างบรรยากาศการเรียนรู้ให้ผู้เรียนโดยตระหนักถึงสุขภาวะของผู้เรียน', key: 'learnerWellbeingActivities', width: 50 },
+        { header: 'สามารถดูแล ช่วยเหลือ และพัฒนาผู้เรียนเป็นรายบุคคลตามศักยภาพ', key: 'individualStudentDevelopment', width: 50 },
+        { header: 'สามารถรายงานผลการพัฒนาคุณภาพผู้เรียนได้อย่างเป็นระบบ', key: 'systematicQualityReporting', width: 50 },
+        { header: 'สามารถทำวิจัยที่สอดคล้องกับปัญหาของผู้เรียน', key: 'studentProblemResearch', width: 50 },
+        { header: 'สามารถประยุกต์ใช้เทคโนโลยีดิจิทัลในการจัดการเรียนรู้ เช่น CAI, google classroom, Kahoot เป็นต้น', key: 'digitalLearningTools', width: 50 },
+        { header: 'สามารถปฏิบัติงานร่วมกับผู้อื่นอย่างสร้างสรรค์', key: 'collaborativeCreativity', width: 50 },
+        { header: 'มีส่วนร่วมในกิจกรรมการพัฒนาวิชาชีพ', key: 'professionalGrowthActivities', width: 50 },
+        { header: 'ข้อเสนอแนะ', key: 'additionalComments', width: 50 }
+    ];
+
+    sortedUsers.value.forEach(user => {
+        const evaluations = evaluationData.value.filter(e => e.studentId === user.studentID);
+        evaluations.forEach(evaluation => {
+            const formattedDate = evaluation.createdAt ? format(new Date(evaluation.createdAt), 'dd/MM/yyyy, HH:mm:ss') : '';
+            worksheet.addRow({
+                timestamp: formattedDate,
+                evaluatorName: evaluation.evaluatorName || '',
+                phoneNumber: evaluation.phoneNumber || '',
+                collegeName: user.collegeDetails?.collegeName || '',
+                department: user.collegeDetails?.department || '',
+                schoolSize: user.collegeDetails?.schoolSize || '',
+                evaluatorStatus: evaluation.evaluatorStatus || '',
+                time: evaluation.time || '',
+                branch: user.branch,
+                studentName: `${user.firstName} ${user.lastName}`,
+                studentID: user.studentID,
+                criteria: evaluation.criteria || '',
+                innovationAlignment: evaluation.innovationAlignment || '',
+                learningPlan: evaluation.learningPlan || '',
+                innovativeLearningPlan: evaluation.innovativeLearningPlan || '',
+                joyfulLearningActivities: evaluation.joyfulLearningActivities || '',
+                learnerWellbeingActivities: evaluation.learnerWellbeingActivities || '',
+                individualStudentDevelopment: evaluation.individualStudentDevelopment || '',
+                systematicQualityReporting: evaluation.systematicQualityReporting || '',
+                studentProblemResearch: evaluation.studentProblemResearch || '',
+                digitalLearningTools: evaluation.digitalLearningTools || '',
+                collaborativeCreativity: evaluation.collaborativeCreativity || '',
+                professionalGrowthActivities: evaluation.professionalGrowthActivities || '',
+                additionalComments: evaluation.additionalComments || ''
+            });
+        });
     });
 
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
-    XLSX.writeFile(workbook, 'students.xlsx');
+    // Apply styles to all cells
+    worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
+        row.eachCell({ includeEmpty: false }, (cell) => {
+            cell.font = { name: 'TH Sarabun New', size: 16 };
+            cell.alignment = { horizontal: 'center' };
+        });
+        // Apply bold and background color to header row
+        if (rowNumber === 1) {
+            row.eachCell((cell) => {
+                cell.font = { name: 'TH Sarabun New', size: 16, bold: true };
+                cell.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: 'FFCCCCCC' } // Gray background
+                };
+                cell.alignment = { horizontal: 'center' };
+            });
+        }
+    });
+
+    workbook.xlsx.writeBuffer().then((buffer) => {
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'students.xlsx';
+        link.click();
+    });
 };
+
 
 onMounted(() => {
     fetchData();
 });
+
 </script>
+
 
 <template>
     <section class="content">

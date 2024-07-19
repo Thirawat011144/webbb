@@ -29,18 +29,23 @@ const fetchData = async () => {
             return counts;
         }, {});
 
+        console.log("Evaluation Counts:", evaluationCounts); // ตรวจสอบค่า evaluationCounts
+
         // อัปเดตสถานะเป็น 'ผ่าน' หรือ 'ไม่ผ่าน' สำหรับนักศึกษาตามเงื่อนไข
         const updateStatusPromises = usersResponse.data.map(async user => {
+            console.log("User:", user); // ตรวจสอบค่าของ user แต่ละคน
             if (
                 user.status === "เข้ารับการฝึก" &&
                 user.year === "ป.ตรี ปีที่ 4" &&
                 user.branch === branch
             ) {
                 if (user.status !== "ไม่ผ่าน" && (evaluationCounts[user.studentID] || 0) >= 3) {
-                    await axios.put(`${config.api_path}/user/${user.id}`, { status: 'ผ่าน' });
+                    const response = await axios.put(`${config.api_path}/user/${user.id}`, { status: 'ผ่าน' });
+                    console.log("Update Response:", response.data); // ตรวจสอบการตอบสนองของ API
                     user.status = 'ผ่าน';
                 } else if (user.status === "ไม่ผ่าน") {
-                    await axios.put(`${config.api_path}/user/${user.id}`, { status: 'ไม่ผ่าน' });
+                    const response = await axios.put(`${config.api_path}/user/${user.id}`, { status: 'ไม่ผ่าน' });
+                    console.log("Update Response:", response.data); // ตรวจสอบการตอบสนองของ API
                 }
             }
             return user;

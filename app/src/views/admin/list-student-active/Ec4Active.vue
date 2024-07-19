@@ -65,7 +65,7 @@ const closeModal = () => {
 };
 // modal
 
-const removeData = async (id) => {
+const removeData = async (id, studentID) => {
     // แสดงป๊อปอัพยืนยันการลบ
     const result = await Swal.fire({
         title: 'คุณแน่ใจหรือไม่?',
@@ -81,11 +81,17 @@ const removeData = async (id) => {
     // ตรวจสอบว่าผู้ใช้กดยืนยันการลบหรือไม่
     if (result.isConfirmed) {
         try {
+            // ลบข้อมูลการประเมินก่อน
+            await axios.delete(`${config.api_path}/data-evaluation`, {
+                data: { studentID }
+            });
+
+            // ลบข้อมูลผู้ใช้
             const response = await axios.delete(`${config.api_path}/users/${id}`);
             users.value = users.value.filter(user => user.id !== id);
             Swal.fire({
                 title: 'สำเร็จ',
-                text: 'ลบข้อมูลผู้ใช้สำเร็จ',
+                text: 'ลบข้อมูลผู้ใช้และการประเมินสำเร็จ',
                 icon: 'success',
             }).then((result) => {
                 if (result.value) {
@@ -102,6 +108,7 @@ const removeData = async (id) => {
         }
     }
 };
+
 
 
 const sortedUsers = computed(() => {
@@ -184,7 +191,7 @@ onMounted(() => {
                                     <button class="btn btn-primary m-1"><i
                                             class="fa-solid fa-pen-to-square"></i></button>
                                 </router-link>
-                                <button @click="removeData(user.id)" class="btn btn-danger m-1"><i
+                                <button @click="removeData(user.id, user.studentID)" class="btn btn-danger m-1"><i
                                         class="fa-solid fa-trash-can"></i></button>
                             </td>
                         </tr>

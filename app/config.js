@@ -7,7 +7,8 @@ const config = {
     evaluatorStatus: 'evaluatorStatus',
     currentStudyField: "currentStudyField",
     evaluatorName: 'evaluatorName',
-    branch: 'branch'
+    branch: 'branch',
+    phoneNumber:'phoneNumber'
 
 }
 
