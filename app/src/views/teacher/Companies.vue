@@ -10,13 +10,15 @@ import THSarabunNewFont from '../../../THSarabunNew-normal'; // ไฟล์ฟ�
 
 // สร้างตัวแปรเพื่อเก็บข้อมูล
 const companies = ref([]);
+const branch = localStorage.getItem(config.currentStudyField)
 
 // ฟังก์ชั่นสำหรับดึงข้อมูลจาก API
 const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/companies`);
         // อัพเดตตัวแปร companies ด้วยข้อมูลที่ได้รับจาก API
-        companies.value = response.data;
+        companies.value = response.data.filter(user => user.userDetails.branch === branch)
+
     } catch (error) {
         Swal.fire({
             title: 'Error',
@@ -83,8 +85,8 @@ onMounted(() => {
         <div class="card">
             <div class="card-header">
                 <div class="card-title">ข้อมูลสถานประกอบการ</div>
-                <button @click="downloadPDF">Download PDF</button>
-                <button @click="downloadCSV">Download CSV</button>
+                <!-- <button @click="downloadPDF">Download PDF</button>
+                <button @click="downloadCSV">Download CSV</button> -->
                 <table class="table">
                     <thead>
                         <tr>

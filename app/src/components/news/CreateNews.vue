@@ -9,8 +9,13 @@
             <input v-model="news.title" type="text" id="title" class="form-control" required>
           </div>
           <div class="mb-3">
+            <label for="imageFile" class="form-label">Upload Image</label>
+            <input @change="handleFileUpload('imageFile', $event)" type="file" id="imageFile" class="form-control"
+              accept="image/*">
+          </div>
+          <div class="mb-3">
             <label for="detail" class="form-label">รายละเอียด</label>
-            <textarea v-model="news.detail" id="detail" class="form-control" required></textarea>
+            <textarea v-model="news.detail" id="detail" class="form-control" ></textarea>
           </div>
           <div class="mb-3">
             <label for="pdfFile" class="form-label">Upload PDF</label>
@@ -39,6 +44,7 @@ export default {
   setup() {
     const news = ref({
       title: '',
+      imageFile: null,
       detail: '',
       pdfFile: null,
       docFile: null,
@@ -51,6 +57,8 @@ export default {
         news.value.pdfFile = event.target.files[0];
       } else if (type === 'docFile') {
         news.value.docFile = event.target.files[0];
+      }else if (type === 'imageFile') {
+        news.value.imageFile = event.target.files[0];
       }
     };
 
@@ -63,6 +71,8 @@ export default {
       }
       if (news.value.docFile) {
         formData.append('docFile', news.value.docFile);
+      }if (news.value.imageFile) {
+        formData.append('imageFile', news.value.imageFile);
       }
 
       try {

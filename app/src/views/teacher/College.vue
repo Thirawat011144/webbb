@@ -6,13 +6,14 @@ import config from '../../../config';
 
 // สร้างตัวแปรเพื่อเก็บข้อมูล
 const colleges = ref([]);
+const branch = localStorage.getItem(config.currentStudyField)
 
 // ฟังก์ชั่นสำหรับดึงข้อมูลจาก API
 const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/colleges`);
         // อัพเดตตัวแปร colleges ด้วยข้อมูลที่ได้รับจาก API
-        colleges.value = response.data;
+        colleges.value = response.data.filter(user => user.userDetails.branch = branch);
     } catch (error) {
         Swal.fire({
             title: 'Error',

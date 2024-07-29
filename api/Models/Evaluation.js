@@ -28,9 +28,9 @@ const EvaluationModel = connect.define("evaluation", {
         type: DataTypes.STRING(15),
         allowNull: false,
     },
-    studentID: {
+    idCard: {
         type: DataTypes.STRING(50),
-        allowNull: false,
+        // allowNull: false,
     },
     schoolName: {
         type: DataTypes.STRING(255),

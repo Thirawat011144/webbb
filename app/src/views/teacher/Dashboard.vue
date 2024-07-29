@@ -18,7 +18,11 @@
                         </div>
                         <div class="status-circle" @click="filterStatus('อนุมัติ')">
                             <div class="circle">{{ trainCount }}</div>
-                            <p>กำลังฝึก</p>
+                            <p>อนุมัติ</p>
+                        </div>
+                        <div class="status-circle" @click="filterStatus('เข้ารับการฝึก')">
+                            <div class="circle">{{ trainCountInternship }}</div>
+                            <p>เข้ารับการฝึก</p>
                         </div>
                         <div class="status-circle" @click="filterStatus('ผ่าน')">
                             <div class="circle">{{ passCount }}</div>
@@ -55,7 +59,8 @@ if (userData.branch) {
 const fetchStudents = async () => {
     try {
         const response = await axios.get(`${config.api_path}/users`);
-        students.value = response.data.filter(student => student.branch === branch && student.role !== 'teacher'); // กรองสาขาและ role
+        students.value = response.data.filter(student => student.branch === branch && student.role !== 'teacher' && student.role !== 'admin'); // กรองสาขาและ role
+        console.log(students.value)
     } catch (error) {
         console.error("Error fetching students:", error);
     }
@@ -64,6 +69,7 @@ const fetchStudents = async () => {
 const allCount = computed(() => students.value.length);
 const permissionCount = computed(() => students.value.filter(student => student.status === 'ขออนุมัติ').length);
 const trainCount = computed(() => students.value.filter(student => student.status === 'อนุมัติ').length);
+const trainCountInternship = computed(() => students.value.filter(student => student.status === 'เข้ารับการฝึก').length);
 const passCount = computed(() => students.value.filter(student => student.status === 'ผ่าน').length);
 const failCount = computed(() => students.value.filter(student => student.status === 'ไม่ผ่าน' || student.status === 'ไม่อนุมัติ').length);
 

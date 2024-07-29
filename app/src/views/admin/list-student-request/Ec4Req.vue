@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router';
 import * as XLSX from 'xlsx'; // import library
+import { makeModalDraggable } from "@/utils/draggable";
 
 
 // const route = useRoute();
@@ -28,12 +29,12 @@ import * as XLSX from 'xlsx'; // import library
 const users = ref([]); // เปลี่ยน {} เป็น []
 const isModalVisible = ref(false);
 const modalData = ref(null);
-
+const branch = localStorage.getItem(config.branch)
 
 const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => user.status === "ขออนุมัติ" && user.year === "ป.ตรี ปีที่ 4");
+        users.value = response.data.filter(user => user.status === "ขออนุมัติ" && user.year === "ป.ตรี ปีที่ 4"&& user.branch === branch);
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -49,6 +50,7 @@ const showModal = async (id) => {
     try {
         const response = await axios.get(`${config.api_path}/user/${id}`);
         modalData.value = response.data;
+        makeModalDraggable();
     } catch (error) {
         Swal.fire({
             title: "error",

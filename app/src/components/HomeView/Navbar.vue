@@ -97,6 +97,8 @@ const handleSignOut = () => {
             localStorage.removeItem(config.evaluatorStatus)
             localStorage.removeItem(config.currentStudyField)
             localStorage.removeItem(config.branch)
+            localStorage.removeItem(config.idCard)
+            localStorage.removeItem(config.phoneNumber)
             localStorage.removeItem('userData');
             isLoggedIn.value = false;
             router.push("/");

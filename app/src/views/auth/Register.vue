@@ -18,6 +18,7 @@ const branch = ref('');
 const status = ref('ขออนุมัติ');
 const studentID = ref('');
 const email = ref('');
+const idCard = ref('');
 
 const vocationalBranches = [
     { value: "สาขาวิชาช่างก่อสร้าง", text: "สาขาวิชาช่างก่อสร้าง" },
@@ -52,7 +53,7 @@ const bachelorBranches = [
 ];
 
 const branches = computed(() => {
-    if (year.value === "ปวช 3") {
+    if (year.value === "ปวช 3" || year.value === "ปวช 2" || year.value === "ปวช 1") {
         return vocationalBranches;
     } else if (year.value === "ปวส 1" || year.value === "ปวส 2") {
         return highVocationalBranches;
@@ -76,7 +77,8 @@ const handleRegister = async () => {
             branch: branch.value,
             status: status.value,
             studentID: studentID.value,
-            email: email.value
+            email: email.value,
+            idCard: idCard.value
         }
         const response = await axios.post(`${config.api_path}/register`, payload);
         if (response.data.message === "Success") {
@@ -223,6 +225,12 @@ const handleRegister = async () => {
                                             <input v-model="studentID" type="text" id="form3Example9"
                                                 class="form-control form-control-lg" required maxlength="13"
                                                 minlength="13" placeholder="Ex. 64322110094-5" />
+                                        </div>
+
+                                        <div class="form-outline mb-4">
+                                            <label class="form-label" for="form3Example9">เลขบัตรประชาชน</label>
+                                            <input type="text" id="form3Example9" class="form-control form-control-lg"
+                                                v-model="idCard" maxlength="13" pattern="[0-9]{13}" required />
                                         </div>
 
                                         <div class="d-flex justify-content-end pt-3">

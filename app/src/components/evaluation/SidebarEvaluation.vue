@@ -9,6 +9,7 @@ const getUserName = computed(() => {
     return firstName.charAt(0).toUpperCase() + firstName.slice(1);
 })
 
+const evaluatorStatus = ref(localStorage.getItem(config.evaluatorStatus));
 </script>
 
 <template>
@@ -45,7 +46,7 @@ const getUserName = computed(() => {
                             <p>หน้าแรก</p>
                         </router-link>
                     </li>
-                    <li class="nav-item">
+                    <li v-if="evaluatorStatus" class="nav-item">
                         <router-link to="/home-evaluation/evaluation" class="nav-link">
                             <i class="fa-solid fa-user"></i> &nbsp;
                             <p>ข้อมูลส่วนตัว</p>

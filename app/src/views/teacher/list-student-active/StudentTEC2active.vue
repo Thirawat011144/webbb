@@ -4,9 +4,10 @@ import { ref, onMounted, computed } from 'vue';
 import config from "../../../../config";
 import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
-import { RouterLink, RouterView } from 'vue-router';
-import * as XLSX from 'xlsx'; // import library
+import * as XLSX from 'xlsx';
+import { makeModalDraggable } from "@/utils/draggable";
 
+const router = useRouter(); 
 const users = ref([]);
 const isModalVisible = ref(false);
 const modalData = ref(null);
@@ -23,8 +24,14 @@ const fetchData = async () => {
     try {
         const usersResponse = await axios.get(`${config.api_path}/users`);
         const evaluationResponse = await axios.get(`${config.api_path}/data-evaluation-internship`);
+        const universityEvaluationResponse = await axios.get(`${config.api_path}/data-evaluation-internship-university`);
 
         const evaluationCounts = evaluationResponse.data.reduce((counts, evaluation) => {
+            counts[evaluation.studentId] = (counts[evaluation.studentId] || 0) + 1;
+            return counts;
+        }, {});
+
+        const universityEvaluationCounts = universityEvaluationResponse.data.reduce((counts, evaluation) => {
             counts[evaluation.studentId] = (counts[evaluation.studentId] || 0) + 1;
             return counts;
         }, {});
@@ -36,12 +43,22 @@ const fetchData = async () => {
                 user.year === "ป.ตรี ปีที่ 2" &&
                 user.branch === branch
             ) {
-                if (user.status !== "ไม่ผ่าน" && (evaluationCounts[user.studentID] || 0) >= 3) {
+                const userEvaluations = evaluationResponse.data.filter(
+                    evaluation => evaluation.studentId === user.studentID
+                );
+
+                const userUniversityEvaluations = universityEvaluationResponse.data.filter(
+                    evaluation => evaluation.studentId === user.studentID
+                );
+
+                const hasHighAverageScore = userEvaluations.some(
+                    evaluation => evaluation.averageScore >= 80
+                );
+
+                if (hasHighAverageScore && userUniversityEvaluations.length > 0) {
                     await axios.put(`${config.api_path}/user/${user.id}`, { status: 'ผ่าน' });
                     user.status = 'ผ่าน';
-                } else if (user.status === "ไม่ผ่าน") {
-                    await axios.put(`${config.api_path}/user/${user.id}`, { status: 'ไม่ผ่าน' });
-                }
+                } 
             }
             return user;
         });
@@ -51,18 +68,22 @@ const fetchData = async () => {
         users.value = updatedUsers.filter(user =>
             user.status === "เข้ารับการฝึก" &&
             user.year === "ป.ตรี ปีที่ 2" &&
-            user.branch === branch &&
-            (evaluationCounts[user.studentID] || 0) < 3
+            user.branch === branch
         );
+
+        // เพิ่มสถานะการประเมินให้กับข้อมูลนักศึกษา
+        users.value.forEach(user => {
+            user.isEvaluated = universityEvaluationCounts[user.studentID] > 0;
+        });
+
     } catch (error) {
         Swal.fire({
             title: "error",
-            text: (error.message, "Cr2 Error"),
+            text: error.message,
             icon: "error"
         });
     }
 };
-
 
 // modal
 const showModal = async (id) => {
@@ -70,6 +91,7 @@ const showModal = async (id) => {
     try {
         const response = await axios.get(`${config.api_path}/user/${id}`);
         modalData.value = response.data;
+        makeModalDraggable();
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -88,7 +110,6 @@ const closeModal = () => {
 const handleStatus = async (id, newStatus) => {
     try {
         if (newStatus === 'ไม่ผ่าน') {
-            // อัปเดตสถานะเป็น 'ไม่ผ่าน' ทันที
             const response = await axios.put(`${config.api_path}/user/${id}`, { status: newStatus });
             if (response.data.message === "Success") {
                 Swal.fire({
@@ -97,22 +118,20 @@ const handleStatus = async (id, newStatus) => {
                     icon: "success",
                 });
 
-                const studentID = response.data.data.studentID; // แก้ไขการเข้าถึง studentID
-                // console.log(studentID);
-
-                // ยิง API ไปที่ data-evaluation เพื่อลบข้อมูลที่มี studentID ตรงกับ id นี้
+                const studentID = response.data.data.studentID;
+                await axios.delete(`${config.api_path}/companies`, { data: { studentID: studentID } });
+                await axios.delete(`${config.api_path}/data-evaluation-internship-university`, { data: { studentID: studentID } });
                 await axios.delete(`${config.api_path}/data-evaluation-internship`, { data: { studentID: studentID } });
                 Swal.fire({
                     title: "สำเร็จ",
                     text: "ลบข้อมูลการประเมินสำเร็จ",
                     icon: "success",
                 });
-                fetchData(); // รีเฟรชข้อมูลหลังจากอัปเดตสถานะและลบข้อมูลการประเมิน
+                fetchData();
             }
             return;
         }
-        //'เงื่อนไขของ function นี้คือ ต้องมีชื่อ ผู้ประเมณ 3 ครั้งต่อ 1 ID ถึงจะแอดค่าผ่านได้ ถ้ามีต้องมีผู้ประเมิน 4 คนก็จะเป็น 4 * 3 = 12
-        // ตรวจสอบว่าจำนวนการประเมินของนักศึกษามีครบ 3 ครั้งหรือไม่ก่อนที่จะอนุมัติ 'ผ่าน'
+
         const evaluationResponse = await axios.get(`${config.api_path}/data-evaluation-internship`);
         const evaluationCounts = evaluationResponse.data.reduce((counts, evaluation) => {
             counts[evaluation.studentId] = (counts[evaluation.studentId] || 0) + 1;
@@ -148,40 +167,35 @@ const handleStatus = async (id, newStatus) => {
     }
 };
 
+const handleEvaluation = (userId) => {
+    let role = localStorage.getItem(config.evaluatorStatus);
+    console.log(role);
 
-const removeData = async (id) => {
-    const result = await Swal.fire({
-        title: 'คุณแน่ใจหรือไม่?',
-        text: 'คุณจะไม่สามารถย้อนกลับได้!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'ใช่, ลบเลย!',
-        cancelButtonText: 'ยกเลิก'
-    });
+    if (role === null || role === 'null') {
+        role = 'อาจารย์นิเทศ';
+    }
 
-    if (result.isConfirmed) {
-        try {
-            const response = await axios.delete(`${config.api_path}/users/${id}`);
-            users.value = users.value.filter(user => user.id !== id);
-            Swal.fire({
-                title: 'สำเร็จ',
-                text: 'ลบข้อมูลผู้ใช้สำเร็จ',
-                icon: 'success',
-            }).then((result) => {
-                if (result.value) {
-                    fetchData();
-                }
-            });
-        } catch (error) {
-            Swal.fire({
-                title: 'error',
-                text: (error.message, 'Cr2 Error DeleteData'),
-                icon: 'error'
-            });
-            console.log(error);
-        }
+    localStorage.setItem(config.evaluatorStatus, role);
+    const roleTeacher = localStorage.getItem(config.role_name);
+    const roleStatus = localStorage.getItem(config.evaluatorStatus);
+
+    console.log("User ID:", userId);
+    console.log("Role Teacher:", roleTeacher);
+    console.log("Role:", roleStatus);
+
+    if (roleStatus === 'อาจารย์นิเทศ') {
+        console.log("Navigating to: /home-evaluation/evaluation-one-vcr/" + userId);
+        router.push(`/home-evaluation/evaluation-one-vcr/${userId}`);
+    } else if (roleStatus === 'ผู้ดูแล') {
+        console.log("Navigating to: /page-evaluation/" + userId);
+        router.push(`/home-evaluation/evaluation-one-mentor/${userId}`);
+    } else {
+        console.log("Invalid role");
+        Swal.fire({
+            title: "error",
+            text: "Role ไม่ถูกต้อง",
+            icon: "error"
+        });
     }
 };
 
@@ -189,7 +203,6 @@ const sortedUsers = computed(() => {
     return users.value.slice().sort((a, b) => a.id - b.id);
 });
 
-// ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
 const downloadExcel = () => {
     const data = sortedUsers.value.map(user => ({
         'รหัสนักศึกษา': user.studentID,
@@ -209,7 +222,6 @@ const downloadExcel = () => {
     XLSX.writeFile(workbook, 'students.xlsx');
 };
 
-
 onMounted(() => {
     fetchData();
 });
@@ -219,7 +231,7 @@ onMounted(() => {
     <section class="content mt-4">
         <div class="card">
             <div class="card-header">
-                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรีชั้นปีที่ 2 (กำลังฝึก)
+                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรี ชั้นปีที่ 2 (เข้ารับการฝึก)
                     <div>
                         <router-link :to="`/teacher-index/student-tec2req`"> <button
                                 class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
@@ -233,13 +245,13 @@ onMounted(() => {
                         <router-link :to="`/teacher-index/student-tec2notpass`"> <button
                                 class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
+
                         <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
                     </div>
                 </div>
                 <table class="table">
                     <thead>
                         <tr>
-                            <!-- <th class="text-center">ลำดับ</th> -->
                             <th>รหัสนักศึกษา</th>
                             <th>ชื่อ-นามสกุล</th>
                             <th>สาขา</th>
@@ -250,7 +262,6 @@ onMounted(() => {
                     </thead>
                     <tbody>
                         <tr v-for="(user, index) in sortedUsers" :key="user.id">
-                            <!-- <td class="text-center">{{ index + 1 }}</td> -->
                             <td>{{ user.studentID }}</td>
                             <td>{{ user.firstName }} {{ user.lastName }}</td>
                             <td>{{ user.branch }}</td>
@@ -259,27 +270,27 @@ onMounted(() => {
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
                             </td>
                             <td>
-                                <router-link :to="`data-tec2/${user.id}`">
-                                    <button class="btn btn-success m-1">ข้อมูลการประเมิน</button>
-                                </router-link>
-                                <!-- <button class="btn btn-primary" @click="handleStatus(user.id, 'ผ่าน')">ผ่าน</button> -->
+                                <button
+                                    :class="user.isEvaluated ? 'btn btn-secondary' : 'btn btn-success'"
+                                    @click="handleEvaluation(user.id)"
+                                    :disabled="user.isEvaluated"
+                                >
+                                    {{ user.isEvaluated ? 'ประเมินแล้ว' : 'ประเมิน' }}
+                                </button>
                                 &nbsp;
-                                <button class="btn btn-danger"
-                                    @click="handleStatus(user.id, 'ไม่ผ่าน')">ไม่ผ่าน</button>
+                                <button class="btn btn-danger" @click="handleStatus(user.id, 'ไม่ผ่าน')">ไม่ผ่าน</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-        <!-- Modal -->
         <div v-if="isModalVisible" class="modal fade show" tabindex="-1" style="display: block;">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="infoModalLabel">ข้อมูลผู้ใช้</h5>
-                        <button type="button" class="btn-close" @click="isModalVisible = false"
-                            aria-label="Close"></button>
+                        <button type="button" class="btn-close" @click="isModalVisible = false" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" v-if="modalData">
                         <p>รหัสนักศึกษา: {{ modalData.studentID }}</p>
@@ -294,11 +305,9 @@ onMounted(() => {
                             <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
                             <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
                             <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
-                            <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{
-                                modalData.companyDetails.contactLastName }}</p>
+                            <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{ modalData.companyDetails.contactLastName }}</p>
                             <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
-                            <p v-if="modalData.companyDetails.companyEmail">Email: {{
-                                modalData.companyDetails.companyEmail }}</p>
+                            <p v-if="modalData.companyDetails.companyEmail">Email: {{ modalData.companyDetails.companyEmail }}</p>
                             <p v-else></p>
                             <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
                         </div>

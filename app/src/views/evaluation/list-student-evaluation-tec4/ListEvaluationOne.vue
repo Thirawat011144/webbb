@@ -28,6 +28,7 @@ const fetchData = async () => {
         users.value = usersResponse.data.filter(user =>
             user.year === "ป.ตรี ปีที่ 4" &&
             user.branch === currentStudyField &&
+            user.status === "เข้ารับการฝึก" &&
             !evaluatedStudents.has(user.studentID)
         );
     } catch (error) {

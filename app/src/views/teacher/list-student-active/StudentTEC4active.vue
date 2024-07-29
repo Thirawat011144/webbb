@@ -3,9 +3,11 @@ import axios from "axios";
 import { ref, onMounted, computed } from 'vue';
 import config from "../../../../config";
 import Swal from 'sweetalert2';
-import { useRoute, useRouter } from 'vue-router';
-import { RouterLink, RouterView } from 'vue-router';
+import { useRouter } from 'vue-router';
 import * as XLSX from 'xlsx'; // import library
+import { makeModalDraggable } from "@/utils/draggable";
+
+const router = useRouter();  // เพิ่มการประกาศตัวแปร router
 
 const users = ref([]);
 const isModalVisible = ref(false);
@@ -39,7 +41,7 @@ const fetchData = async () => {
                 user.year === "ป.ตรี ปีที่ 4" &&
                 user.branch === branch
             ) {
-                if (user.status !== "ไม่ผ่าน" && (evaluationCounts[user.studentID] || 0) >= 3) {
+                if (user.status !== "ไม่ผ่าน" && (evaluationCounts[user.studentID] || 0) >= 10) {
                     const response = await axios.put(`${config.api_path}/user/${user.id}`, { status: 'ผ่าน' });
                     console.log("Update Response:", response.data); // ตรวจสอบการตอบสนองของ API
                     user.status = 'ผ่าน';
@@ -57,8 +59,12 @@ const fetchData = async () => {
             user.status === "เข้ารับการฝึก" &&
             user.year === "ป.ตรี ปีที่ 4" &&
             user.branch === branch &&
-            (evaluationCounts[user.studentID] || 0) < 3
+            (evaluationCounts[user.studentID] || 0) < 10
         );
+
+        users.value.forEach(user => {
+            user.isEvaluated = evaluationCounts[user.studentID] >= 10; // ตรวจสอบจำนวนการประเมินและตั้งค่า
+        });
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -75,6 +81,7 @@ const showModal = async (id) => {
     try {
         const response = await axios.get(`${config.api_path}/user/${id}`);
         modalData.value = response.data;
+        makeModalDraggable();
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -116,7 +123,6 @@ const handleStatus = async (id, newStatus) => {
             }
             return;
         }
-        //'เงื่อขของ function นี้คือ ต้องมีชื่อ ผู้ประเมณ 3 ครั้งต่อ 1 ID ถึงจะแอดค่าผ่านได้ ถ้ามีต้องมีผู้ประเมิน 4 คนก็จะเป็น 4 * 3 = 12
         // ตรวจสอบว่าจำนวนการประเมินของนักศึกษามีครบ 3 ครั้งหรือไม่ก่อนที่จะอนุมัติ 'ผ่าน'
         const evaluationResponse = await axios.get(`${config.api_path}/data-evaluation`);
         const evaluationCounts = evaluationResponse.data.reduce((counts, evaluation) => {
@@ -126,7 +132,7 @@ const handleStatus = async (id, newStatus) => {
 
         const userEvaluations = evaluationCounts[id] || 0;
 
-        if (userEvaluations < 3 && newStatus === 'ผ่าน') {
+        if (userEvaluations < 10 && newStatus === 'ผ่าน') {
             Swal.fire({
                 title: "ไม่สามารถอนุมัติได้",
                 text: "จำนวนนักศึกษาที่ได้รับการประเมินยังไม่ครบ 3 ครั้ง",
@@ -190,6 +196,40 @@ const removeData = async (id) => {
     }
 };
 
+// handleEvaluation ฟังก์ชันที่กำหนดการประเมิน
+const handleEvaluation = (userId) => {
+    let role = localStorage.getItem(config.evaluatorStatus);
+    console.log(role);
+
+    if (role === null || role === 'null') {
+        role = 'อาจารย์นิเทศ';
+    }
+
+    localStorage.setItem(config.evaluatorStatus, role);
+    const roleTeacher = localStorage.getItem(config.role_name);
+    const roleStatus = localStorage.getItem(config.evaluatorStatus);
+
+    console.log("User ID:", userId);
+    console.log("Role Teacher:", roleTeacher);
+    console.log("Role:", roleStatus);
+
+    if (roleStatus === 'อาจารย์นิเทศ') {
+        console.log("Navigating to: /home-evaluation/evaluation-one-vcr/" + userId);
+        router.push(`/home-evaluation/student-ev-tec4`);
+    } else if (roleStatus === 'ผู้ดูแล') {
+        console.log("Navigating to: /page-evaluation/" + userId);
+        router.push(`/home-evaluation/evaluation-one-mentor/${userId}`);
+    } else {
+        console.log("Invalid role");
+        Swal.fire({
+            title: "error",
+            text: "Role ไม่ถูกต้อง",
+            icon: "error"
+        });
+    }
+    // router.push(`/home-evaluation/evaluation-one/${userId}`);
+};
+
 const sortedUsers = computed(() => {
     return users.value.slice().sort((a, b) => a.id - b.id);
 });
@@ -224,27 +264,24 @@ onMounted(() => {
     <section class="content mt-4">
         <div class="card">
             <div class="card-header">
-                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรีชั้นปีที่ 4 (กำลังฝึก)
+                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรีชั้นปีที่ 4 (เข้ารับการฝึก)
                     <div>
                         <router-link :to="`/teacher-index/student-tec4req`">
-                            <button class="btn btn-primary m-1"> ขออนุมัติ</button></router-link>
+                            <button class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
                         <router-link :to="`/teacher-index/student-tec4approved`">
-                            <button class="btn btn-success m-1"> อนุมัติ</button></router-link>
-                        <router-link :to="`/teacher-index/student-tec4active`"> <button
-                                class="btn btn-warning m-1">เข้ารับการฝึก</button></router-link>
-                        <router-link :to="`/teacher-index/student-tec4success`"> <button
-                                class="btn btn-success m-1">ผ่าน</button>
-                        </router-link>
-                        <router-link :to="`/teacher-index/student-tec4notpass`"> <button
-                                class="btn btn-danger m-1">ไม่ผ่าน</button>
-                        </router-link>
+                            <button class="btn btn-success m-1">อนุมัติ</button></router-link>
+                        <router-link :to="`/teacher-index/student-tec4active`">
+                            <button class="btn btn-warning m-1">เข้ารับการฝึก</button></router-link>
+                        <router-link :to="`/teacher-index/student-tec4success`">
+                            <button class="btn btn-success m-1">ผ่าน</button></router-link>
+                        <router-link :to="`/teacher-index/student-tec4notpass`">
+                            <button class="btn btn-danger m-1">ไม่ผ่าน</button></router-link>
                         <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
                     </div>
                 </div>
                 <table class="table">
                     <thead>
                         <tr>
-                            <!-- <th class="text-center">ลำดับ</th> -->
                             <th>รหัสนักศึกษา</th>
                             <th>ชื่อ-นามสกุล</th>
                             <th>สาขา</th>
@@ -255,7 +292,6 @@ onMounted(() => {
                     </thead>
                     <tbody>
                         <tr v-for="(user, index) in sortedUsers" :key="user.id">
-                            <!-- <td class="text-center">{{ index + 1 }}</td> -->
                             <td>{{ user.studentID }}</td>
                             <td>{{ user.firstName }} {{ user.lastName }}</td>
                             <td>{{ user.branch }}</td>
@@ -264,13 +300,15 @@ onMounted(() => {
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
                             </td>
                             <td>
-                                <router-link :to="`data-tec4/${user.id}`">
-                                    <button class="btn btn-success m-1">ข้อมูลการประเมิน</button>
-                                </router-link>
-                                <!-- <button class="btn btn-primary" @click="handleStatus(user.id, 'ผ่าน')">ผ่าน</button> -->
+                                <button
+                                    :class="user.isEvaluated ? 'btn btn-secondary' : 'btn btn-success'"
+                                    @click="handleEvaluation(user.id)"
+                                    :disabled="user.isEvaluated"
+                                >
+                                    {{ user.isEvaluated ? 'ประเมินแล้ว' : 'ประเมิน' }}
+                                </button>
                                 &nbsp;
-                                <button class="btn btn-danger"
-                                    @click="handleStatus(user.id, 'ไม่ผ่าน')">ไม่ผ่าน</button>
+                                <button class="btn btn-danger" @click="handleStatus(user.id, 'ไม่ผ่าน')">ไม่ผ่าน</button>
                             </td>
                         </tr>
                     </tbody>
@@ -283,8 +321,7 @@ onMounted(() => {
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="infoModalLabel">ข้อมูลผู้ใช้</h5>
-                        <button type="button" class="btn-close" @click="isModalVisible = false"
-                            aria-label="Close"></button>
+                        <button type="button" class="btn-close" @click="isModalVisible = false" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" v-if="modalData">
                         <p>รหัสนักศึกษา: {{ modalData.studentID }}</p>
@@ -298,14 +335,11 @@ onMounted(() => {
                         <div v-if="modalData.collegeDetails">
                             <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
                             <p>สถานประกอบการ: {{ modalData.collegeDetails.collegeName }}</p>
-                            <p>แผนกวิชาที่นักเรียนเข้ารับการฝึกประสบการณ์วิชาชีพ: {{ modalData.collegeDetails.department
-                                }}</p>
+                            <p>แผนกวิชาที่นักเรียนเข้ารับการฝึกประสบการณ์วิชาชีพ: {{ modalData.collegeDetails.department }}</p>
                             <p>ขนาดสถานศึกษา: {{ modalData.collegeDetails.schoolSize }}</p>
-                            <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{
-                                modalData.collegeDetails.contactLastName }}</p>
+                            <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{ modalData.collegeDetails.contactLastName }}</p>
                             <p>เบอร์โทรศัพท์: {{ modalData.collegeDetails.collegePhone }}</p>
-                            <p v-if="modalData.collegeDetails.collegeEmail">Email: {{
-                                modalData.collegeDetails.collegeEmail }}</p>
+                            <p v-if="modalData.collegeDetails.collegeEmail">Email: {{ modalData.collegeDetails.collegeEmail }}</p>
                             <p v-else></p>
                             <p>ที่ตั้งวิทยาลัย: {{ modalData.collegeDetails.collegeAddress }}</p>
                         </div>

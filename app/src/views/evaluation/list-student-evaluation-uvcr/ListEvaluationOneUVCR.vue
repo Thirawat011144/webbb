@@ -10,39 +10,77 @@ const router = useRouter();
 
 const users = ref([]);
 const currentStudyField = localStorage.getItem(config.currentStudyField);
-
+const evaluatorName = `${localStorage.getItem(config.firstName_name)} ${localStorage.getItem(config.token_lastName)}`; // ดึงชื่อผู้ประเมินจาก localStorage
 
 const fetchData = async () => {
     try {
         const usersResponse = await axios.get(`${config.api_path}/users`);
-        const evaluationResponse = await axios.get(`${config.api_path}/data-evaluation-internship`);
+        const role = localStorage.getItem(config.evaluatorStatus);
 
-        const evaluatorName = `${localStorage.getItem(config.firstName_name)} ${localStorage.getItem(config.token_lastName)}`;
-        console.log("bbb", evaluatorName)
+        let evaluationResponse;
+        if (role === 'อาจารย์นิเทศ') {
+            evaluationResponse = await axios.get(`${config.api_path}/data-evaluation-internship-university`);
+        } else if (role === 'ผู้ดูแล') {
+            evaluationResponse = await axios.get(`${config.api_path}/data-evaluation-internship`);
+        } else {
+            throw new Error('Invalid role');
+        }
+
         const evaluatedStudents = new Set(
             evaluationResponse.data
                 .filter(evaluation => evaluation.time === "1" && evaluation.evaluatorName === evaluatorName)
-                .map(evaluation => evaluation.studentId.trim())
+                .map(evaluation => evaluation.studentId)
         );
 
-        console.log('Evaluated students set:', evaluatedStudents);
-
-        console.log("AAA", evaluationResponse)
-        users.value = usersResponse.data.filter(user => {
-            const isEvaluated = evaluatedStudents.has(user.studentID);
-            console.log('User:', user.studentID, 'Evaluated:', isEvaluated);
-            return user.year === "ปวส 2" &&
-                user.branch === currentStudyField &&
-                !isEvaluated;
-        });
+        users.value = usersResponse.data.filter(user =>
+            user.year === "ปวส 2" &&
+            user.branch === currentStudyField &&
+            user.status === "เข้ารับการฝึก" &&
+            !evaluatedStudents.has(user.studentID)
+        );
     } catch (error) {
         Swal.fire({
             title: "error",
-            text: (error.message, "Cr2 Error"),
+            text: error.message,
             icon: "error"
         });
     }
 };
+
+const handleEvaluation = (userId) => {
+    let role = localStorage.getItem(config.evaluatorStatus); // ดึง role จาก localStorage
+    console.log(role);
+
+    // ตรวจสอบและจัดการกับค่า null และค่าที่เป็นสตริง "null"
+    if (role === null || role === 'null') {
+        role = 'อาจารย์นิเทศ';
+    }
+
+    localStorage.setItem(config.evaluatorStatus, role);
+    const roleTeacher = localStorage.getItem(config.role_name);
+    const roleStatus = localStorage.getItem(config.evaluatorStatus);
+
+    // Logging values for debugging
+    console.log("User ID:", userId);
+    console.log("Role Teacher:", roleTeacher);
+    console.log("Role:", roleStatus);
+
+    if (roleStatus === 'อาจารย์นิเทศ') {
+        console.log("Navigating to: /home-evaluation/evaluation-one-vcr/" + userId);
+        router.push(`/home-evaluation/evaluation-one-vcr/${userId}`);
+    } else if (roleStatus === 'ผู้ดูแล') {
+        console.log("Navigating to: /page-evaluation/" + userId);
+        router.push(`/home-evaluation/evaluation-one-mentor/${userId}`);
+    } else {
+        console.log("Invalid role");
+        Swal.fire({
+            title: "error",
+            text: "Role ไม่ถูกต้อง",
+            icon: "error"
+        });
+    }
+};
+
 const sortedUsers = computed(() => {
     return users.value.slice().sort((a, b) => a.id - b.id);
 });
@@ -61,13 +99,6 @@ onMounted(() => {
                         <router-link :to="`/home-evaluation/list-evaluation-one-uvcr`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 1 </button>
                         </router-link>
-                        <router-link :to="`/home-evaluation/list-evaluation-two-uvcr`">
-                            <button class="btn btn-primary m-1"> ครั้งที่ 2 </button>
-                        </router-link>
-                        <router-link :to="`/home-evaluation/list-evaluation-three-uvcr`">
-                            <button class="btn btn-primary m-1"> ครั้งที่ 3 </button>
-                        </router-link>
-
                     </div>
                 </div>
                 <table class="table">
@@ -89,9 +120,7 @@ onMounted(() => {
                             <td>{{ user.branch }}</td>
                             <td>{{ user.year }}</td>
                             <td class="text-center">
-                                <router-link :to="`/home-evaluation/evaluation-one-tec2/${user.id}`">
-                                    <button class="btn btn-success">ประเมิน</button>
-                                </router-link>
+                                <button class="btn btn-success" @click="handleEvaluation(user.id)">ประเมิน</button>
                             </td>
                         </tr>
                     </tbody>

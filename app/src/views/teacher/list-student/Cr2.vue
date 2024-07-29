@@ -167,7 +167,7 @@ const makeModalDraggable = () => {
             <router-link :to="`/teacher-index/student-vcr-approved`"> <button
                 class="btn btn-success m-1">อนุมัติ</button></router-link>
             <router-link :to="`/teacher-index/student-vcr2active`"> <button
-                class="btn btn-warning m-1">กำลังฝึก</button></router-link>
+                class="btn btn-warning m-1">เข้ารับการฝึก</button></router-link>
             <router-link :to="`/teacher-index/student-vcr2success`"> <button class="btn btn-success m-1">ผ่าน</button>
             </router-link>
             <router-link :to="`/teacher-index/student-vcr2notpass`"> <button class="btn btn-danger m-1">ไม่ผ่าน</button>

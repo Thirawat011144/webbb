@@ -1,52 +1,3 @@
-<script setup>
-import axios from "axios";
-import { ref } from 'vue';
-import config from "../../../config";
-import Swal from 'sweetalert2';
-import { useRouter } from 'vue-router'
-
-const router = useRouter();
-
-const firstName = ref('');
-const lastName = ref('')
-const userName = ref('');
-const password = ref('');
-const phoneNumber = ref('');
-const gender = ref('')
-const branch = ref('');
-
-const handleRegister = async () => {
-    try {
-        const payload = {
-            firstName: firstName.value,
-            lastName: lastName.value,
-            userName: userName.value,
-            password: password.value,
-            phoneNumber: phoneNumber.value,
-            gender: gender.value,
-            branch: branch.value,
-        }
-        const response = await axios.post(`${config.api_path}/register`, payload);
-        if (response.data.message === "Success") {
-            Swal.fire({
-                title: "Sign Up",
-                text: "สมัครบัญชีเรียบร้อยแล้ว",
-                icon: "success",
-                timer: 2000
-            })
-            router.push('/login')
-        }
-    } catch (error) {
-        Swal.fire({
-            title: "error",
-            text: (error.message, "Register Error"),
-            icon: "error"
-        })
-        console.log(error)
-    }
-}
-</script>
-
 <template>
     <section class="h-100 bg-light">
         <div class="container py-5 h-100">
@@ -60,7 +11,22 @@ const handleRegister = async () => {
 
                                     <form @submit.prevent="handleRegister">
                                         <div class="row">
-                                            <div class="col-md-6 mb-4">
+                                            <div class="col-md-4 mb-4">
+                                                <div class="form-outline">
+                                                    <label class="form-label" for="form3ExamplePrefix">คำนำหน้า</label>
+                                                    <select id="form3ExamplePrefix" class="form-control-lg"
+                                                        v-model="prefix" required>
+                                                        <!-- <option value="" disabled selected>-</option> -->
+                                                        <option value="อาจารย์">อาจารย์</option>
+                                                        <option value="ผู้ช่วยศาสตราจารย์">ผู้ช่วยศาสตราจารย์</option>
+                                                        <option value="รองศาสตราจารย์">รองศาสตราจารย์</option>
+                                                        <!-- <option value="พลเอก">พลเอก</option> -->
+                                                        <!-- <option value="พันโท">พันโท</option> -->
+                                                        <!-- เพิ่มเติมคำนำหน้าหรือยศอื่นๆ ตามต้องการ -->
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 mb-4">
                                                 <div class="form-outline">
                                                     <label class="form-label" for="form3Example1m">ชื่อ</label>
                                                     <input type="text" id="form3Example1m"
@@ -68,7 +34,7 @@ const handleRegister = async () => {
                                                         required />
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 mb-4">
+                                            <div class="col-md-4 mb-4">
                                                 <div class="form-outline">
                                                     <label class="form-label" for="form3Example1n">นามสกุล</label>
                                                     <input type="text" id="form3Example1n"
@@ -101,6 +67,12 @@ const handleRegister = async () => {
                                             <label class="form-label" for="form3Example8">เบอร์โทร</label>
                                             <input type="tel" id="form3Example8" class="form-control form-control-lg"
                                                 v-model="phoneNumber" maxlength="10" pattern="[0-9]{10}" required />
+                                        </div>
+
+                                        <div class="form-outline mb-4">
+                                            <label class="form-label" for="form3Example9">เลขบัตรประชาชน</label>
+                                            <input type="text" id="form3Example9" class="form-control form-control-lg"
+                                                v-model="idCard" maxlength="13" pattern="[0-9]{13}" required />
                                         </div>
 
                                         <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
@@ -161,6 +133,59 @@ const handleRegister = async () => {
         </div>
     </section>
 </template>
+
+<script setup>
+import axios from "axios";
+import { ref } from 'vue';
+import config from "../../../config";
+import Swal from 'sweetalert2';
+import { useRouter } from 'vue-router'
+
+const router = useRouter();
+
+const prefix = ref('');  // เพิ่มตัวแปร prefix
+const firstName = ref('');
+const lastName = ref('');
+const userName = ref('');
+const password = ref('');
+const phoneNumber = ref('');
+const idCard = ref('');  // เพิ่มตัวแปร idCard
+const gender = ref('');
+const branch = ref('');
+
+const handleRegister = async () => {
+    try {
+        const payload = {
+            prefix: prefix.value,  // เพิ่ม prefix ใน payload
+            firstName: firstName.value,
+            lastName: lastName.value,
+            userName: userName.value,
+            password: password.value,
+            phoneNumber: phoneNumber.value,
+            idCard: idCard.value,  // เพิ่ม idCard ใน payload
+            gender: gender.value,
+            branch: branch.value,
+        }
+        const response = await axios.post(`${config.api_path}/register`, payload);
+        if (response.data.message === "Success") {
+            Swal.fire({
+                title: "Sign Up",
+                text: "สมัครบัญชีเรียบร้อยแล้ว",
+                icon: "success",
+                timer: 2000
+            })
+            router.push('/login')
+        }
+    } catch (error) {
+        Swal.fire({
+            title: "error",
+            text: (error.message, "Register Error"),
+            icon: "error"
+        })
+        console.log(error)
+    }
+}
+</script>
 
 <style scoped>
 .bg-light {

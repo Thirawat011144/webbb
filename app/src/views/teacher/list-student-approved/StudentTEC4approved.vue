@@ -5,7 +5,8 @@ import config from "../../../../config";
 import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router';
-import * as XLSX from 'xlsx'; // import library
+import * as XLSX from 'xlsx'; // import library\
+import { makeModalDraggable } from "@/utils/draggable";
 
 // const route = useRoute();
 // const router = useRouter();
@@ -43,6 +44,7 @@ const showModal = async (id) => {
     try {
         const response = await axios.get(`${config.api_path}/user/${id}`);
         modalData.value = response.data;
+        makeModalDraggable();
     } catch (error) {
         Swal.fire({
             title: "error",

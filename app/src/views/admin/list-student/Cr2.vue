@@ -4,38 +4,17 @@ import { ref, onMounted, computed } from 'vue';
 import config from "../../../../config";
 import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
-import { RouterLink, RouterView } from 'vue-router';
-import * as XLSX from 'xlsx'; // import library
+import * as XLSX from 'xlsx';
+import { makeModalDraggable } from "@/utils/draggable";
 
-// const route = useRoute();
-// const router = useRouter();
-
-// const user = ref({
-//   firstName: '',
-//   lastName: '',
-//   userName: '',
-//   password: '',
-//   phoneNumber: '',
-//   gender: '',
-//   year: '',
-//   branch: '',
-//   status: '',
-//   studentID: '',
-//   company: ''
-// });
-
-const users = ref([]); // เปลี่ยน {} เป็น []
+const users = ref([]);
 const isModalVisible = ref(false);
 const modalData = ref(null);
-const branch = localStorage.getItem(config.branch)
-
-
+const branch = localStorage.getItem(config.branch);
 
 const fetchData = async () => {
   try {
-    const response = await axios.get(`${config.api_path}/users`, {
-      // headers: { 'Authorization': `Bearer ${localStorage.getItem(config.token_name)}` }
-    });
+    const response = await axios.get(`${config.api_path}/users`);
     users.value = response.data.filter(user => user.year === "ปวช 3" && user.branch === branch);
   } catch (error) {
     Swal.fire({
@@ -46,13 +25,12 @@ const fetchData = async () => {
   }
 };
 
-
-// modal
 const showModal = async (id) => {
   isModalVisible.value = true;
   try {
     const response = await axios.get(`${config.api_path}/user/${id}`);
     modalData.value = response.data;
+    makeModalDraggable();
   } catch (error) {
     Swal.fire({
       title: "error",
@@ -66,11 +44,8 @@ const closeModal = () => {
   isModalVisible.value = false;
   modalData.value = null;
 };
-// modal
-
 
 const removeData = async (id) => {
-  // แสดงป๊อปอัพยืนยันการลบ
   const result = await Swal.fire({
     title: 'คุณแน่ใจหรือไม่?',
     text: 'คุณจะไม่สามารถย้อนกลับได้!',
@@ -82,7 +57,6 @@ const removeData = async (id) => {
     cancelButtonText: 'ยกเลิก'
   });
 
-  // ตรวจสอบว่าผู้ใช้กดยืนยันการลบหรือไม่
   if (result.isConfirmed) {
     try {
       const response = await axios.delete(`${config.api_path}/users/${id}`);
@@ -93,7 +67,7 @@ const removeData = async (id) => {
         icon: 'success',
       }).then((result) => {
         if (result.value) {
-          fetchData(); // รีเฟรชข้อมูลหลังจากการลบ
+          fetchData();
         }
       });
     } catch (error) {
@@ -107,12 +81,10 @@ const removeData = async (id) => {
   }
 };
 
-
 const sortedUsers = computed(() => {
-  return users.value.slice().sort((a, b) => a.id - b.id); // เรียงลำดับตาม ID
+  return users.value.slice().sort((a, b) => a.id - b.id);
 });
 
-// ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
 const downloadExcel = () => {
   const data = sortedUsers.value.map(user => ({
     'รหัสนักศึกษา': user.studentID,
@@ -123,7 +95,7 @@ const downloadExcel = () => {
     'สถานะ': user.status,
     'เบอร์โทรศัพท์': user.phoneNumber,
     'อีเมล์': user.email,
-    'สถานที่ฝึกประสบการณ์': user.companyDetails?.companyName || 'ไม่มีข้อมมูล'
+    'สถานที่ฝึกประสบการณ์': user.companyDetails?.companyName || 'ไม่มีข้อมูล'
   }));
 
   const worksheet = XLSX.utils.json_to_sheet(data);
@@ -132,27 +104,31 @@ const downloadExcel = () => {
   XLSX.writeFile(workbook, 'students.xlsx');
 };
 
-
 onMounted(() => {
   fetchData();
 });
 </script>
 
 <template>
-  <section class="content mt-4">
+  <section class="content">
     <div class="card">
       <div class="card-header">
         <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นประกาศนียบัตรวิชาชีพ ชั้นปีที่ 3
           <div>
-            <router-link :to="`/admin-index/cr2-req`"> <button
-                class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
-            <router-link :to="`/admin-index/vcr2-approved`"> <button
-                class="btn btn-success m-1">อนุมัติ</button></router-link>
-            <router-link :to="`/admin-index/cr2-active`"> <button
-                class="btn btn-warning m-1">กำลังฝึก</button></router-link>
-            <router-link :to="`/admin-index/cr2-success`"> <button class="btn btn-success m-1">ผ่าน</button>
+            <router-link :to="`/admin-index/cr2-req`"> 
+              <button class="btn btn-primary m-1">ขออนุมัติ</button>
             </router-link>
-            <router-link :to="`/admin-index/cr2-notpass`"> <button class="btn btn-danger m-1">ไม่ผ่าน</button>
+            <router-link :to="`/admin-index/vcr2-approved`">
+              <button class="btn btn-success m-1">อนุมัติ</button>
+            </router-link>
+            <router-link :to="`/admin-index/cr2-active`"> 
+              <button class="btn btn-warning m-1">เข้ารับการฝึก</button>
+            </router-link>
+            <router-link :to="`/admin-index/cr2-success`"> 
+              <button class="btn btn-success m-1">ผ่าน</button>
+            </router-link>
+            <router-link :to="`/admin-index/cr2-notpass`">
+              <button class="btn btn-danger m-1">ไม่ผ่าน</button>
             </router-link>
             <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
           </div>
@@ -176,23 +152,24 @@ onMounted(() => {
               <td>{{ user.firstName }} {{ user.lastName }}</td>
               <td>{{ user.branch }}</td>
               <td>{{ user.year }}</td>
-
               <td class="text-center">
                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
               </td>
               <td>
                 <router-link :to="`/edit-cr2/${user.id}`">
-                  <button class="btn btn-primary m-1"><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button class="btn btn-primary m-1">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </button>
                 </router-link>
-                <button @click="removeData(user.id)" class="btn btn-danger m-1"><i
-                  class="fa-solid fa-trash-can"></i></button>
+                <button @click="removeData(user.id)" class="btn btn-danger m-1">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <!-- Modal -->
     <div v-if="isModalVisible" class="modal fade show" tabindex="-1" style="display: block;">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -213,8 +190,7 @@ onMounted(() => {
               <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
               <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
               <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
-              <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{
-                modalData.companyDetails.contactLastName }}</p>
+              <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{ modalData.companyDetails.contactLastName }}</p>
               <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
               <p v-if="modalData.companyDetails.companyEmail">Email: {{ modalData.companyDetails.companyEmail }}</p>
               <p v-else></p>
@@ -223,13 +199,11 @@ onMounted(() => {
             <div v-else-if="modalData.collegeDetails">
               <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
               <p>สถานประกอบการ: {{ modalData.collegeDetails.collegeName }}</p>
-              <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{
-                modalData.collegeDetails.contactLastName }}</p>
+              <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{ modalData.collegeDetails.contactLastName }}</p>
               <p>เบอร์โทรศัพท์: {{ modalData.collegeDetails.collegePhone }}</p>
               <p v-if="modalData.collegeDetails.collegeEmail">Email: {{ modalData.collegeDetails.collegeEmail }}</p>
               <p v-else></p>
               <p>ที่ตั้งวิทยาลัย: {{ modalData.collegeDetails.collegeAddress }}</p>
-
             </div>
             <div v-else>
               <p>ไม่มีข้อมูลสถานประกอบการ</p>

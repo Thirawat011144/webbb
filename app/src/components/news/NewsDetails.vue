@@ -10,6 +10,9 @@
                     </router-link>
                 </div>
                 <div class="content">
+                    <img v-if="announcement.imageFile" :src="getFileTypeUrl(announcement.imageFile)"
+                        alt="Announcement Image" class="announcement-image">
+                    <img v-else class="announcement-image" src="../../assets/img/917.png">
                     <div class="announcement-details">
                         <div v-html="announcement.detail"></div>
                         <a v-if="announcement.pdfFile" :href="getFileTypeUrl(announcement.pdfFile)" target="_blank"
@@ -46,7 +49,8 @@ const fetchAnnouncement = async () => {
 };
 
 const getFileTypeUrl = (fileUrl) => {
-    return fileUrl ? `${config.api_path}/uploads/${fileUrl}` : '#';
+    console.log(fileUrl)
+    return fileUrl ? `${fileUrl}` : '#';
 };
 
 // ดึงข้อมูลเมื่อคอมโพเนนต์ถูกเมาท์
@@ -124,6 +128,13 @@ onMounted(() => {
     margin-top: 20px;
     font-size: 16px;
     line-height: 1.6;
+}
+
+.announcement-image {
+    margin-top: 20px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
 }
 
 .news-link {

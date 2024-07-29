@@ -9,6 +9,7 @@
             <th scope="col">ลิงค์</th>
             <th scope="col">ไฟล์ PDF</th>
             <th scope="col">ไฟล์ Doc</th>
+            <th scope="col">ไฟล์ Images</th>
             <th scope="col">วันที่ลงประกาศ</th>
             <th scope="col">Tools</th>
           </tr>
@@ -28,9 +29,13 @@
               <a v-if="document.docFile" :href="document.docFile" target="_blank">ดาวน์โหลด Doc</a>
               <span v-else>-</span>
             </td>
+            <td>
+              <a v-if="document.imageFile" :href="document.imageFile" target="_blank">ดาวน์โหลด Image</a>
+              <span v-else>-</span>
+            </td>
             <td>{{ formatDate(document.createdAt) }}</td>
             <td class="p-3">
-              <router-link :to="`/admin-index/edit-download/${document.id}`">
+              <router-link :to="`/admin-index/edit-news/${document.id}`">
                 <button class="btn btn-primary">Edit</button>
               </router-link>
               <button @click="removeData(document.id)" class="btn btn-danger">Delete</button>

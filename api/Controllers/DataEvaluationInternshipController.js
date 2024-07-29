@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post("/data-evaluation-internship", async (req, res) => {
     try {
-        const { evaluatorName, studentId, criteria, time, evaluatorStatus,qualityOfWork,generalKnowledge,specificKnowledge,responsibility,teamResponsibility,conduct,problemSolving, strength,improvement,jobOffer,other,averageScore,totalScore,phoneNumber } = req.body;
+        const { evaluatorName, studentId, criteria, time, evaluatorStatus,qualityOfWork,generalKnowledge,specificKnowledge,responsibility,teamResponsibility,conduct,problemSolving, strength,improvement,jobOffer,other,averageScore,totalScore,phoneNumber,idCard } = req.body;
 
         console.log("Criteria Length:", criteria.length); // เพิ่มดีบักเพื่อดูจำนวนข้อ
         console.log("Criteria:", criteria); // เพิ่มดีบักเพื่อดูข้อมูลที่ส่งมา
@@ -14,7 +14,8 @@ router.post("/data-evaluation-internship", async (req, res) => {
             evaluatorName: evaluatorName,
             studentId: studentId,
             phoneNumber: phoneNumber,
-
+            idCard: idCard,
+            
             criteria: criteria,
             qualityOfWork:qualityOfWork,
             generalKnowledge:generalKnowledge,

@@ -7,6 +7,9 @@ const UsersModel = connect.define("users", {
         primaryKey: true,
         autoIncrement: true,
     },
+    prefix: {
+        type: DataTypes.STRING(50),
+    },
     firstName: {
         type: DataTypes.STRING(50),
     },
@@ -23,6 +26,9 @@ const UsersModel = connect.define("users", {
         type: DataTypes.STRING(255),
     },
     phoneNumber: {
+        type: DataTypes.STRING(50),
+    },
+    idCard: {
         type: DataTypes.STRING(50),
     },
     gender: {

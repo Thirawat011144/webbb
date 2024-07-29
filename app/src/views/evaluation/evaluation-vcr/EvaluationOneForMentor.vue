@@ -268,6 +268,7 @@ const fetchStudentData = async () => {
 
 const submitEvaluation = async () => {
     try {
+        const idCard = localStorage.getItem(config.idCard)
         const phoneNumber = localStorage.getItem(config.phoneNumber);
         const evaluatorStatus = localStorage.getItem(config.evaluatorStatus);
         const evaluatorName = `${localStorage.getItem(config.firstName_name)} ${localStorage.getItem(config.token_lastName)}`;
@@ -287,6 +288,7 @@ const submitEvaluation = async () => {
             evaluatorName: evaluatorName,
             studentId: student.value.studentID,
             phoneNumber: phoneNumber,
+            idCard: idCard,
 
             criteria: workCriteria.value,
             qualityOfWork: qualityOfWork.value,

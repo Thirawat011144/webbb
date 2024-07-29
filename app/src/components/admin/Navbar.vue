@@ -24,6 +24,9 @@ const handleSignOut = () => {
             localStorage.removeItem(config.token_name);
             localStorage.removeItem(config.firstName_name);
             localStorage.removeItem(config.branch)
+            localStorage.removeItem(config.companyData)
+            localStorage.removeItem(config.idCard)
+            localStorage.removeItem(config.phoneNumber)
             localStorage.removeItem('userData');
             router.push("/");
         }

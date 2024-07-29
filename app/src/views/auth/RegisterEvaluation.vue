@@ -12,7 +12,7 @@ const lastName = ref('');
 const userName = ref('');
 const password = ref('');
 const phoneNumber = ref('');
-const studentID = ref('');
+const idCard = ref('');
 // const schoolName = ref('');
 // const department = ref('');
 // const schoolSize = ref('');
@@ -46,7 +46,7 @@ const handleRegister = async () => {
             userName: userName.value,
             password: password.value,
             phoneNumber: phoneNumber.value,
-            studentID: studentID.value,
+            idCard: idCard.value,
             // schoolName: schoolName.value,
             // department: department.value,
             // schoolSize: schoolSize.value,
@@ -130,10 +130,9 @@ const handleRegister = async () => {
                                             <div class="col-md-6 mb-4">
                                                 <div class="form-outline">
                                                     <label class="form-label"
-                                                        for="studentID">เลขบัตรประจำตัวประชาชน</label>
-                                                    <input type="text" id="studentID"
-                                                        class="form-control form-control-lg" v-model="studentID"
-                                                        maxlength="13" minlength="13" required />
+                                                        for="idCard">เลขบัตรประจำตัวประชาชน</label>
+                                                    <input type="text" id="idCard" class="form-control form-control-lg"
+                                                        v-model="idCard" maxlength="13" minlength="13" required />
                                                 </div>
                                             </div>
                                             <!-- <div class="col-md-6 mb-4">
@@ -226,7 +225,7 @@ const handleRegister = async () => {
                                             <div class="col-md-6 mb-4">
                                                 <div class="form-outline">
                                                     <label class="form-label"
-                                                        for="evaluatorStatus">สถานะผู้ประเมินสมรรถนะวิชาชีพครู</label>
+                                                        for="evaluatorStatus">สถานะผู้ประเมิน</label>
                                                     <select id="evaluatorStatus" class="form-control form-control-lg"
                                                         v-model="evaluatorStatus" required>
                                                         <option value="" disabled>-</option>

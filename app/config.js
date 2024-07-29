@@ -8,8 +8,8 @@ const config = {
     currentStudyField: "currentStudyField",
     evaluatorName: 'evaluatorName',
     branch: 'branch',
-    phoneNumber:'phoneNumber'
-
+    phoneNumber:'phoneNumber',
+    idCard:'idCard'
 }
 
 export default config

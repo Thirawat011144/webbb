@@ -51,6 +51,8 @@ const updateData = async () => {
     });
     if (result.isConfirmed) {
         try {
+            const checkYears = user.value.year
+            console.log("check",checkYears)
             const response = await axios.put(`${config.api_path}/user/${route.params.id}`, user.value);
             if (response.data.message === 'Success') {
                 Swal.fire({
@@ -60,6 +62,8 @@ const updateData = async () => {
                 });
                 if (role === 'teacher') {
                     router.push('/teacher-index/list-cr2');
+                } else if (role === 'admin' && checkYears === 'ปวส 2'){
+                    router.push('/admin-index/list-dcr');
                 } else {
                     router.push('/admin-index/list-cr2');
                 }
@@ -141,9 +145,14 @@ onMounted(() => {
                         <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
                             <h6 class="mb-0 me-4">Year:</h6>
                             <div class="form-check form-check-inline mb-0 me-4">
-                                <input class="form-check-input" type="radio" name="yearOptions" id="voc2" value="ปวช 2"
+                                <input class="form-check-input" type="radio" name="yearOptions" id="voc2" value="ปวช 3"
                                     v-model="user.year" />
-                                <label class="form-check-label" for="voc2">ปวช 2</label>
+                                <label class="form-check-label" for="voc2">ปวช 3</label>
+                            </div>
+                            <div class="form-check form-check-inline mb-0 me-4">
+                                <input class="form-check-input" type="radio" name="yearOptions" id="voc2" value="ปวส 2"
+                                    v-model="user.year" />
+                                <label class="form-check-label" for="voc2">ปวส 2</label>
                             </div>
                             <div class="form-check form-check-inline mb-0 me-4">
                                 <input class="form-check-input" type="radio" name="yearOptions" id="bach2"
@@ -161,20 +170,32 @@ onMounted(() => {
                                 <label class="form-label" for="branch">สาขา</label>
                                 <select v-model="user.branch" class="form-select">
                                     <option value="" disabled>-</option>
-                                    <option value="สาขาครุศาสตร์อุตสาหกรรมโยธา">
-                                        สาขาครุศาสตร์อุตสาหกรรมโยธา</option>
-                                    <option value="สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า">
-                                        สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า</option>
-                                    <option value="สาขาครุศาสตร์อุตสาหกรรมเครื่องกล">
-                                        สาขาครุศาสตร์อุตสาหกรรมเครื่องกล</option>
-                                    <option value="สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ">
-                                        สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ</option>
-                                    <option value="สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม">
-                                        สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม</option>
-                                    <option value="สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์">
-                                        สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์</option>
-                                    <option value="สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ">
-                                        สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ</option>
+                                    <option value="สาขาวิชาช่างก่อสร้าง">
+                                        สาขาวิชาช่างก่อสร้าง</option>
+                                    <option value="สาขาวิชาช่างไฟฟ้ากำลัง">
+                                        สาขาวิชาช่างไฟฟ้ากำลัง</option>
+                                    <option value="สาขาวิชาช่างยนต์">
+                                        สาขาวิชาช่างยนต์</option>
+                                    <option value="สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล">
+                                        สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล</option>
+                                    <option value="สาขาวิชาช่างอิเล็กทรอนิกส์">
+                                        สาขาวิชาช่างอิเล็กทรอนิกส์</option>
+                                    <option value="สาขาวิชาช่างเทคนิคคอมพิวเตอร์">
+                                        สาขาวิชาช่างเทคนิคคอมพิวเตอร์</option>
+                                    <option value="สาขาวิชาช่างโยธา">
+                                        สาขาวิชาช่างโยธา</option>
+                                    <option value="สาขาวิชาช่างเครื่องมือกลอัตโนมัติ">
+                                        สาขาวิชาช่างเครื่องมือกลอัตโนมัติ</option>
+                                    <option value="สาขาวิชาช่างกลเกษตร">
+                                        สาขาวิชาช่างกลเกษตร</option>
+                                    <option value="สาขาวิชาช่างกลโรงงาน">
+                                        สาขาวิชาช่างกลโรงงาน</option>
+                                    <option value="สาขาวิชาช่างท่อและประสาน">
+                                        สาขาวิชาช่างท่อและประสาน</option>
+                                    <option value="สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล">
+                                        สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล</option>
+                                    <option value="สาขาวิชาเทคโนโลยีคอมพิวเตอร์">
+                                        สาขาวิชาเทคโนโลยีคอมพิวเตอร์</option>
                                 </select>
                             </div>
                             <!-- <div class="col-md-6 mb-4">

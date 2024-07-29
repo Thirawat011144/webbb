@@ -92,14 +92,14 @@ onMounted(() => {
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <div class="form-outline">
-                                    <label class="form-label" for="firstName">First name</label>
+                                    <label class="form-label" for="firstName">ชื่อ</label>
                                     <input type="text" id="firstName" class="form-control form-control-lg"
                                         v-model="user.firstName" />
                                 </div>
                             </div>
                             <div class="col-md-6 mb-4">
                                 <div class="form-outline">
-                                    <label class="form-label" for="lastName">Last name</label>
+                                    <label class="form-label" for="lastName">นามสกุล</label>
                                     <input type="text" id="lastName" class="form-control form-control-lg"
                                         v-model="user.lastName" />
                                 </div>
@@ -122,30 +122,30 @@ onMounted(() => {
                             </div>
                         </div> -->
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="phoneNumber">Tel</label>
+                            <label class="form-label" for="phoneNumber">เบอร์โทรศัพท์</label>
                             <input type="text" id="phoneNumber" class="form-control form-control-lg"
                                 v-model="user.phoneNumber" />
                         </div>
                         <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
-                            <h6 class="mb-0 me-4">Gender:</h6>
+                            <h6 class="mb-0 me-4">เพศ:</h6>
                             <div class="form-check form-check-inline mb-0 me-4">
                                 <input class="form-check-input" type="radio" name="inlineRadioOptions" id="femaleGender"
                                     value="Female" v-model="user.gender" />
-                                <label class="form-check-label" for="femaleGender">Female</label>
+                                <label class="form-check-label" for="femaleGender">หญิง</label>
                             </div>
                             <div class="form-check form-check-inline mb-0 me-4">
                                 <input class="form-check-input" type="radio" name="inlineRadioOptions" id="maleGender"
                                     value="Male" v-model="user.gender" />
-                                <label class="form-check-label" for="maleGender">Male</label>
+                                <label class="form-check-label" for="maleGender">ชาย</label>
                             </div>
                         </div>
                         <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
-                            <h6 class="mb-0 me-4">Year:</h6>
-                            <div class="form-check form-check-inline mb-0 me-4">
+                            <h6 class="mb-0 me-4">ชั้นปี:</h6>
+                            <!-- <div class="form-check form-check-inline mb-0 me-4">
                                 <input class="form-check-input" type="radio" name="yearOptions" id="voc2" value="ปวช 2"
                                     v-model="user.year" />
                                 <label class="form-check-label" for="voc2">ปวช 2</label>
-                            </div>
+                            </div> -->
                             <div class="form-check form-check-inline mb-0 me-4">
                                 <input class="form-check-input" type="radio" name="yearOptions" id="bach2"
                                     value="ป.ตรี ปีที่ 2" v-model="user.year" />
@@ -158,7 +158,7 @@ onMounted(() => {
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 mb-4">
+                            <div class="form-outline mb-4">
                                 <label class="form-label" for="branch">สาขา</label>
                                 <select v-model="user.branch" class="form-select">
                                     <option value="" disabled>-</option>
@@ -190,7 +190,7 @@ onMounted(() => {
                             </div> -->
                         </div>
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="studentID">Student ID</label>
+                            <label class="form-label" for="studentID">รหัสนักศึกษา</label>
                             <input v-model="user.studentID" type="text" id="studentID"
                                 class="form-control form-control-lg" />
                         </div>

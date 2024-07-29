@@ -36,6 +36,7 @@ router.post('/login', async (req, res) => {
             studentID: User.studentID,
             email:User.email,
             role: User.role,
+            idCard:User.idCard
         };
 
         jwt.sign(data, process.env.SECRET_KEY, { expiresIn: '1h' }, (error, token) => {

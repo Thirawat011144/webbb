@@ -7,6 +7,8 @@ import { useRoute, useRouter } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router';
 import * as XLSX from 'xlsx'; // import library
 
+import { makeModalDraggable } from "@/utils/draggable";
+
 // const route = useRoute();
 // const router = useRouter();
 
@@ -54,6 +56,7 @@ const showModal = async (id) => {
   try {
     const response = await axios.get(`${config.api_path}/user/${id}`);
     modalData.value = response.data;
+    makeModalDraggable();
   } catch (error) {
     Swal.fire({
       title: "error",
@@ -140,7 +143,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="content mt-4">
+  <section class="content">
     <div class="card">
       <div class="card-header">
         <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นประกาศนียบัตรวิชาชีพชั้นสูง ชั้นปีที่ 2
@@ -150,7 +153,7 @@ onMounted(() => {
             <router-link :to="`/admin-index/dcr-approved`"> <button
                 class="btn btn-success m-1">อนุมัติ</button></router-link>
             <router-link :to="`/admin-index/dcr-active`"> <button
-                class="btn btn-warning m-1">กำลังฝึก</button></router-link>
+                class="btn btn-warning m-1">เข้ารับการฝึก</button></router-link>
             <router-link :to="`/admin-index/dcr-success`"> <button class="btn btn-success m-1">ผ่าน</button>
             </router-link>
             <router-link :to="`/admin-index/dcr-notpass`"> <button class="btn btn-danger m-1">ไม่ผ่าน</button>

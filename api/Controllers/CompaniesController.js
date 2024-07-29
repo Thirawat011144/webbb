@@ -87,7 +87,7 @@ router.post('/company', async (req, res) => {
         }
 
         // ตรวจสอบค่า status
-        if (status === 'ไม่อนุมัติ') {
+        if (status === 'ไม่อนุมัติ' || status === 'ไม่ผ่าน') {
             // อัปเดต status ใน Users table
             user.year = academicYear
             user.status = 'ขออนุมัติ';
@@ -110,7 +110,18 @@ router.post('/company', async (req, res) => {
 
                 res.status(200).send({ message: "Success", existingCompany });
             } else {
-                res.status(404).send({ message: "ไม่พบข้อมูล studentID ในตาราง Companies" });
+                const newCompanies = await CompaniesModel.create({
+                    companyName,
+                    companyDepartment,
+                    contactFirstName,
+                    contactLastName,
+                    companyPhone,
+                    companyEmail,
+                    companyAddress,
+                    studentID,
+                    valueStatus
+                })
+                res.status(201).send({ message: "Success", newCompanies });
             }
         } else if (status === 'ขออนุมัติ') {
             // อัปเดต status ใน Users table
@@ -175,6 +186,24 @@ router.get('/companies', async (req, res) => {
             ]
         });
         res.send(companies);
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+});
+
+router.delete("/companies", async (req, res) => {
+    try {
+        const { studentID } = req.body; // ตรวจสอบชื่อฟิลด์ให้ตรงกัน
+
+        const result = await CompaniesModel.destroy({
+            where: { studentID: studentID } // ใช้ studentID
+        });
+
+        if (result) {
+            res.json({ message: "Evaluations deleted successfully" });
+        } else {
+            res.status(404).send({ message: "Evaluations not found" });
+        }
     } catch (error) {
         res.status(500).send({ message: error.message });
     }

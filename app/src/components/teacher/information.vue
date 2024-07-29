@@ -4,11 +4,14 @@
         <div class="card" v-if="dataResult">
             <div class="card-body">
                 <h5 class="card-title">
-                    <span>ชื่อ:</span> {{ dataResult.firstName }} <span>นามสกุล:</span> {{ dataResult.lastName }}
+                    <span>ชื่อ:</span> {{ dataResult.prefix }}{{ dataResult.firstName }} <span>นามสกุล:</span> {{ dataResult.lastName }}
                 </h5>
 
                 <p class="card-text">
                     <span>โทรศัพท์:</span> {{ dataResult.phoneNumber }}
+                </p>
+                <p class="card-text">
+                    <span>เลขบัตรประชาชน:</span> {{ dataResult.idCard }}
                 </p>
                 <p class="card-text branch-container">
                     <span>รับผิดชอบสาขา :</span>

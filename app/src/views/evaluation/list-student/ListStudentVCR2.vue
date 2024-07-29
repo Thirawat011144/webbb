@@ -19,7 +19,7 @@ const currentStudyField = localStorage.getItem(config.currentStudyField)
 const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => user.year === "ปวช 3" && user.branch === currentStudyField);
+        users.value = response.data.filter(user => user.year === "ปวช 3" && user.branch === currentStudyField && user.status === 'เข้ารับการฝึก' );
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -108,12 +108,12 @@ onMounted(() => {
                         <router-link :to="`/home-evaluation/list-evaluation-one-vcr`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 1 </button>
                         </router-link>
-                        <router-link :to="`/home-evaluation/list-evaluation-two-vcr`">
+                        <!-- <router-link :to="`/home-evaluation/list-evaluation-two-vcr`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 2 </button>
                         </router-link>
                         <router-link :to="`/home-evaluation/list-evaluation-three-vcr`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 3 </button>
-                        </router-link>
+                        </router-link> -->
 
                     </div>
                 </div>

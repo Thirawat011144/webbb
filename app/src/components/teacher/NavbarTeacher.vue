@@ -26,6 +26,8 @@ const handleSignOut = () => {
             localStorage.removeItem(config.token_lastName)
             localStorage.removeItem(config.evaluatorStatus)
             localStorage.removeItem(config.currentStudyField)
+            localStorage.removeItem(config.phoneNumber)
+            localStorage.removeItem(config.idCard)
             localStorage.removeItem('userData');
             router.push("/");
         }

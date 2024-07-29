@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router';
 import * as XLSX from 'xlsx'; // import library
-
+import { makeModalDraggable } from "@/utils/draggable";
 
 // const route = useRoute();
 // const router = useRouter();
@@ -43,6 +43,7 @@ const showModal = async (id) => {
     try {
         const response = await axios.get(`${config.api_path}/user/${id}`);
         modalData.value = response.data;
+        makeModalDraggable();
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -160,7 +161,7 @@ onMounted(() => {
             <router-link :to="`/admin-index/vcr2-approved`"> <button
                 class="btn btn-success m-1">อนุมัติ</button></router-link>
             <router-link :to="`/admin-index/cr2-active`"> <button
-                class="btn btn-warning m-1">กำลังฝึก</button></router-link>
+                class="btn btn-warning m-1">เข้ารับการฝึก</button></router-link>
             <router-link :to="`/admin-index/cr2-success`"> <button class="btn btn-success m-1">ผ่าน</button>
             </router-link>
             <router-link :to="`/admin-index/cr2-notpass`"> <button class="btn btn-danger m-1">ไม่ผ่าน</button>
@@ -197,9 +198,9 @@ onMounted(() => {
                                     @click="handleStatus(user.id, 'ไม่ผ่าน')">ไม่ผ่าน</button> -->
 
                                 <router-link :to="`/edit-cr2/${user.id}`">
-                                    <button class="btn btn-primary m-1">Edit</button>
+                                    <button class="btn btn-primary m-1"><i class="fa-solid fa-pen-to-square"></i></button>
                                 </router-link>
-                                <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button>
+                                <button @click="removeData(user.id)" class="btn btn-danger m-1"><i class="fa-solid fa-trash-can"></i></button>
                             </td>
                         </tr>
                     </tbody>

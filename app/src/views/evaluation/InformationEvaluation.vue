@@ -13,7 +13,7 @@
                     <span>โทรศัพท์:</span> {{ dataResult.phoneNumber }}
                 </p>
                 <p class="card-text">
-                    <span>เลขบัตรประจำตัวประชาชน:</span> {{ dataResult.studentID }}
+                    <span>เลขบัตรประจำตัวประชาชน:</span> {{ dataResult.idCard }}
                 </p>
                 <p class="card-text">
                     <span>สถานะผู้ประเมินสมรรถนะวิชาชีพครู:</span> {{ dataResult.evaluatorStatus }}

@@ -87,8 +87,10 @@ const dataEvaluationInternship = connect.define("dataEvaluationInternship", {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
-    
-
+    idCard: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+    },
 },);
 
 // dataEvaluationInternship.sync({ alter: true })
