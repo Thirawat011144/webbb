@@ -47,27 +47,67 @@ const dataEvaluationInternship = connect.define("dataEvaluationInternship", {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
-    generalKnowledge: {
+    academicAbility: {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
-    specificKnowledge: {
+    abilityToLearn: {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
-    responsibility: {
+    practicalAbility: {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
-    teamResponsibility: {
+    judgmentAndDecision: {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
-    conduct: {
+    managementAndPlanning: {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
-    problemSolving: {
+    communicationSkills: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+    },
+    foreignLanguage: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+    },
+    suitabilityForJob: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+    },
+    responsibilityAndDependability: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+    },
+    interestInWork: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+    },
+    initiative: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+    },
+    dependability: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+    },
+    personality: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+    },
+    interpersonalSkills: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+    },
+    discipline: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+    },
+    ethicsAndMorality: {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
@@ -79,10 +119,6 @@ const dataEvaluationInternship = connect.define("dataEvaluationInternship", {
         type: DataTypes.FLOAT,
         allowNull: true
     },
-      problemSolving: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
-    },
     phoneNumber: {
         type: DataTypes.STRING(255),
         allowNull: false,
@@ -91,7 +127,10 @@ const dataEvaluationInternship = connect.define("dataEvaluationInternship", {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
-},);
+});
+
+module.exports = dataEvaluationInternship;
+
 
 // dataEvaluationInternship.sync({ alter: true })
 //     .then(() => {

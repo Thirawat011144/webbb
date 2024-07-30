@@ -6,13 +6,15 @@ import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
 import * as XLSX from 'xlsx';
 import { makeModalDraggable } from "@/utils/draggable";
-
-const router = useRouter(); 
+import { downloadExcel as downloadExcelInternship, downloadExcelUniversity as downloadExcelUniversity } from '@/utils/download';
+const router = useRouter();
 const users = ref([]);
 const isModalVisible = ref(false);
 const modalData = ref(null);
 const userData = JSON.parse(localStorage.getItem('userData') || '{}');
 let branch = null;
+const evaluationData = ref([]); // เพิ่มการประกาศตัวแปร evaluationData
+const universityEvaluationData = ref([]);
 
 if (userData.branch) {
     branch = userData.branch;
@@ -26,6 +28,9 @@ const fetchData = async () => {
         const evaluationResponse = await axios.get(`${config.api_path}/data-evaluation-internship`);
         const universityEvaluationResponse = await axios.get(`${config.api_path}/data-evaluation-internship-university`);
 
+        evaluationData.value = evaluationResponse.data;
+        universityEvaluationData.value = universityEvaluationResponse.data
+        console.log(evaluationData)
         const evaluationCounts = evaluationResponse.data.reduce((counts, evaluation) => {
             counts[evaluation.studentId] = (counts[evaluation.studentId] || 0) + 1;
             return counts;
@@ -51,14 +56,17 @@ const fetchData = async () => {
                     evaluation => evaluation.studentId === user.studentID
                 );
 
+
                 const hasHighAverageScore = userEvaluations.some(
                     evaluation => evaluation.averageScore >= 80
                 );
 
+
+
                 if (hasHighAverageScore && userUniversityEvaluations.length > 0) {
                     await axios.put(`${config.api_path}/user/${user.id}`, { status: 'ผ่าน' });
                     user.status = 'ผ่าน';
-                } 
+                }
             }
             return user;
         });
@@ -246,7 +254,10 @@ onMounted(() => {
                                 class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
 
-                        <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
+                        <button class="btn btn-info m-1"
+                            @click="downloadExcelInternship(sortedUsers, evaluationData)">การประเมินจากสถานประกอบการณ์</button>
+                        <button class="btn btn-info m-1"
+                            @click="downloadExcelUniversity(sortedUsers, universityEvaluationData)">การประเมินจากมหาลัย</button>
                     </div>
                 </div>
                 <table class="table">
@@ -270,15 +281,13 @@ onMounted(() => {
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
                             </td>
                             <td>
-                                <button
-                                    :class="user.isEvaluated ? 'btn btn-secondary' : 'btn btn-success'"
-                                    @click="handleEvaluation(user.id)"
-                                    :disabled="user.isEvaluated"
-                                >
+                                <button :class="user.isEvaluated ? 'btn btn-secondary' : 'btn btn-success'"
+                                    @click="handleEvaluation(user.id)" :disabled="user.isEvaluated">
                                     {{ user.isEvaluated ? 'ประเมินแล้ว' : 'ประเมิน' }}
                                 </button>
                                 &nbsp;
-                                <button class="btn btn-danger" @click="handleStatus(user.id, 'ไม่ผ่าน')">ไม่ผ่าน</button>
+                                <button class="btn btn-danger"
+                                    @click="handleStatus(user.id, 'ไม่ผ่าน')">ไม่ผ่าน</button>
                             </td>
                         </tr>
                     </tbody>
@@ -290,7 +299,8 @@ onMounted(() => {
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="infoModalLabel">ข้อมูลผู้ใช้</h5>
-                        <button type="button" class="btn-close" @click="isModalVisible = false" aria-label="Close"></button>
+                        <button type="button" class="btn-close" @click="isModalVisible = false"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body" v-if="modalData">
                         <p>รหัสนักศึกษา: {{ modalData.studentID }}</p>
@@ -305,9 +315,11 @@ onMounted(() => {
                             <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
                             <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
                             <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
-                            <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{ modalData.companyDetails.contactLastName }}</p>
+                            <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{
+                                modalData.companyDetails.contactLastName }}</p>
                             <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
-                            <p v-if="modalData.companyDetails.companyEmail">Email: {{ modalData.companyDetails.companyEmail }}</p>
+                            <p v-if="modalData.companyDetails.companyEmail">Email: {{
+                                modalData.companyDetails.companyEmail }}</p>
                             <p v-else></p>
                             <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
                         </div>

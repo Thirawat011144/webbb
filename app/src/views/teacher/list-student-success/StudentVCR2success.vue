@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
 import ExcelJS from 'exceljs';
 import { format } from 'date-fns';
+import { downloadExcel } from "@/utils/downloadInternship";
 
 
 const users = ref([]);
@@ -101,105 +102,128 @@ const sortedUsers = computed(() => {
     return users.value.slice().sort((a, b) => a.id - b.id); // เรียงลำดับตาม ID
 });
 
-const downloadExcel = () => {
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Students');
+// const downloadExcel = () => {
+//     const workbook = new ExcelJS.Workbook();
+//     const worksheet = workbook.addWorksheet('Students');
 
-    worksheet.columns = [
-        { header: 'ประทับเวลา', key: 'timestamp', width: 30 },
-        { header: 'ชื่อ - สกุล(ผู้ประเมิน)', key: 'evaluatorName', width: 30 },
-        { header: 'เลขบัตรประชาชน', key: 'idCard', width: 30 },
-        { header: 'เบอร์โทรศัพท์', key: 'phoneNumber', width: 15 },
-        { header: 'ชื่อสถานประกอบการที่นักศึกษาเข้ารับการฝึก', key: 'companyName', width: 50 },
-        { header: 'แผนกที่นักศึกษาเข้ารับการฝึก', key: 'department', width: 50 },
-        { header: 'สถานะผู้ประเมินสมรรถวิชาชีพ', key: 'evaluatorStatus', width: 30 },
-        { header: 'รอบการประเมิน', key: 'time', width: 20 },
-        { header: 'สาขาวิชาที่นักศึกษากำลังศึกษา', key: 'branch', width: 30 },
-        { header: 'รายชื่อนักศึกษา', key: 'studentName', width: 30 },
-        { header: 'รหัสนักศึกษา', key: 'studentID', width: 20 },
-        { header: 'เลขบัตรประชาชน', key: 'studentIDCard', width: 20 },
-        { header: 'คะแนนรวม', key: 'totalScore', width: 20 },
-        { header: 'คิดเป็นร้อยละ', key: 'averageScore', width: 20 },
-        { header: 'ปริมาณงาน (Quantity Of Work) ปริมาณงานที่ปฏิบัติสำเร็จตามหน้าที่หรือตามที่ได้รับมอบหมายภายในระยะเวลาที่กำหนด (ในระดับที่นักศึกษาจะปฏิบัติได้) และเทียบกับนักศึกษาทั่ว ๆ ไป', key: 'criteria', width: 100 },
-        { header: 'คุณภาพงาน (Quality Of Work) ทำงานได้ถูกต้องครบถ้วนสมบูรณ์ มีความประณีตเรียบร้อย มีความรอบคอบ ไม่เกิดปัญหาติดตามมา งานไม่ค้าง ทำงานเสร็จทันเวลาหรือก่อนเวลาที่กำหนด', key: 'qualityOfWork', width: 100 },
-        { header: 'ความรู้ความสามารถทั่วไป (General Knowledge) การใช้ความรู้ความสามารถพื้นฐานในการปฏิบัติงาน', key: 'generalKnowledge', width: 100 },
-        { header: 'ความรู้ความสามารถเฉพาะด้าน (Specific Knowledge) การใช้ความรู้ความสามารถเฉพาะทางในการปฏิบัติงาน', key: 'specificKnowledge', width: 100 },
-        { header: 'ความรับผิดชอบในหน้าที่ (Responsibility) การทำงานอย่างมีความรับผิดชอบ', key: 'responsibility', width: 100 },
-        { header: 'ความรับผิดชอบต่อทีม (Team Responsibility) การทำงานร่วมกับทีมและสนับสนุนเพื่อนร่วมงาน', key: 'teamResponsibility', width: 100 },
-        { header: 'การประพฤติปฏิบัติตน (Conduct) ความสุภาพเรียบร้อยและความมีวินัย', key: 'conduct', width: 100 },
-        { header: 'การแก้ไขปัญหา (Problem Solving) การจัดการและแก้ไขปัญหาในงาน', key: 'problemSolving', width: 100 },
-        { header: 'จุดเด่นของนักศึกษา/Strength', key: 'strength', width: 100 },
-        { header: 'ข้อควรปรับปรุงของนักศึกษา/Improvement', key: 'improvement', width: 100 },
-        { header: 'หากนักศึกษาผู้นี้สำเร็จการศึกษาแล้ว ท่านจะรับเข้าทำงานในสถานประกอบการนี้หรือไม่ (หากมีโอกาสเลือก)', key: 'jobOffer', width: 100 },
-        { header: 'ข้อคิดเห็นเพิ่มเติม/Other Comments', key: 'other', width: 100 },
-    ];
+//     worksheet.columns = [
+//         { header: 'ประทับเวลา', key: 'timestamp', width: 30 },
+//         { header: 'ชื่อ - สกุล(ผู้ประเมิน)', key: 'evaluatorName', width: 30 },
+//         { header: 'เลขบัตรประชาชน', key: 'idCard', width: 30 },
+//         { header: 'เบอร์โทรศัพท์', key: 'phoneNumber', width: 15 },
+//         { header: 'ชื่อสถานประกอบการที่นักศึกษาเข้ารับการฝึก', key: 'companyName', width: 50 },
+//         { header: 'แผนกที่นักศึกษาเข้ารับการฝึก', key: 'department', width: 50 },
+//         { header: 'สถานะผู้ประเมินสมรรถวิชาชีพ', key: 'evaluatorStatus', width: 30 },
+//         { header: 'รอบการประเมิน', key: 'time', width: 20 },
+//         { header: 'สาขาวิชาที่นักศึกษากำลังศึกษา', key: 'branch', width: 30 },
+//         { header: 'รายชื่อนักศึกษา', key: 'studentName', width: 30 },
+//         { header: 'รหัสนักศึกษา', key: 'studentID', width: 20 },
+//         { header: 'เลขบัตรประชาชน', key: 'studentIDCard', width: 20 },
+//         { header: 'คะแนนรวม', key: 'totalScore', width: 20 },
+//         { header: 'คิดเป็นร้อยละ', key: 'averageScore', width: 20 },
+//         { header: 'ปริมาณงาน (Quantity Of Work) ปริมาณงานที่ปฏิบัติสำเร็จตามหน้าที่หรือตามที่ได้รับมอบหมายภายในระยะเวลาที่กำหนด (ในระดับที่นักศึกษาจะปฏิบัติได้) และเทียบกับนักศึกษาทั่ว ๆ ไป', key: 'criteria', width: 100 },
+//         { header: 'คุณภาพงาน (Quality Of Work) ทำงานได้ถูกต้องครบถ้วนสมบูรณ์ มีความประณีตเรียบร้อย มีความรอบคอบ ไม่เกิดปัญหาติดตามมา งานไม่ค้าง ทำงานเสร็จทันเวลาหรือก่อนเวลาที่กำหนด', key: 'qualityOfWork', width: 100 },
+//         { header: 'ความรู้ความสามารถทางวิชาการ(Academic Ability)นักศึกษามีความรู้ทางวิชาการเพียงพอ  ที่จะทำงานตามที่ได้รับมอบหมาย (ในระดับที่นักศึกษาจะปฏิบัติได้)', key: 'academicAbility', width: 100 },
+//         { header: 'ความสามารถในการเรียนรู้และประยุกต์วิชาการ (Ability to Learn and Apply Knowledge)ความรวดเร็วในการเรียนรู้  เข้าใจข้อมูล  ข่าวสาร  และวิธีการทำงาน  ตลอดจนการนำความรู้ไปประยุกต์ใช้งาน', key: 'abilityToLearn', width: 100 },
+//         { header: 'ความรู้ความชำนาญด้านปฏิบัติการ (Practical  Ability)เช่น  การปฏิบัติงานในภาคสนาม  ในห้องปฏิบัติการ', key: 'practicalAbility', width: 100 },
+//         { header: 'วิจารณญาณและการตัดสินใจ (Judgment and Decision Making)ตัดสินใจได้ดี  ถูกต้อง รวดเร็ว  มีการวิเคราะห์  ข้อมูลและปัญหาต่าง ๆ อย่างรอบคอบก่อนการตัดสินใจ  สามารถแก้ปัญหาเฉพาะหน้า  สามารถไว้วางใจให้ตัดสินใจได้ด้วยตัวเอง', key: 'judgmentAndDecision', width: 100 },
+//         { header: 'การจัดการและวางแผน (Management and Planning)', key: 'managementAndPlanning', width: 100 },
+//         { header: 'ทักษะการสื่อสาร (Communication  Skills)ความสามารถในการติดต่อสื่อสาร  การพูด  การเขียน  และการนำเสนอ  (Presentation)  สามารถสื่อให้เข้าใจได้ง่าย  เรียบร้อย  ชัดเจน  ถูกต้อง  รัดกุม  มีลำดับขั้นตอนที่ดี  ไม่ก่อให้เกิดความสับสนต่อการทำงาน  รู้จักสอบถาม  รู้จักชี้แจงผลการปฏิบัติงานและข้อขัดข้องให้ทราบ', key: 'communicationSkills', width: 100 },
+//         { header: 'การพัฒนาด้านภาษาและวัฒนธรรมต่างประเทศ (Foreign  Language and CulturalDevelopment)เช่น ภาษาอังกฤษ  การทำงานกับชาวต่างชาติ', key: 'foreignLanguage', width: 100 },
+//         { header: 'ความเหมาะสมต่อตำแหน่งงานที่ได้รับมอบหมาย (Suitability for Job Position)สามารถพัฒนาตนเองให้ปฏิบัติงานตาม Job Position และ Job Description ที่มอบหมายได้อย่างเหมาะสมหรือตำแหน่งงานนี้เหมาะสมกับนักศึกษาคนนี้หรือไม่เพียงใด', key: 'suitabilityForJob', width: 100 },
+//         { header: 'ความรับผิดชอบและเป็นผู้ที่ไว้วางใจได้ (Responsibility and Dependability)ดำเนินงานให้สำเร็จลุล่วงโดยคำนึงถึงเป้าหมาย  และความสำเร็จของงานเป็นหลักยอมรับผลที่เกิดจากการทำงานอย่างมีเหตุผล  สามารถปล่อยให้ทำงาน (กรณีงานประจำ) ได้โดยไม่ต้องควบคุมมากจนเกินไป ความจำเป็นในการตรวจสอบขั้นตอนและผลงานตลอดเวลาสามารถไว้วางในให้รับผิดชอบงานที่มากกว่าเวลาประจำสามารถไว้วางใจได้แทบทุกสถานการณ์หรือในสถานการณ์ปกติเท่านั้น', key: 'responsibilityAndDependability', width: 100 },
+//         { header: 'ความสนใจ  อุตสาหะในการทำงาน (Interest in  Work)ความสนใจและความกระตือรือร้นในการทำงาน  มีความอุตสาหะ  ความพยายาม ความตั้งใจที่จะทำงานได้สำเร็จ  ความมานะบากบั่น  ไม่ย่อท้อต่ออุปสรรคและปัญหา', key: 'interestInWork', width: 100 },
+//         { header: 'ความสามารถเริ่มต้นทำงานได้ด้วยตนเอง (Initiative or Self Starter)เมื่อได้รับคำชี้แนะ  สามารถเริ่มทำงานได้เอง  โดยไม่ต้องรอคำสั่ง (กรณีงานประจำ)  เสนอตัวเข้าช่วยงานแทบทุกอย่าง  มาขอรับงานใหม่ ๆ ไปทำ ไม่ปล่อยเวลาว่างให้ล่วงเลยไปโดยเปล่าประโยชน์', key: 'initiative', width: 100 },
+//         { header: 'การตอบเสนอต่อการสั่งการ (Responsibility and Dependability)ยินดีรับคำสั่ง คำแนะนำ คำวิจารณ์  ไม่แสดงความอึดอัดใจ  เมื่อได้รับคำติเตือนและวิจารณ์  ความรวดเร็วในการปฏิบัติตามคำสั่ง  การปรับตัวปฏิบัติตามคำแนะนำ ข้อเสนอแนะและวิจารณ์', key: 'dependability', width: 100 },
+//         { header: 'บุคลิกภาพและการวางตัว (Personality)มีบุคลิกภาพและวางตัวได้เหมาะสม เช่น ทัศนคติ วุฒิภาวะ  ความอ่อนน้อมถ่อมตน  การแต่งกาย กิริยาวาจา  การตรงต่อเวลา และอื่น ๆ', key: 'personality', width: 100 },
+//         { header: 'มนุษยสัมพันธ์ (Interpersonal Skills)สามารถร่วมงานกับผู้อื่น  การทำงานเป็นทีม  สร้างมนุษย์สัมพันธ์ได้ดี  เป็นที่รักใคร่ชอบพอของผู้ร่วมงาน  เป็นผู้ที่ช่วยก่อให้เกิดความร่วมมือประสานงาน', key: 'interpersonalSkills', width: 100 },
+//         { header: 'ความมีระเบียบวินัย  ปฏิบัติตามวัฒนธรรมขององค์กร (Discipline and Adaptability to Formal  Organization)ความสนใจเรียบรู้  ศึกษา  กฎระเบียบ นโยบายต่าง ๆ และปฏิบัติตามโดยเต็มใจการปฏิบัติตามระเบียบบริหารบุคคล (การเข้างาน  ลางาน)  ปฏิบัติตามกฎการรักษาความปลอดภัยในโรงงาน  การควบคุมคุณภาพ 5ส  และอื่น ๆ', key: 'discipline', width: 100 },
+//         { header: 'คุณธรรมและจริยธรรม (Ethics and Morality) มีความซื่อสัตย์  สุจริต  มีจิตใจสะอาด  รู้จักเสียสละ  ไม่เห็นแก่ตัว  เอื้อเฟื้อช่วยเหลือคนอื่น', key: 'ethicsAndMorality', width: 100 },
+//         { header: 'จุดเด่นของนักศึกษา/Strength', key: 'strength', width: 100 },
+//         { header: 'ข้อควรปรับปรุงของนักศึกษา/Improvement', key: 'improvement', width: 100 },
+//         { header: 'หากนักศึกษาผู้นี้สำเร็จการศึกษาแล้ว ท่านจะรับเข้าทำงานในสถานประกอบการนี้หรือไม่ (หากมีโอกาสเลือก)', key: 'jobOffer', width: 100 },
+//         { header: 'ข้อคิดเห็นเพิ่มเติม/Other Comments', key: 'other', width: 100 },
+//     ];
 
-    sortedUsers.value.forEach(user => {
-        const evaluations = evaluationData.value.filter(e => e.studentId === user.studentID);
-        evaluations.forEach(evaluation => {
-            const formattedDate = evaluation.createdAt ? format(new Date(evaluation.createdAt), 'dd/MM/yyyy, HH:mm:ss') : '';
-            console.log(user); // เพิ่มการพิมพ์ข้อมูล user เพื่อดูโครงสร้าง
-            console.log(evaluation); // เพิ่มการพิมพ์ข้อมูล evaluation เพื่อดูโครงสร้าง
-            worksheet.addRow({
-                timestamp: formattedDate,
-                evaluatorName: evaluation.evaluatorName || '',
-                idCard: evaluation.idCard || '',
-                phoneNumber: evaluation.phoneNumber || 'sad',
-                companyName: user.companyDetails?.companyName || 'ไม่มีข้อมูล', // เพิ่มค่าเริ่มต้นเป็น 'ไม่มีข้อมูล'
-                department: user.companyDetails?.companyDepartment || 'ไม่มีข้อมูล', // เพิ่มค่าเริ่มต้นเป็น 'ไม่มีข้อมูล'
-                evaluatorStatus: evaluation.evaluatorStatus || '',
-                time: evaluation.time || '',
-                branch: user.branch,
-                studentName: `${user.firstName} ${user.lastName}`,
-                studentID: user.studentID,
-                studentIDCard: user.idCard,
-                totalScore: `${evaluation.totalScore || 'ไม่มีข้อมูล'}`,
-                averageScore: `${evaluation.averageScore || 'ไม่มีข้อมูล'}% `,
-                criteria: evaluation.criteria || 'ไม่มีข้อมูล',
-                qualityOfWork: evaluation.qualityOfWork || 'ไม่มีข้อมูล',
-                generalKnowledge: evaluation.generalKnowledge || 'ไม่มีข้อมูล',
-                specificKnowledge: evaluation.specificKnowledge || 'ไม่มีข้อมูล',
-                responsibility: evaluation.responsibility || 'ไม่มีข้อมูล',
-                teamResponsibility: evaluation.teamResponsibility || 'ไม่มีข้อมูล',
-                conduct: evaluation.conduct || 'ไม่มีข้อมูล',
-                problemSolving: evaluation.problemSolving || 'ไม่มีข้อมูล',
-                strength: evaluation.strength || 'ไม่มีข้อมูล',
-                improvement: evaluation.improvement || 'ไม่มีข้อมูล',
-                jobOffer: evaluation.jobOffer || 'ไม่มีข้อมูล',
-                other: evaluation.other || 'ไม่มีข้อมูล',
-            });
-        });
-    });
+//     sortedUsers.value.forEach(user => {
+//         const evaluations = evaluationData.value.filter(e => e.studentId === user.studentID);
+//         evaluations.forEach(evaluation => {
+//             const formattedDate = evaluation.createdAt ? format(new Date(evaluation.createdAt), 'dd/MM/yyyy, HH:mm:ss') : '';
+//             console.log(user); // เพิ่มการพิมพ์ข้อมูล user เพื่อดูโครงสร้าง
+//             console.log(evaluation); // เพิ่มการพิมพ์ข้อมูล evaluation เพื่อดูโครงสร้าง
+//             worksheet.addRow({
+//                 timestamp: formattedDate,
+//                 evaluatorName: evaluation.evaluatorName || '',
+//                 idCard: evaluation.idCard || '',
+//                 phoneNumber: evaluation.phoneNumber || 'sad',
+//                 companyName: user.companyDetails?.companyName || 'ไม่มีข้อมูล', // เพิ่มค่าเริ่มต้นเป็น 'ไม่มีข้อมูล'
+//                 department: user.companyDetails?.companyDepartment || 'ไม่มีข้อมูล', // เพิ่มค่าเริ่มต้นเป็น 'ไม่มีข้อมูล'
+//                 evaluatorStatus: evaluation.evaluatorStatus || '',
+//                 time: evaluation.time || '',
+//                 branch: user.branch,
+//                 studentName: `${user.firstName} ${user.lastName}`,
+//                 studentID: user.studentID,
+//                 studentIDCard: user.idCard,
+//                 totalScore: `${evaluation.totalScore || 'ไม่มีข้อมูล'}`,
+//                 averageScore: `${evaluation.averageScore || 'ไม่มีข้อมูล'}% `,
+//                 criteria: evaluation.criteria || 'ไม่มีข้อมูล',
+//                 qualityOfWork: evaluation.qualityOfWork || 'ไม่มีข้อมูล',
+//                 academicAbility: evaluation.academicAbility || 'ไม่มีข้อมูล',
+//                 abilityToLearn: evaluation.abilityToLearn || 'ไม่มีข้อมูล',
+//                 practicalAbility: evaluation.practicalAbility || 'ไม่มีข้อมูล',
+//                 judgmentAndDecision: evaluation.judgmentAndDecision || 'ไม่มีข้อมูล',
+//                 managementAndPlanning: evaluation.managementAndPlanning || 'ไม่มีข้อมูล',
+//                 communicationSkills: evaluation.communicationSkills || 'ไม่มีข้อมูล',
+//                 foreignLanguage: evaluation.foreignLanguage || 'ไม่มีข้อมูล',
+//                 suitabilityForJob: evaluation.suitabilityForJob || 'ไม่มีข้อมูล',
+//                 responsibilityAndDependability: evaluation.responsibilityAndDependability || 'ไม่มีข้อมูล',
+//                 interestInWork: evaluation.interestInWork || 'ไม่มีข้อมูล',
+//                 initiative: evaluation.initiative || 'ไม่มีข้อมูล',
+//                 dependability: evaluation.dependability || 'ไม่มีข้อมูล',
+//                 personality: evaluation.personality || 'ไม่มีข้อมูล',
+//                 interpersonalSkills: evaluation.interpersonalSkills || 'ไม่มีข้อมูล',
+//                 discipline: evaluation.discipline || 'ไม่มีข้อมูล',
+//                 ethicsAndMorality: evaluation.ethicsAndMorality || 'ไม่มีข้อมูล',
+//                 strength: evaluation.strength || 'ไม่มีข้อมูล',
+//                 improvement: evaluation.improvement || 'ไม่มีข้อมูล',
+//                 jobOffer: evaluation.jobOffer || 'ไม่มีข้อมูล',
+//                 other: evaluation.other || 'ไม่มีข้อมูล',
+//             });
+//         });
+//     });
 
-    // Apply styles to all cells
-    worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
-        row.eachCell({ includeEmpty: false }, (cell) => {
-            cell.font = { name: 'TH Sarabun New', size: 16 };
-            cell.alignment = { horizontal: 'center' };
-        });
-        // Apply bold and background color to header row
-        if (rowNumber === 1) {
-            row.eachCell((cell) => {
-                cell.font = { name: 'TH Sarabun New', size: 16, bold: true };
-                cell.fill = {
-                    type: 'pattern',
-                    pattern: 'solid',
-                    fgColor: { argb: 'FFCCCCCC' } // Gray background
-                };
-                cell.alignment = { horizontal: 'center' };
-            });
-        }
-    });
+//     // Apply styles to all cells
+//     worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
+//         row.eachCell({ includeEmpty: false }, (cell) => {
+//             cell.font = { name: 'TH Sarabun New', size: 16 };
+//             cell.alignment = { horizontal: 'center' };
+//         });
+//         // Apply bold and background color to header row
+//         if (rowNumber === 1) {
+//             row.eachCell((cell) => {
+//                 cell.font = { name: 'TH Sarabun New', size: 16, bold: true };
+//                 cell.fill = {
+//                     type: 'pattern',
+//                     pattern: 'solid',
+//                     fgColor: { argb: 'FFCCCCCC' } // Gray background
+//                 };
+//                 cell.alignment = { horizontal: 'center' };
+//             });
+//         }
+//     });
 
-    workbook.xlsx.writeBuffer().then((buffer) => {
-        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'students.xlsx';
-        link.click();
-    });
+//     workbook.xlsx.writeBuffer().then((buffer) => {
+//         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+//         const link = document.createElement('a');
+//         link.href = URL.createObjectURL(blob);
+//         link.download = 'students.xlsx';
+//         link.click();
+//     });
+// };
+
+const exportExcel = () => {
+    downloadExcel(sortedUsers, evaluationData);
 };
-
 
 const downloadExcelUniversity = () => {
     const workbook = new ExcelJS.Workbook();
@@ -388,7 +412,8 @@ const makeModalDraggable = () => {
                                 class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
 
-                        <button class="btn btn-info m-1" @click="downloadExcel">การประเมินจากสถานประกอบการณ์</button>
+                        <button class="btn btn-info m-1" @click="exportExcel">การประเมินจากสถานประกอบการณ์</button>
+                        <!-- <button class="btn btn-info m-1" @click="downloadExcel(sortedUsers, evaluationData)">การประเมินจากสถานประกอบการณ์</button> -->
                         <button class="btn btn-info m-1"
                             @click="downloadExcelUniversity">การประเมินจากมหาวิทยาลัย</button>
                         <!-- <button class="btn btn-info m-1" @click="updateAllStatusToCompleted">เสร็จสิ้นทั้งหมด</button> -->

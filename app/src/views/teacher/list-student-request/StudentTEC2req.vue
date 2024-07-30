@@ -17,7 +17,8 @@
                         <router-link :to="`/teacher-index/student-tec2notpass`"> <button
                                 class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
-                        <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
+                        <button class="btn btn-info m-1" @click="downloadExcel('filename', sortedUsers)">ดาวน์โหลด
+                            Excel</button>
                     </div>
                 </div>
                 <table class="table">
@@ -122,6 +123,7 @@ import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
 import * as XLSX from 'xlsx'; // import library
 import { makeModalDraggable } from "@/utils/draggable";
+import { downloadExcel } from '@/utils/downloadBeforeEvaluation'; // นำเข้าฟังก์ชันจาก excelHelper.js
 
 
 const users = ref([]);
@@ -238,24 +240,10 @@ const sortedUsers = computed(() => {
 });
 
 // ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
-const downloadExcel = () => {
-  const data = sortedUsers.value.map(user => ({
-    'รหัสนักศึกษา': user.studentID,
-    'ชื่อ': user.firstName,
-    'นามสกุล': user.lastName,
-    'สาขา': user.branch,
-    'ชั้นปี': user.year,
-    'สถานะ': user.status,
-    'เบอร์โทรศัพท์': user.phoneNumber,
-    'อีเมล์': user.email,
-    'สถานที่ฝึกประสบการณ์':user.companyDetails.companyName
-  }));
+// const downloadExcelFile = () => {
+//     downloadExcel('students', sortedUsers.value);
+// };
 
-  const worksheet = XLSX.utils.json_to_sheet(data);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
-  XLSX.writeFile(workbook, 'students.xlsx');
-};
 
 onMounted(() => {
     fetchData();

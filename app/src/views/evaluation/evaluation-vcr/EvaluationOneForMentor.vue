@@ -77,13 +77,15 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>1. ความรู้ความสามารถทั่วไป (General Knowledge)
-                                การใช้ความรู้ความสามารถพื้นฐานในการปฏิบัติงาน</td>
+                            <td>3. ความรู้ความสามารถทางวิชาการ(Academic Ability)
+                                นักศึกษามีความรู้ทางวิชาการเพียงพอ ที่จะทำงานตามที่ได้รับมอบหมาย
+                                (ในระดับที่นักศึกษาจะปฏิบัติได้)
+                            </td>
                             <td class="score-cell">
-                                <span class="score-prefix">20/</span>
-                                <select v-model="generalKnowledge" class="score-select" required>
+                                <span class="score-prefix">10/</span>
+                                <select v-model="academicAbility" class="score-select" required>
                                     <option disabled value="">เลือกคะแนน</option>
-                                    <option v-for="score in Array.from({ length: 21 }, (_, i) => 20 - i)" :key="score"
+                                    <option v-for="score in Array.from({ length: 11 }, (_, i) => 10 - i)" :key="score"
                                         :value="score">
                                         {{ score }}
                                     </option>
@@ -91,13 +93,110 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>2. ความรู้ความสามารถเฉพาะด้าน (Specific Knowledge)
-                                การใช้ความรู้ความสามารถเฉพาะทางในการปฏิบัติงาน</td>
+                            <td>4. ความสามารถในการเรียนรู้และประยุกต์วิชาการ (Ability to Learn and Apply Knowledge)
+                                ความรวดเร็วในการเรียนรู้ เข้าใจข้อมูล ข่าวสาร และวิธีการทำงาน
+                                ตลอดจนการนำความรู้ไปประยุกต์ใช้งาน
+                            </td>
                             <td class="score-cell">
-                                <span class="score-prefix">20/</span>
-                                <select v-model="specificKnowledge" class="score-select" required>
+                                <span class="score-prefix">10/</span>
+                                <select v-model="abilityToLearn" class="score-select" required>
                                     <option disabled value="">เลือกคะแนน</option>
-                                    <option v-for="score in Array.from({ length: 21 }, (_, i) => 20 - i)" :key="score"
+                                    <option v-for="score in Array.from({ length: 11 }, (_, i) => 10 - i)" :key="score"
+                                        :value="score">
+                                        {{ score }}
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5. ความรู้ความชำนาญด้านปฏิบัติการ (Practical Ability)
+                                เช่น การปฏิบัติงานในภาคสนาม ในห้องปฏิบัติการ
+                            </td>
+                            <td class="score-cell">
+                                <span class="score-prefix">10/</span>
+                                <select v-model="practicalAbility" class="score-select" required>
+                                    <option disabled value="">เลือกคะแนน</option>
+                                    <option v-for="score in Array.from({ length: 11 }, (_, i) => 10 - i)" :key="score"
+                                        :value="score">
+                                        {{ score }}
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>6. วิจารณญาณและการตัดสินใจ (Judgment and Decision Making)
+                                ตัดสินใจได้ดี ถูกต้อง รวดเร็ว มีการวิเคราะห์ ข้อมูลและปัญหาต่าง ๆ
+                                อย่างรอบคอบก่อนการตัดสินใจ สามารถแก้ปัญหาเฉพาะหน้า
+                                สามารถไว้วางใจให้ตัดสินใจได้ด้วยตัวเอง
+                            </td>
+                            <td class="score-cell">
+                                <span class="score-prefix">10/</span>
+                                <select v-model="judgmentAndDecision" class="score-select" required>
+                                    <option disabled value="">เลือกคะแนน</option>
+                                    <option v-for="score in Array.from({ length: 11 }, (_, i) => 10 - i)" :key="score"
+                                        :value="score">
+                                        {{ score }}
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>7. การจัดการและวางแผน (Management and Planning)
+                            </td>
+                            <td class="score-cell">
+                                <span class="score-prefix">10/</span>
+                                <select v-model="managementAndPlanning" class="score-select" required>
+                                    <option disabled value="">เลือกคะแนน</option>
+                                    <option v-for="score in Array.from({ length: 11 }, (_, i) => 10 - i)" :key="score"
+                                        :value="score">
+                                        {{ score }}
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>8. ทักษะการสื่อสาร (Communication Skills)
+                                ความสามารถในการติดต่อสื่อสาร การพูด การเขียน และการนำเสนอ (Presentation)
+                                สามารถสื่อให้เข้าใจได้ง่าย เรียบร้อย ชัดเจน ถูกต้อง รัดกุม มีลำดับขั้นตอนที่ดี
+                                ไม่ก่อให้เกิดความสับสนต่อการทำงาน รู้จักสอบถาม
+                                รู้จักชี้แจงผลการปฏิบัติงานและข้อขัดข้องให้ทราบ
+                            </td>
+                            <td class="score-cell">
+                                <span class="score-prefix">10/</span>
+                                <select v-model="communicationSkills" class="score-select" required>
+                                    <option disabled value="">เลือกคะแนน</option>
+                                    <option v-for="score in Array.from({ length: 11 }, (_, i) => 10 - i)" :key="score"
+                                        :value="score">
+                                        {{ score }}
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>9. การพัฒนาด้านภาษาและวัฒนธรรมต่างประเทศ (Foreign Language and Cultural
+                                Development)เช่น ภาษาอังกฤษ การทำงานกับชาวต่างชาติ
+                            </td>
+                            <td class="score-cell">
+                                <span class="score-prefix">10/</span>
+                                <select v-model="foreignLanguage" class="score-select" required>
+                                    <option disabled value="">เลือกคะแนน</option>
+                                    <option v-for="score in Array.from({ length: 11 }, (_, i) => 10 - i)" :key="score"
+                                        :value="score">
+                                        {{ score }}
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>10. ความเหมาะสมต่อตำแหน่งงานที่ได้รับมอบหมาย (Suitability for Job Position)
+                                สามารถพัฒนาตนเองให้ปฏิบัติงานตาม Job Position และ Job Description
+                                ที่มอบหมายได้อย่างเหมาะสมหรือตำแหน่งงานนี้เหมาะสมกับนักศึกษาคนนี้หรือไม่เพียงใด
+                            </td>
+                            <td class="score-cell">
+                                <span class="score-prefix">10/</span>
+                                <select v-model="suitabilityForJob" class="score-select" required>
+                                    <option disabled value="">เลือกคะแนน</option>
+                                    <option v-for="score in Array.from({ length: 11 }, (_, i) => 10 - i)" :key="score"
                                         :value="score">
                                         {{ score }}
                                     </option>
@@ -118,12 +217,17 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>1. ความรับผิดชอบในหน้าที่ (Responsibility) การทำงานอย่างมีความรับผิดชอบ</td>
+                            <td>11. ความรับผิดชอบและเป็นผู้ที่ไว้วางใจได้ (Responsibility and Dependability)
+                                ดำเนินงานให้สำเร็จลุล่วงโดยคำนึงถึงเป้าหมาย
+                                และความสำเร็จของงานเป็นหลักยอมรับผลที่เกิดจากการทำงานอย่างมีเหตุผล สามารถปล่อยให้ทำงาน
+                                (กรณีงานประจำ) ได้โดยไม่ต้องควบคุมมากจนเกินไป
+                                ความจำเป็นในการตรวจสอบขั้นตอนและผลงานตลอดเวลาสามารถไว้วางในให้รับผิดชอบงานที่มากกว่าเวลาประจำสามารถไว้วางใจได้แทบทุกสถานการณ์หรือในสถานการณ์ปกติเท่านั้น
+                            </td>
                             <td class="score-cell">
-                                <span class="score-prefix">20/</span>
-                                <select v-model="responsibility" class="score-select" required>
+                                <span class="score-prefix">10/</span>
+                                <select v-model="responsibilityAndDependability" class="score-select" required>
                                     <option disabled value="">เลือกคะแนน</option>
-                                    <option v-for="score in Array.from({ length: 21 }, (_, i) => 20 - i)" :key="score"
+                                    <option v-for="score in Array.from({ length: 11 }, (_, i) => 10 - i)" :key="score"
                                         :value="score">
                                         {{ score }}
                                     </option>
@@ -131,13 +235,48 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>2. ความรับผิดชอบต่อทีม (Team Responsibility) การทำงานร่วมกับทีมและสนับสนุนเพื่อนร่วมงาน
+                            <td>12. ความสนใจ อุตสาหะในการทำงาน (Interest in Work)
+                                ความสนใจและความกระตือรือร้นในการทำงาน มีความอุตสาหะ ความพยายาม
+                                ความตั้งใจที่จะทำงานได้สำเร็จ ความมานะบากบั่น ไม่ย่อท้อต่ออุปสรรคและปัญหา
                             </td>
                             <td class="score-cell">
-                                <span class="score-prefix">20/</span>
-                                <select v-model="teamResponsibility" class="score-select" required>
+                                <span class="score-prefix">10/</span>
+                                <select v-model="interestInWork" class="score-select" required>
                                     <option disabled value="">เลือกคะแนน</option>
-                                    <option v-for="score in Array.from({ length: 21 }, (_, i) => 20 - i)" :key="score"
+                                    <option v-for="score in Array.from({ length: 11 }, (_, i) => 10 - i)" :key="score"
+                                        :value="score">
+                                        {{ score }}
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>13. ความสามารถเริ่มต้นทำงานได้ด้วยตนเอง (Initiative or Self Starter)
+                                เมื่อได้รับคำชี้แนะ สามารถเริ่มทำงานได้เอง โดยไม่ต้องรอคำสั่ง (กรณีงานประจำ)
+                                เสนอตัวเข้าช่วยงานแทบทุกอย่าง มาขอรับงานใหม่ ๆ ไปทำ
+                                ไม่ปล่อยเวลาว่างให้ล่วงเลยไปโดยเปล่าประโยชน์
+                            </td>
+                            <td class="score-cell">
+                                <span class="score-prefix">10/</span>
+                                <select v-model="initiative" class="score-select" required>
+                                    <option disabled value="">เลือกคะแนน</option>
+                                    <option v-for="score in Array.from({ length: 11 }, (_, i) => 10 - i)" :key="score"
+                                        :value="score">
+                                        {{ score }}
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>14. การตอบเสนอต่อการสั่งการ (Responsibility and Dependability)
+                                ยินดีรับคำสั่ง คำแนะนำ คำวิจารณ์ ไม่แสดงความอึดอัดใจ เมื่อได้รับคำติเตือนและวิจารณ์
+                                ความรวดเร็วในการปฏิบัติตามคำสั่ง การปรับตัวปฏิบัติตามคำแนะนำ ข้อเสนอแนะและวิจารณ์
+                            </td>
+                            <td class="score-cell">
+                                <span class="score-prefix">10/</span>
+                                <select v-model="dependability" class="score-select" required>
+                                    <option disabled value="">เลือกคะแนน</option>
+                                    <option v-for="score in Array.from({ length: 11 }, (_, i) => 10 - i)" :key="score"
                                         :value="score">
                                         {{ score }}
                                     </option>
@@ -158,12 +297,15 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>1. การประพฤติปฏิบัติตน (Conduct) ความสุภาพเรียบร้อยและความมีวินัย</td>
+                            <td>15. บุคลิกภาพและการวางตัว (Personality)
+                                มีบุคลิกภาพและวางตัวได้เหมาะสม เช่น ทัศนคติ วุฒิภาวะ ความอ่อนน้อมถ่อมตน การแต่งกาย
+                                กิริยาวาจา การตรงต่อเวลา และอื่น ๆ
+                            </td>
                             <td class="score-cell">
-                                <span class="score-prefix">20/</span>
-                                <select v-model="conduct" class="score-select" required>
+                                <span class="score-prefix">10/</span>
+                                <select v-model="personality" class="score-select" required>
                                     <option disabled value="">เลือกคะแนน</option>
-                                    <option v-for="score in Array.from({ length: 21 }, (_, i) => 20 - i)" :key="score"
+                                    <option v-for="score in Array.from({ length: 11 }, (_, i) => 10 - i)" :key="score"
                                         :value="score">
                                         {{ score }}
                                     </option>
@@ -171,13 +313,48 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>2. การแก้ไขปัญหา (Problem Solving) การจัดการและแก้ไขปัญหาในงาน
+                            <td>16. มนุษยสัมพันธ์ (Interpersonal Skills)
+                                สามารถร่วมงานกับผู้อื่น การทำงานเป็นทีม สร้างมนุษย์สัมพันธ์ได้ดี
+                                เป็นที่รักใคร่ชอบพอของผู้ร่วมงาน เป็นผู้ที่ช่วยก่อให้เกิดความร่วมมือประสานงาน
                             </td>
                             <td class="score-cell">
-                                <span class="score-prefix">20/</span>
-                                <select v-model="problemSolving" class="score-select" required>
+                                <span class="score-prefix">10/</span>
+                                <select v-model="interpersonalSkills" class="score-select" required>
                                     <option disabled value="">เลือกคะแนน</option>
-                                    <option v-for="score in Array.from({ length: 21 }, (_, i) => 20 - i)" :key="score"
+                                    <option v-for="score in Array.from({ length: 11 }, (_, i) => 10 - i)" :key="score"
+                                        :value="score">
+                                        {{ score }}
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>17. ความมีระเบียบวินัย ปฏิบัติตามวัฒนธรรมขององค์กร (Discipline and Adaptability to
+                                Formal Organization)
+                                ความสนใจเรียบรู้ ศึกษา กฎระเบียบ นโยบายต่าง ๆ
+                                และปฏิบัติตามโดยเต็มใจการปฏิบัติตามระเบียบบริหารบุคคล (การเข้างาน ลางาน)
+                                ปฏิบัติตามกฎการรักษาความปลอดภัยในโรงงาน การควบคุมคุณภาพ 5ส และอื่น ๆ
+                            </td>
+                            <td class="score-cell">
+                                <span class="score-prefix">10/</span>
+                                <select v-model="discipline" class="score-select" required>
+                                    <option disabled value="">เลือกคะแนน</option>
+                                    <option v-for="score in Array.from({ length: 11 }, (_, i) => 10 - i)" :key="score"
+                                        :value="score">
+                                        {{ score }}
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>18. คุณธรรมและจริยธรรม (Ethics and Morality)มีความซื่อสัตย์ สุจริต มีจิตใจสะอาด
+                                รู้จักเสียสละ ไม่เห็นแก่ตัว เอื้อเฟื้อช่วยเหลือคนอื่น
+                            </td>
+                            <td class="score-cell">
+                                <span class="score-prefix">10/</span>
+                                <select v-model="ethicsAndMorality" class="score-select" required>
+                                    <option disabled value="">เลือกคะแนน</option>
+                                    <option v-for="score in Array.from({ length: 11 }, (_, i) => 10 - i)" :key="score"
                                         :value="score">
                                         {{ score }}
                                     </option>
@@ -240,13 +417,22 @@ const time = ref('1');
 
 const workCriteria = ref('');
 const qualityOfWork = ref('');
-const generalKnowledge = ref('');
-const specificKnowledge = ref('');
-const responsibility = ref('');
-const teamResponsibility = ref('');
-const conduct = ref('');
-const problemSolving = ref('');
-
+const academicAbility = ref('')
+const abilityToLearn = ref('')
+const practicalAbility = ref('')
+const judgmentAndDecision = ref('')
+const managementAndPlanning = ref('')
+const communicationSkills = ref('')
+const foreignLanguage = ref('')
+const suitabilityForJob = ref('')
+const responsibilityAndDependability = ref('')
+const interestInWork = ref('')
+const initiative = ref('')
+const dependability = ref('')
+const personality = ref('')
+const interpersonalSkills = ref('')
+const discipline = ref('')
+const ethicsAndMorality = ref('')
 const strength = ref('');
 const improvement = ref('');
 const jobOffer = ref('');
@@ -275,38 +461,51 @@ const submitEvaluation = async () => {
 
         // คำนวณคะแนนรวม
         const totalScore = parseInt(workCriteria.value) + parseInt(qualityOfWork.value) +
-                           parseInt(generalKnowledge.value) + parseInt(specificKnowledge.value) +
-                           parseInt(responsibility.value) + parseInt(teamResponsibility.value) +
-                           parseInt(conduct.value) + parseInt(problemSolving.value);
+            parseInt(academicAbility.value) + parseInt(abilityToLearn.value) +
+            parseInt(practicalAbility.value) + parseInt(judgmentAndDecision.value) +
+            parseInt(managementAndPlanning.value) + parseInt(communicationSkills.value) +
+            parseInt(foreignLanguage.value) + parseInt(suitabilityForJob.value) +
+            parseInt(responsibilityAndDependability.value) + parseInt(interestInWork.value) +
+            parseInt(initiative.value) + parseInt(dependability.value) +
+            parseInt(personality.value) + parseInt(interpersonalSkills.value) +
+            parseInt(discipline.value) + parseInt(ethicsAndMorality.value);
+
 
         // คำนวณคะแนนเฉลี่ยเป็นเปอร์เซ็นต์ของ 160
-        const averageScore = (totalScore / 160) * 100;
+        const averageScore = (totalScore /200) * 100;
 
         const payload = {
-            evaluatorStatus: evaluatorStatus,
-            time: time.value,
-            evaluatorName: evaluatorName,
-            studentId: student.value.studentID,
-            phoneNumber: phoneNumber,
-            idCard: idCard,
-
-            criteria: workCriteria.value,
-            qualityOfWork: qualityOfWork.value,
-            generalKnowledge: generalKnowledge.value,
-            specificKnowledge: specificKnowledge.value,
-            responsibility: responsibility.value,
-            teamResponsibility: teamResponsibility.value,
-            conduct: conduct.value,
-            problemSolving: problemSolving.value,
-
-            totalScore: totalScore,
-            averageScore: averageScore,
-
-            strength: strength.value,
-            improvement: improvement.value,
-            jobOffer: jobOffer.value,
-            other: other.value
-        };
+    evaluatorStatus: evaluatorStatus,
+    time: time.value,
+    evaluatorName: evaluatorName,
+    studentId: student.value.studentID,
+    phoneNumber: phoneNumber,
+    idCard: idCard,
+    criteria: workCriteria.value,
+    qualityOfWork: qualityOfWork.value,
+    academicAbility: academicAbility.value,
+    abilityToLearn: abilityToLearn.value,
+    practicalAbility: practicalAbility.value,
+    judgmentAndDecision: judgmentAndDecision.value,
+    managementAndPlanning: managementAndPlanning.value,
+    communicationSkills: communicationSkills.value,
+    foreignLanguage: foreignLanguage.value,
+    suitabilityForJob: suitabilityForJob.value,
+    responsibilityAndDependability: responsibilityAndDependability.value,
+    interestInWork: interestInWork.value,
+    initiative: initiative.value,
+    dependability: dependability.value,
+    personality: personality.value,
+    interpersonalSkills: interpersonalSkills.value,
+    discipline: discipline.value,
+    ethicsAndMorality: ethicsAndMorality.value,
+    totalScore: totalScore,
+    averageScore: averageScore,
+    strength: strength.value,
+    improvement: improvement.value,
+    jobOffer: jobOffer.value,
+    other: other.value
+};
 
         console.log(payload);
 
