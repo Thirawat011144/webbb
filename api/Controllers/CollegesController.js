@@ -252,7 +252,7 @@ router.get('/colleges', async (req, res) => {
                 {
                     model: UsersModel,
                     as: 'userDetails',
-                    attributes: ['firstName', 'lastName', 'branch'] // เลือกเฉพาะฟิลด์ firstName และ lastName
+                    // attributes: ['firstName', 'lastName', 'branch'] // เลือกเฉพาะฟิลด์ firstName และ lastName
                 }
             ]
         });

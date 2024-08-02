@@ -6,9 +6,37 @@ import RegisterEvaluation from '@/views/auth/RegisterEvaluation.vue'
 import ChoiceLogin from '@/views/auth/ChoiceLogin.vue'
 import LoginStudent from '@/views/auth/LoginStudent.vue'
 import LoginTeacher from '@/views/auth/LoginTeacher.vue'
+import FormForgotPass from '@/views/auth/FormForgotPass.vue'
+import FormChangePass from '@/views/auth/FormChangePass.vue'
+import FormForgotPassEvaluator from '@/views/auth/FormForgotPassEvaluator.vue'
+import FormChangePassEvaluator from '@/views/auth/FormChangePassEvaluator.vue'
 
 
 const routerAuth = [
+  {
+    path: '/reset-password-evaluator',
+    name: 'reset-password-evaluator',
+    component: FormChangePassEvaluator
+  }
+  ,
+  {
+    path: '/forgot-pass-evaluator',
+    // name: 'login-teacher',
+    component: FormForgotPassEvaluator
+  }
+  ,
+  {
+    path: '/reset-password',
+    name: 'reset-password',
+    component: FormChangePass
+  }
+  ,
+  {
+    path: '/forgot-pass',
+    // name: 'login-teacher',
+    component: FormForgotPass
+  }
+  ,
   {
     path: '/login-teacher',
     name: 'login-teacher',

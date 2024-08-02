@@ -41,6 +41,10 @@
                                 <td>{{ job.position }}</td>
                             </tr>
                             <tr>
+                                <th>สาขาที่รับ</th>
+                                <td>ครุศาสตร์อุตสหกรรมคอมพิวเตอร์, เทคโนโลยีคอมพิวเตอร์</td>
+                            </tr>
+                            <tr>
                                 <th>อัตราที่รับ</th>
                                 <td>{{ job.vacancies }}</td>
                             </tr>
@@ -86,6 +90,7 @@ const fetchJob = async () => {
         console.error('Error fetching job:', error);
     }
 };
+
 
 // ดึงข้อมูลเมื่อคอมโพเนนต์ถูกเมาท์
 onMounted(() => {

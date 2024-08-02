@@ -13,6 +13,7 @@ const users = ref([]); // เปลี่ยน {} เป็น []
 const isModalVisible = ref(false);
 const modalData = ref(null);
 const currentStudyField = localStorage.getItem(config.currentStudyField)
+const checkEvaluatorStatus = localStorage.getItem(config.evaluatorStatus)
 
 
 
@@ -105,13 +106,13 @@ onMounted(() => {
             <div class="card-header">
                 <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรี ชั้นปีที่ 4
                     <div>
-                        <router-link :to="`/home-evaluation/list-evaluation-one`">
+                        <router-link v-if="checkEvaluatorStatus !== 'กรรมการบริหารสถานศึกษา/ตัวแทนชุมชน'" :to="`/home-evaluation/list-evaluation-one`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 1 </button>
                         </router-link>
-                        <router-link :to="`/home-evaluation/list-evaluation-two`">
+                        <router-link v-if="checkEvaluatorStatus === 'กรรมการบริหารสถานศึกษา/ตัวแทนชุมชน'":to="`/home-evaluation/list-evaluation-two`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 2 </button>
                         </router-link>
-                        <router-link :to="`/home-evaluation/list-evaluation-three`">
+                        <router-link v-if="checkEvaluatorStatus !=='กรรมการบริหารสถานศึกษา/ตัวแทนชุมชน'" :to="`/home-evaluation/list-evaluation-three`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 3 </button>
                         </router-link>
 

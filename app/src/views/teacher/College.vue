@@ -13,7 +13,8 @@ const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/colleges`);
         // อัพเดตตัวแปร colleges ด้วยข้อมูลที่ได้รับจาก API
-        colleges.value = response.data.filter(user => user.userDetails.branch = branch);
+        colleges.value = response.data.filter(user => user.userDetails.branch = branch && user.userDetails.year === "ป.ตรี ปีที่ 4");
+        console.log(colleges.value)
     } catch (error) {
         Swal.fire({
             title: 'Error',
@@ -40,7 +41,7 @@ onMounted(() => {
                             <th>ลำดับ</th>
                             <th>ชื่อ-นามสกุล</th>
                             <th>ชื่อวิทยาลัย</th>
-                            <th>สาขา</th>
+                            <!-- <th>สาขา</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -48,7 +49,7 @@ onMounted(() => {
                             <td>{{ index + 1 }}</td>
                             <td>{{ college.userDetails.firstName }} {{ college.userDetails.lastName }}</td>
                             <td>{{ college.collegeName }}</td>
-                            <td>{{ college.userDetails.branch }}</td>
+                            <!-- <td>{{ college.userDetails.branch }}</td> -->
                         </tr>
                     </tbody>
                 </table>

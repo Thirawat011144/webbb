@@ -83,6 +83,12 @@ const evaluatorStatus = ref(localStorage.getItem(config.evaluatorStatus));
                             </li>
                         </ul>
                     </li>
+                    <li class="nav-item">
+                        <router-link to="/reset-password-evaluator" class="nav-link">
+                            <i class="fa-solid fa-unlock me-2"></i>
+                            <p>เปลี่ยนรหัสผ่าน</p>
+                        </router-link>
+                    </li>
                     <!-- <li class="nav-item">
                         <router-link to="/teacher-index/companies" class="nav-link">
                             <i class="fa-solid fa-building"></i> &nbsp;

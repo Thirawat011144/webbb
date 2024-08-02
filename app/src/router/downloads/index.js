@@ -1,6 +1,5 @@
 import Downloads from '../../views/downloads/Downloads.vue'
 
-
 const routeDownloads= [
     {
         path: '/downloads',

@@ -18,9 +18,10 @@
             <td>{{ formatDate(internship.createdAt) }}</td>
             <td class="p-3">
               <router-link :to="`/admin-index/edit-internship/${internship.id}`">
-                <button class="btn btn-primary">Edit</button>
+                <button class="btn btn-primary me-2"><i class="fa-solid fa-pen-to-square"></i></button>
               </router-link>
-              <button @click="removeData(internship.id)" class="btn btn-danger">Delete</button>
+              <button @click="removeData(internship.id)" class="btn btn-danger"><i
+                  class="fa-solid fa-trash-can"></i></button>
             </td>
           </tr>
         </tbody>

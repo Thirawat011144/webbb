@@ -12,6 +12,7 @@ const users = ref([]);
 const currentStudyField = localStorage.getItem(config.currentStudyField);
 const evaluatorName = `${localStorage.getItem(config.firstName_name)} ${localStorage.getItem(config.token_lastName)}`; // ดึงชื่อผู้ประเมินจาก localStorage
 // ดึงชื่อผู้ประเมินจาก localStorage
+const checkEvaluatorStatus = localStorage.getItem(config.evaluatorStatus)
 
 const fetchData = async () => {
     try {
@@ -54,13 +55,16 @@ onMounted(() => {
             <div class="card-header">
                 <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรี ชั้นปีที่ 4
                     <div>
-                        <router-link :to="`/home-evaluation/list-evaluation-one`">
+                        <router-link v-if="checkEvaluatorStatus !== 'กรรมการบริหารสถานศึกษา/ตัวแทนชุมชน'"
+                            :to="`/home-evaluation/list-evaluation-one`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 1 </button>
                         </router-link>
-                        <router-link :to="`/home-evaluation/list-evaluation-two`">
+                        <router-link v-if="checkEvaluatorStatus === 'กรรมการบริหารสถานศึกษา/ตัวแทนชุมชน'"
+                            :to="`/home-evaluation/list-evaluation-two`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 2 </button>
                         </router-link>
-                        <router-link :to="`/home-evaluation/list-evaluation-three`">
+                        <router-link v-if="checkEvaluatorStatus !== 'กรรมการบริหารสถานศึกษา/ตัวแทนชุมชน'"
+                            :to="`/home-evaluation/list-evaluation-three`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 3 </button>
                         </router-link>
                     </div>

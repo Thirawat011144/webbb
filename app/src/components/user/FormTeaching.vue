@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import axios from 'axios';
 import config from '../../../config';
 import Swal from 'sweetalert2';
@@ -17,17 +17,71 @@ const collegeEmail = ref('');
 const collegeAddress = ref('');
 const studentID = ref('');
 const department = ref('');
-const schoolSize = ref('')
-const academicYear = ref('')
+const schoolSize = ref('');
+const academicYear = ref('');
 const status = ref('');
+
+const provinces = ref([]);
+const districts = ref([]);
+const universities = ref([]);
+
+const selectedProvince = ref('');
+const selectedDistrict = ref('');
+const selectedUniversity = ref('');
 
 if (userData.studentID) {
     studentID.value = userData.studentID;
-    // status.value = userData.status;
-    console.log("sss", status.value)
 } else {
     console.log('No userData found in localStorage');
 }
+
+// Fetch provinces data
+const fetchProvinces = async () => {
+    try {
+        const response = await axios.get(`${config.api_path}/provinces`);
+        provinces.value = response.data;
+    } catch (error) {
+        console.error('Error fetching provinces:', error);
+    }
+};
+
+// Fetch districts data based on selected province
+const fetchDistricts = async (provinceId) => {
+    try {
+        const response = await axios.get(`${config.api_path}/districts`, { params: { provinceId } });
+        districts.value = response.data;
+    } catch (error) {
+        console.error('Error fetching districts:', error);
+    }
+};
+
+// Fetch universities data based on selected district
+const fetchUniversities = async (districtId) => {
+    try {
+        const response = await axios.get(`${config.api_path}/universities`, { params: { districtId } });
+        universities.value = response.data;
+    } catch (error) {
+        console.error('Error fetching universities:', error);
+    }
+};
+
+// Watch for changes in selectedProvince and selectedDistrict
+watch(selectedProvince, (newValue) => {
+    if (newValue) {
+        fetchDistricts(newValue);
+        selectedDistrict.value = '';
+        universities.value = [];
+    }
+});
+
+watch(selectedDistrict, (newValue) => {
+    if (newValue) {
+        fetchUniversities(newValue);
+        selectedUniversity.value = '';
+    }
+});
+
+fetchProvinces();
 
 const handleSubmit = async () => {
     const result = await Swal.fire({
@@ -43,7 +97,7 @@ const handleSubmit = async () => {
     if (result.isConfirmed) {
         try {
             const formData = {
-                collegeName: collegeName.value,
+                collegeName: selectedUniversity.value, // ใช้ selectedUniversity แทน collegeName
                 contactFirstName: contactFirstName.value,
                 contactLastName: contactLastName.value,
                 collegePhone: collegePhone.value,
@@ -62,7 +116,6 @@ const handleSubmit = async () => {
                     text: "เพิ่มข้อมูลสำเร็จ",
                     icon: "success",
                 });
-                console.log(response.data.newCollege);
                 localStorage.setItem('collegeData', JSON.stringify(response.data.newCollege));
                 router.push('/user-index/data-student');
             }
@@ -88,14 +141,50 @@ const handleSubmit = async () => {
                         <div class="row mb-4">
                             <div class="col">
                                 <div data-mdb-input-init class="form-outline">
-                                    <label class="form-label" for="collegeName">ชื่อวิทยาลัย
-                                        <span class="text-red">*</span></label>
-                                    <input type="text" id="collegeName" class="form-control" v-model="collegeName"
-                                        required />
+                                    <label class="form-label" for="province">จังหวัด <span
+                                            class="text-red">*</span></label>
+                                    <select id="province" class="form-control" v-model="selectedProvince" required>
+                                        <option value="" disabled selected>เลือกจังหวัด</option>
+                                        <option v-for="province in provinces" :key="province.id" :value="province.id">
+                                            {{ province.name }}
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
 
+                        <div class="row mb-4">
+                            <div class="col">
+                                <div data-mdb-input-init class="form-outline">
+                                    <label class="form-label" for="district">อำเภอ <span
+                                            class="text-red">*</span></label>
+                                    <select id="district" class="form-control" v-model="selectedDistrict" required>
+                                        <option value="" disabled selected>เลือกอำเภอ</option>
+                                        <option v-for="district in districts" :key="district.id" :value="district.id">
+                                            {{ district.name }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col">
+                                <div data-mdb-input-init class="form-outline">
+                                    <label class="form-label" for="university">มหาวิทยาลัย <span
+                                            class="text-red">*</span></label>
+                                    <select id="university" class="form-control" v-model="selectedUniversity" required>
+                                        <option value="" disabled selected>เลือกมหาวิทยาลัย</option>
+                                        <option v-for="university in universities" :key="university.id"
+                                            :value="university.name">
+                                            {{ university.name }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Other form fields remain unchanged -->
                         <div class="row mb-4">
                             <div class="col">
                                 <div data-mdb-input-init class="form-outline">
@@ -123,7 +212,7 @@ const handleSubmit = async () => {
 
                         <label class="form-label" for="contactInfo">ข้อมูลผู้ประสานงานวิทยาลัย</label>
                         <!-- Text input -->
-                        <div data-mdb-input-init class="form-outline row mb-4 ">
+                        <div data-mdb-input-init class="form-outline row mb-4">
                             <div class="col">
                                 <label class="form-label" for="contactFirstName">ชื่อ <span
                                         class="text-red">*</span></label>
@@ -138,8 +227,6 @@ const handleSubmit = async () => {
                             </div>
                         </div>
 
-
-
                         <div data-mdb-input-init class="form-outline mb-4">
                             <label class="form-label" for="collegePhone">เบอร์โทรศัพท์ <span
                                     class="text-red">*</span></label>
@@ -147,19 +234,16 @@ const handleSubmit = async () => {
                                 maxlength="10" required />
                         </div>
 
-                        <!-- Email input -->
                         <div data-mdb-input-init class="form-outline mb-4">
                             <label class="form-label" for="collegeEmail">Email </label>
                             <input type="email" id="collegeEmail" class="form-control" v-model="collegeEmail" />
                         </div>
 
-                        <!-- StudentID input -->
                         <div data-mdb-input-init class="form-outline mb-4">
                             <label class="form-label" for="studentID">Student ID <span class="text-red">*</span></label>
                             <input type="text" id="studentID" class="form-control" v-model="studentID" disabled />
                         </div>
 
-                        <!-- Department input -->
                         <div data-mdb-input-init class="form-outline mb-4">
                             <label class="form-label" for="department">แผนกวิชาที่นักศึกษาเข้ารับการฝึกประสบการณ์วิชาชีพ
                                 <span class="text-red">*</span></label>
@@ -184,8 +268,6 @@ const handleSubmit = async () => {
                             </select>
                         </div>
 
-                        <!-- SchoolSize Input -->
-
                         <div class="form-outline mb-4">
                             <label class="form-label" for="schoolSize">ขนาดสถานศึกษา</label>
                             <select id="schoolSize" class="form-select" v-model="schoolSize" required>
@@ -193,13 +275,10 @@ const handleSubmit = async () => {
                                 <option value="สถานศึกษาขนาดเล็ก">สถานศึกษาขนาดเล็ก</option>
                                 <option value="สถานศึกษาขนาดกลาง">สถานศึกษาขนาดกลาง</option>
                                 <option value="สถานศึกษาขนาดใหญ่">สถานศึกษาขนาดใหญ่</option>
-                                <option value="สถานศึกษาขนาดใหญ่พิเศษ">สถานศึกษาขนาดใหญ่พิเศษ
-                                </option>
+                                <option value="สถานศึกษาขนาดใหญ่พิเศษ">สถานศึกษาขนาดใหญ่พิเศษ</option>
                             </select>
                         </div>
 
-
-                        <!-- Message input -->
                         <div data-mdb-input-init class="form-outline mb-4">
                             <label class="form-label" for="collegeAddress">ที่ตั้งวิทยาลัย <span
                                     class="text-red">*</span></label>
@@ -207,7 +286,6 @@ const handleSubmit = async () => {
                                 required></textarea>
                         </div>
 
-                        <!-- Submit button -->
                         <button type="submit" class="btn btn-primary btn-block mb-4">Submit</button>
                     </form>
                 </div>

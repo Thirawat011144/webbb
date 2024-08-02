@@ -112,6 +112,7 @@ const handleLogin = async () => {
                             <!-- <router-link to="/register"><small href="#">สมัครสำหรับนักศึกษา</small></router-link> -->
                             <router-link to="/teacher-register"><small href="#">Don't have an
                                     account? Click Register</small></router-link>
+                            <router-link to="/forgot-pass"><small href="#">Forgot your password?</small></router-link>
                             <!-- <router-link to="/register-evaluation"><small
                                     href="#">สมัครสำหรับผู้ประเมิน</small></router-link>
                             <router-link to="/login-evaluation"><small

@@ -110,6 +110,7 @@ const handleLogin = async () => {
                             <!-- <p>ยังไม่มีบัญชีผู้ใช้ ใช่ไหม</p> -->
                             <router-link to="/register"><small href="#">Don't have an
                                     account? Click Register</small></router-link>
+                            <router-link to="/forgot-pass"><small href="#">Forgot your password?</small></router-link>
                             <!-- <router-link to="/teacher-register"><small href="#">Don't have an
                                     account? Click Register</small></router-link> -->
                             <!-- <router-link to="/register-evaluation"><small

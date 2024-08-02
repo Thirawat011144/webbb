@@ -1,3 +1,5 @@
+import { checkAuth } from './authRouteFunction'
+
 import HomeEvaluation from '../../views/evaluation/HomeEvaluation.vue'
 import InformationEvaluation from '../../views/evaluation/InformationEvaluation.vue'
 
@@ -39,6 +41,7 @@ const routeEvaluation = [
         path: '/home-evaluation',
         name: 'home-evaluation',
         component: HomeEvaluation,
+        beforeEnter: checkAuth,
         children: [
 
             // {

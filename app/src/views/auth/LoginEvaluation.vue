@@ -35,7 +35,7 @@ const handleLogin = async () => {
             localStorage.setItem(config.currentStudyField, response.data.data.currentStudyField)
             localStorage.setItem(config.phoneNumber, response.data.data.phoneNumber)
             localStorage.setItem(config.idCard, response.data.data.idCard)
-            
+
             // localStorage.setItem(config.evaluatorName, response.data.data.firstName)
             localStorage.setItem('userData', JSON.stringify(response.data.data));
             searchData.setDataResults(response.data.data);
@@ -112,6 +112,7 @@ const handleLogin = async () => {
                             <router-link to="/teacher-register"><small href="#">สมัครสำหรับอาจารย์</small></router-link> -->
                             <router-link to="/register-evaluation"><small href="#">Don't have an
                                     account? Click Register</small></router-link>
+                            <router-link to="/forgot-pass-evaluator"><small href="#">Forgot your password?</small></router-link>
                             <!-- <router-link to="/login"><small href="#">เข้าสู่ระบบทั่วไป</small></router-link> -->
                         </div>
                     </div>

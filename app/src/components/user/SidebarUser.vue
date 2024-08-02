@@ -69,6 +69,12 @@ const handleSignOut = () => {
                                 <p>หน้าแรก</p>
                             </router-link>
                         </li>
+                        <li class="nav-item">
+                            <router-link to="/reset-password" class="nav-link">
+                                <i class="fa-solid fa-unlock me-2"></i>
+                                <p>เปลี่ยนรหัสผ่าน</p>
+                            </router-link>
+                        </li>
                     </ul>
                 </nav>
             </div>

@@ -1,3 +1,4 @@
+import { checkAuth } from './authRouterFunction'
 
 import TeacherIndex from '../../views/teacher/index.vue'
 import information from '../../components/teacher/information.vue'
@@ -39,11 +40,13 @@ import StudentUVCRnotpass from '../../views/teacher/list-student-notpass/Student
 import StudentTEC2notpass from '../../views/teacher/list-student-notpass/StudentTEC2NotPass.vue'
 import StudentTEC4notpass from '../../views/teacher/list-student-notpass/StudentTEC4NotPass.vue'
 
+
 const routeTeacher = [
     {
         path: '/teacher-index',
         name: 'teacher-home',
         component: TeacherIndex,
+        beforeEnter: checkAuth,
         children: [
             {
                 path: 'data-tec2/:id',

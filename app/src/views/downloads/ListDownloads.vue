@@ -31,9 +31,10 @@
                         <td>{{ formatDate(document.createdAt) }}</td>
                         <td class="p-3">
                             <router-link :to="`/admin-index/edit-download/${document.id}`">
-                                <button class="btn btn-primary">Edit</button>
+                                <button class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></button>
                             </router-link>
-                            <button @click="removeData(document.id)" class="btn btn-danger">Delete</button>
+                            <button @click="removeData(document.id)" class="btn btn-danger"><i
+                                    class="fa-solid fa-trash-can"></i></button>
                         </td>
                     </tr>
                 </tbody>
