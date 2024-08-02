@@ -36,10 +36,6 @@
                         <h2>ข้อมูลอื่นๆ</h2>
                         <table class="table">
                             <tr>
-                                <th>อัตราที่รับ</th>
-                                <td>{{ job.vacancies }}</td>
-                            </tr>
-                            <tr>
                                 <th>เงินเดือน</th>
                                 <td>{{ job.salary }}</td>
                             </tr>
@@ -53,9 +49,32 @@
                             </tr>
                         </table>
                     </div>
+                    <div class="section">
+                        <h2>สาขาที่รับ</h2>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">ชื่อสาขา</th>
+                                    <th class="text-center">ผู้สมัคร/จำนวนที่รับ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(branch, index) in job.branches" :key="index">
+                                    <td>{{ branch.name }}</td>
+                                    <td class="text-center">
+                                        <template v-if="getApplicantsCount(branch.name) >= branch.count">
+                                            เต็มแล้ว
+                                        </template>
+                                        <template v-else>
+                                            {{ getApplicantsCount(branch.name) }}/{{ branch.count }}
+                                        </template>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-
         </div>
         <Footer />
     </div>
@@ -71,15 +90,33 @@ import config from '../../../config';
 
 const route = useRoute();
 const job = ref({}); // เก็บข้อมูลสถานที่ฝึกงาน
+const branchCounts = ref([]); // เก็บข้อมูลจำนวนผู้สมัครในแต่ละสาขา
 
 // ฟังก์ชันดึงข้อมูลจาก API
 const fetchJob = async () => {
     try {
         const response = await axios.get(`${config.api_path}/practice-teaching/${route.params.id}`);
         job.value = response.data;
+        await fetchBranchCounts(); // ดึงข้อมูลจำนวนผู้สมัคร
     } catch (error) {
         console.error('Error fetching job:', error);
     }
+};
+
+// ฟังก์ชันดึงข้อมูลจำนวนผู้สมัครในแต่ละสาขา
+const fetchBranchCounts = async () => {
+    try {
+        const response = await axios.get(`${config.api_path}/colleges`);
+        branchCounts.value = response.data;
+    } catch (error) {
+        console.error('Error fetching branch counts:', error);
+    }
+};
+
+// ฟังก์ชันดึงจำนวนผู้สมัครในแต่ละสาขา
+const getApplicantsCount = (branchName) => {
+    const applicants = branchCounts.value.filter(college => college.collegeName === job.value.company && college.department === branchName);
+    return applicants.length;
 };
 
 // ดึงข้อมูลเมื่อคอมโพเนนต์ถูกเมาท์
